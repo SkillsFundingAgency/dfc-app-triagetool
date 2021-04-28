@@ -1,4 +1,4 @@
-﻿using DFC.App.Triagetool.Data.Models;
+﻿using DFC.App.Triagetool.Data.Models.ContentModels;
 using DFC.App.Triagetool.Extensions;
 using DFC.App.Triagetool.ViewModels;
 using DFC.Compui.Cosmos.Contracts;

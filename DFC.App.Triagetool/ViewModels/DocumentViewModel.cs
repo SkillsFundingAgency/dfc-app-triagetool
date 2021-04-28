@@ -7,7 +7,7 @@ namespace DFC.App.Triagetool.ViewModels
     [ExcludeFromCodeCoverage]
     public class DocumentViewModel
     {
-        public HtmlHeadViewModel? HtmlHead { get; set; }
+        public HtmlHeadViewModel HtmlHead { get; set; } = new HtmlHeadViewModel();
 
         public BreadcrumbViewModel? Breadcrumb { get; set; }
 

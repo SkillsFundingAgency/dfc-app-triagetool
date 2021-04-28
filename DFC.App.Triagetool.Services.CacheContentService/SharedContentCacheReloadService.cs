@@ -1,6 +1,7 @@
 ﻿using DFC.App.Triagetool.Data.Contracts;
 using DFC.App.Triagetool.Data.Helpers;
-using DFC.App.Triagetool.Data.Models;
+using DFC.App.Triagetool.Data.Models.CmsApiModels;
+using DFC.App.Triagetool.Data.Models.ContentModels;
 using DFC.Compui.Cosmos.Contracts;
 using DFC.Content.Pkg.Netcore.Data.Contracts;
 using Microsoft.Extensions.Logging;
@@ -29,22 +30,22 @@ namespace DFC.App.Triagetool.Services.CacheContentService
         {
             try
             {
-                logger.LogInformation("Reload All content item cache started");
+                logger.LogInformation("Reload shared content cache started");
 
                 if (stoppingToken.IsCancellationRequested)
                 {
-                    logger.LogWarning("Reload content item cache cancelled");
+                    logger.LogWarning("Reload shared content cache cancelled");
 
                     return;
                 }
 
                 await ReloadSharedContent(stoppingToken).ConfigureAwait(false);
 
-                logger.LogInformation("Reload All content item cache completed");
+                logger.LogInformation("Reload shared content cache completed");
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "Error in content item cache reload");
+                logger.LogError(ex, "Error in shared content cache reload");
                 throw;
             }
         }
@@ -57,7 +58,7 @@ namespace DFC.App.Triagetool.Services.CacheContentService
             {
                 if (stoppingToken.IsCancellationRequested)
                 {
-                    logger.LogWarning("Reload content item cache cancelled");
+                    logger.LogWarning("Reload shared content cache cancelled");
 
                     return;
                 }
@@ -66,13 +67,14 @@ namespace DFC.App.Triagetool.Services.CacheContentService
 
                 if (apiDataModel == null)
                 {
-                    logger.LogError($"Content item: {key} not found in API response");
+                    logger.LogError($"shared content: {key} not found in API response");
                 }
+                else
+                {
+                    var mappedContentItem = mapper.Map<SharedContentItemModel>(apiDataModel);
 
-                //Add the e-mail to cache
-                var mappedContentItem = mapper.Map<SharedContentItemModel>(apiDataModel);
-
-                await sharedContentDocumentService.UpsertAsync(mappedContentItem).ConfigureAwait(false);
+                    await sharedContentDocumentService.UpsertAsync(mappedContentItem).ConfigureAwait(false);
+                }
             }
         }
     }

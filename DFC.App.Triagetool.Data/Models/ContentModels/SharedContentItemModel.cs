@@ -3,7 +3,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 
-namespace DFC.App.Triagetool.Data.Models
+namespace DFC.App.Triagetool.Data.Models.ContentModels
 {
     [ExcludeFromCodeCoverage]
     public class SharedContentItemModel : DocumentModel

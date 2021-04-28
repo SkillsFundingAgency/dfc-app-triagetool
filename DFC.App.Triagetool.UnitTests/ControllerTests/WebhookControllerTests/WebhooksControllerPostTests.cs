@@ -43,7 +43,7 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.WebhookControllerTests
             // Arrange
             const HttpStatusCode expectedResponse = HttpStatusCode.OK;
             var eventGridEvents = BuildValidEventGridEvent(eventType, new EventGridEventData { ItemId = ItemIdForCreate.ToString(), Api = "https://somewhere.com", });
-            var controller = BuildWebhooksController(mediaTypeName);
+            using var controller = BuildWebhooksController(mediaTypeName);
             controller.HttpContext.Request.Body = BuildStreamFromModel(eventGridEvents);
 
             A.CallTo(() => FakeWebhooksService.ProcessMessageAsync(A<WebhookCacheOperation>.Ignored, A<Guid>.Ignored, A<Guid>.Ignored, A<string>.Ignored)).Returns(HttpStatusCode.Created);
@@ -56,8 +56,6 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.WebhookControllerTests
             var okResult = Assert.IsType<OkResult>(result);
 
             Assert.Equal((int)expectedResponse, okResult.StatusCode);
-
-            controller.Dispose();
         }
 
         [Theory]
@@ -67,7 +65,7 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.WebhookControllerTests
             // Arrange
             const HttpStatusCode expectedResponse = HttpStatusCode.OK;
             var eventGridEvents = BuildValidEventGridEvent(eventType, new EventGridEventData { ItemId = ItemIdForUpdate.ToString(), Api = "https://somewhere.com", });
-            var controller = BuildWebhooksController(mediaTypeName);
+            using var controller = BuildWebhooksController(mediaTypeName);
             controller.HttpContext.Request.Body = BuildStreamFromModel(eventGridEvents);
 
             A.CallTo(() => FakeWebhooksService.ProcessMessageAsync(A<WebhookCacheOperation>.Ignored, A<Guid>.Ignored, A<Guid>.Ignored, A<string>.Ignored)).Returns(expectedResponse);
@@ -80,8 +78,6 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.WebhookControllerTests
             var okResult = Assert.IsType<OkResult>(result);
 
             Assert.Equal((int)expectedResponse, okResult.StatusCode);
-
-            controller.Dispose();
         }
 
         [Theory]
@@ -91,7 +87,7 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.WebhookControllerTests
             // Arrange
             const HttpStatusCode expectedResponse = HttpStatusCode.OK;
             var eventGridEvents = BuildValidEventGridEvent(eventType, new EventGridEventData { ItemId = ItemIdForDelete.ToString(), Api = "https://somewhere.com", });
-            var controller = BuildWebhooksController(mediaTypeName);
+            using var controller = BuildWebhooksController(mediaTypeName);
             controller.HttpContext.Request.Body = BuildStreamFromModel(eventGridEvents);
 
             A.CallTo(() => FakeWebhooksService.ProcessMessageAsync(A<WebhookCacheOperation>.Ignored, A<Guid>.Ignored, A<Guid>.Ignored, A<string>.Ignored)).Returns(expectedResponse);
@@ -104,8 +100,6 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.WebhookControllerTests
             var okResult = Assert.IsType<OkResult>(result);
 
             Assert.Equal((int)expectedResponse, okResult.StatusCode);
-
-            controller.Dispose();
         }
 
         [Theory]
@@ -115,7 +109,7 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.WebhookControllerTests
             // Arrange
             const HttpStatusCode expectedResponse = HttpStatusCode.OK;
             var eventGridEvents = BuildValidEventGridEvent(eventType, new EventGridEventData { ItemId = ItemIdForCreate.ToString(), Api = "https://somewhere.com", });
-            var controller = BuildWebhooksController(mediaTypeName);
+            using var controller = BuildWebhooksController(mediaTypeName);
             controller.HttpContext.Request.Body = BuildStreamFromModel(eventGridEvents);
 
             A.CallTo(() => FakeWebhooksService.ProcessMessageAsync(A<WebhookCacheOperation>.Ignored, A<Guid>.Ignored, A<Guid>.Ignored, A<string>.Ignored)).Returns(HttpStatusCode.AlreadyReported);
@@ -128,8 +122,6 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.WebhookControllerTests
             var okResult = Assert.IsType<OkResult>(result);
 
             Assert.Equal((int)expectedResponse, okResult.StatusCode);
-
-            controller.Dispose();
         }
 
         [Theory]
@@ -138,7 +130,7 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.WebhookControllerTests
         {
             // Arrange
             var eventGridEvents = BuildValidEventGridEvent(eventType, new EventGridEventData { ItemId = ItemIdForCreate.ToString(), Api = "https://somewhere.com", });
-            var controller = BuildWebhooksController(mediaTypeName);
+            using var controller = BuildWebhooksController(mediaTypeName);
             controller.HttpContext.Request.Body = BuildStreamFromModel(eventGridEvents);
 
             A.CallTo(() => FakeWebhooksService.ProcessMessageAsync(A<WebhookCacheOperation>.Ignored, A<Guid>.Ignored, A<Guid>.Ignored, A<string>.Ignored)).Returns(HttpStatusCode.Conflict);
@@ -148,8 +140,6 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.WebhookControllerTests
 
             // Assert
             A.CallTo(() => FakeWebhooksService.ProcessMessageAsync(A<WebhookCacheOperation>.Ignored, A<Guid>.Ignored, A<Guid>.Ignored, A<string>.Ignored)).MustHaveHappenedOnceExactly();
-
-            controller.Dispose();
         }
 
         [Theory]
@@ -158,7 +148,7 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.WebhookControllerTests
         {
             // Arrange
             var eventGridEvents = BuildValidEventGridEvent(EventTypePublished, new EventGridEventData { ItemId = Guid.NewGuid().ToString(), Api = "https://somewhere.com", });
-            var controller = BuildWebhooksController(MediaTypeNames.Application.Json);
+            using var controller = BuildWebhooksController(MediaTypeNames.Application.Json);
             eventGridEvents.First().Id = id;
             controller.HttpContext.Request.Body = BuildStreamFromModel(eventGridEvents);
 
@@ -167,8 +157,6 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.WebhookControllerTests
 
             // Assert
             A.CallTo(() => FakeWebhooksService.ProcessMessageAsync(A<WebhookCacheOperation>.Ignored, A<Guid>.Ignored, A<Guid>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
-
-            controller.Dispose();
         }
 
         [Theory]
@@ -177,7 +165,7 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.WebhookControllerTests
         {
             // Arrange
             var eventGridEvents = BuildValidEventGridEvent(EventTypePublished, new EventGridEventData { ItemId = id, Api = "https://somewhere.com", });
-            var controller = BuildWebhooksController(MediaTypeNames.Application.Json);
+            using var controller = BuildWebhooksController(MediaTypeNames.Application.Json);
             controller.HttpContext.Request.Body = BuildStreamFromModel(eventGridEvents);
 
             // Act
@@ -185,8 +173,6 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.WebhookControllerTests
 
             // Assert
             A.CallTo(() => FakeWebhooksService.ProcessMessageAsync(A<WebhookCacheOperation>.Ignored, A<Guid>.Ignored, A<Guid>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
-
-            controller.Dispose();
         }
 
         [Fact]
@@ -194,7 +180,7 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.WebhookControllerTests
         {
             // Arrange
             var eventGridEvents = BuildValidEventGridEvent("Unknown", new EventGridEventData { ItemId = Guid.NewGuid().ToString(), Api = "https://somewhere.com", });
-            var controller = BuildWebhooksController(MediaTypeNames.Application.Json);
+            using var controller = BuildWebhooksController(MediaTypeNames.Application.Json);
             controller.HttpContext.Request.Body = BuildStreamFromModel(eventGridEvents);
 
             // Act
@@ -202,8 +188,6 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.WebhookControllerTests
 
             // Assert
             A.CallTo(() => FakeWebhooksService.ProcessMessageAsync(A<WebhookCacheOperation>.Ignored, A<Guid>.Ignored, A<Guid>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
-
-            controller.Dispose();
         }
 
         [Fact]
@@ -211,7 +195,7 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.WebhookControllerTests
         {
             // Arrange
             var eventGridEvents = BuildValidEventGridEvent(EventTypePublished, new EventGridEventData { Api = "http:http://badUrl" });
-            var controller = BuildWebhooksController(MediaTypeNames.Application.Json);
+            using var controller = BuildWebhooksController(MediaTypeNames.Application.Json);
             controller.HttpContext.Request.Body = BuildStreamFromModel(eventGridEvents);
 
             // Act
@@ -219,8 +203,6 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.WebhookControllerTests
 
             // Assert
             A.CallTo(() => FakeWebhooksService.ProcessMessageAsync(A<WebhookCacheOperation>.Ignored, A<Guid>.Ignored, A<Guid>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
-
-            controller.Dispose();
         }
 
         [Fact]
@@ -230,7 +212,7 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.WebhookControllerTests
             const HttpStatusCode expectedResponse = HttpStatusCode.OK;
             string expectedValidationCode = Guid.NewGuid().ToString();
             var eventGridEvents = BuildValidEventGridEvent(Microsoft.Azure.EventGrid.EventTypes.EventGridSubscriptionValidationEvent, new SubscriptionValidationEventData(expectedValidationCode, "https://somewhere.com"));
-            var controller = BuildWebhooksController(MediaTypeNames.Application.Json);
+            using var controller = BuildWebhooksController(MediaTypeNames.Application.Json);
             controller.HttpContext.Request.Body = BuildStreamFromModel(eventGridEvents);
 
             // Act
@@ -244,8 +226,6 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.WebhookControllerTests
 
             Assert.Equal((int)expectedResponse, jsonResult.StatusCode);
             Assert.Equal(expectedValidationCode, response.ValidationResponse);
-
-            controller.Dispose();
         }
     }
 }

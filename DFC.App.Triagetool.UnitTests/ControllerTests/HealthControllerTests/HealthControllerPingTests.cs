@@ -13,7 +13,7 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.HealthControllerTests
         public void HealthControllerPingReturnsSuccess()
         {
             // Arrange
-            var controller = BuildHealthController(MediaTypeNames.Application.Json);
+            using var controller = BuildHealthController(MediaTypeNames.Application.Json);
 
             // Act
             var result = controller.Ping();
@@ -22,8 +22,6 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.HealthControllerTests
             var statusResult = Assert.IsType<OkResult>(result);
 
             A.Equals((int)HttpStatusCode.OK, statusResult.StatusCode);
-
-            controller.Dispose();
         }
     }
 }

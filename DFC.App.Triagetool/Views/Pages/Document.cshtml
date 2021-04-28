@@ -9,7 +9,7 @@
     }
 }
 
-<partial name="Breadcrumb" model=@Model.Breadcrumb />
+<partial name="Breadcrumb" model="Model.Breadcrumb" />
 
 <div class="govuk-tabs" data-module="govuk-tabs">
     <h2 class="govuk-tabs__title">
@@ -28,7 +28,7 @@
         </li>
     </ul>
     <div class="govuk-tabs__panel" id="tab-content">
-        <partial name="Body" model=@Model.BodyViewModel />
+        <partial name="Body" model="Model.BodyViewModel" />
     </div>
     <div class="govuk-tabs__panel govuk-tabs__panel--hidden" id="tab-metadata">
         <dl class="govuk-summary-list">

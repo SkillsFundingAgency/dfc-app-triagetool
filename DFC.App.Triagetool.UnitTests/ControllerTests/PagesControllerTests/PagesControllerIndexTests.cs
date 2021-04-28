@@ -1,4 +1,4 @@
-using DFC.App.Triagetool.Data.Models;
+using DFC.App.Triagetool.Data.Models.ContentModels;
 using DFC.App.Triagetool.ViewModels;
 using FakeItEasy;
 using Microsoft.AspNetCore.Mvc;
@@ -19,7 +19,7 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
             // Arrange
             const int resultsCount = 2;
             var expectedResults = A.CollectionOfFake<SharedContentItemModel>(resultsCount);
-            var controller = BuildPagesController(mediaTypeName);
+            using var controller = BuildPagesController(mediaTypeName);
 
             A.CallTo(() => FakeSharedContentItemDocumentService.GetAllAsync(A<string>.Ignored)).Returns(expectedResults);
             A.CallTo(() => FakeMapper.Map<IndexDocumentViewModel>(A<SharedContentItemModel>.Ignored)).Returns(A.Fake<IndexDocumentViewModel>());
@@ -35,8 +35,6 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
             var model = Assert.IsAssignableFrom<IndexViewModel>(viewResult.ViewData.Model);
 
             A.Equals(resultsCount, model.Documents!.Count);
-
-            controller.Dispose();
         }
 
         [Theory]
@@ -46,7 +44,7 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
             // Arrange
             const int resultsCount = 2;
             var expectedResults = A.CollectionOfFake<SharedContentItemModel>(resultsCount);
-            var controller = BuildPagesController(mediaTypeName);
+            using var controller = BuildPagesController(mediaTypeName);
 
             A.CallTo(() => FakeSharedContentItemDocumentService.GetAllAsync(A<string>.Ignored)).Returns(expectedResults);
             A.CallTo(() => FakeMapper.Map<IndexDocumentViewModel>(A<SharedContentItemModel>.Ignored)).Returns(A.Fake<IndexDocumentViewModel>());
@@ -62,8 +60,6 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
             var model = Assert.IsAssignableFrom<IndexViewModel>(jsonResult.Value);
 
             A.Equals(resultsCount, model.Documents!.Count);
-
-            controller.Dispose();
         }
 
         [Theory]
@@ -73,7 +69,7 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
             // Arrange
             const int resultsCount = 0;
             IEnumerable<SharedContentItemModel>? expectedResults = null;
-            var controller = BuildPagesController(mediaTypeName);
+            using var controller = BuildPagesController(mediaTypeName);
 
             A.CallTo(() => FakeSharedContentItemDocumentService.GetAllAsync(A<string>.Ignored)).Returns(expectedResults);
             A.CallTo(() => FakeMapper.Map<IndexDocumentViewModel>(A<SharedContentItemModel>.Ignored)).Returns(A.Fake<IndexDocumentViewModel>());
@@ -89,8 +85,6 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
             var model = Assert.IsAssignableFrom<IndexViewModel>(viewResult.ViewData.Model);
 
             A.Equals(null, model.Documents);
-
-            controller.Dispose();
         }
 
         [Theory]
@@ -100,7 +94,7 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
             // Arrange
             const int resultsCount = 0;
             IEnumerable<SharedContentItemModel>? expectedResults = null;
-            var controller = BuildPagesController(mediaTypeName);
+            using var controller = BuildPagesController(mediaTypeName);
 
             A.CallTo(() => FakeSharedContentItemDocumentService.GetAllAsync(A<string>.Ignored)).Returns(expectedResults);
             A.CallTo(() => FakeMapper.Map<IndexDocumentViewModel>(A<SharedContentItemModel>.Ignored)).Returns(A.Fake<IndexDocumentViewModel>());
@@ -116,8 +110,6 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
             var model = Assert.IsAssignableFrom<IndexViewModel>(jsonResult.Value);
 
             A.Equals(null, model.Documents);
-
-            controller.Dispose();
         }
 
         [Theory]
@@ -127,7 +119,7 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
             // Arrange
             const int resultsCount = 0;
             IEnumerable<SharedContentItemModel>? expectedResults = null;
-            var controller = BuildPagesController(mediaTypeName);
+            using var controller = BuildPagesController(mediaTypeName);
 
             A.CallTo(() => FakeSharedContentItemDocumentService.GetAllAsync(A<string>.Ignored)).Returns(expectedResults);
             A.CallTo(() => FakeMapper.Map<IndexDocumentViewModel>(A<SharedContentItemModel>.Ignored)).Returns(A.Fake<IndexDocumentViewModel>());
@@ -142,8 +134,6 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
             var statusResult = Assert.IsType<StatusCodeResult>(result);
 
             A.Equals((int)HttpStatusCode.NotAcceptable, statusResult.StatusCode);
-
-            controller.Dispose();
         }
     }
 }

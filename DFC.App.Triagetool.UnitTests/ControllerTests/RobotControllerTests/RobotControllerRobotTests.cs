@@ -12,7 +12,7 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.RobotControllerTests
         public void RobotControllerRobotReturnsSuccess()
         {
             // Arrange
-            var controller = BuildRobotController();
+            using var controller = BuildRobotController();
 
             // Act
             var result = controller.Robot();
@@ -21,8 +21,6 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.RobotControllerTests
             var contentResult = Assert.IsType<ContentResult>(result);
 
             contentResult.ContentType.Should().Be(MediaTypeNames.Text.Plain);
-
-            controller.Dispose();
         }
     }
 }

@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using DFC.App.Triagetool.Data.Models;
+using DFC.App.Triagetool.Data.Models.ContentModels;
 using DFC.App.Triagetool.Extensions;
 using DFC.App.Triagetool.Models;
 using DFC.App.Triagetool.ViewModels;
@@ -42,7 +42,7 @@ namespace DFC.App.Triagetool.Controllers
         {
             var viewModel = new IndexViewModel()
             {
-                LocalPath = LocalPath,
+                Path = LocalPath,
                 Documents = new List<IndexDocumentViewModel>()
                 {
                     new IndexDocumentViewModel { Title = HealthController.HealthViewCanonicalName },
@@ -92,26 +92,80 @@ namespace DFC.App.Triagetool.Controllers
             return NoContent();
         }
 
+        [HttpGet]
+        [Route("pages/{article}/htmlhead")]
+        public async Task<IActionResult> HtmlHead(string article)
+        {
+            logger.LogWarning($"{nameof(HtmlHead)} has returned no content for: {article}");
+
+            return NoContent();
+        }
+
+        [HttpGet]
+        [Route("pages/{article}/breadcrumb")]
+        public async Task<IActionResult> Breadcrumb(string article)
+        {
+            logger.LogWarning($"{nameof(Breadcrumb)} has returned no content for: {article}");
+
+            return NoContent();
+        }
+
+        [HttpGet]
+        [Route("pages/{article}/bodytop")]
+        public async Task<IActionResult> BodyTop(string article)
+        {
+            logger.LogWarning($"{nameof(BodyTop)} has returned no content for: {article}");
+
+            return NoContent();
+        }
+
+        [HttpGet]
+        [Route("pages/{article}/body")]
+        public async Task<IActionResult> Body(string article)
+        {
+            logger.LogWarning($"{nameof(Body)} has returned not found for: {article}");
+
+            return NotFound();
+        }
+
+        [HttpGet]
+        [Route("pages/{article}/bodyfooter")]
+        public async Task<IActionResult> BodyFooter(string article)
+        {
+            logger.LogWarning($"{nameof(BodyFooter)} has returned no content for: {article}");
+
+            return NoContent();
+        }
+
+        [HttpGet]
+        [Route("pages/{article}/herobanner")]
+        public async Task<IActionResult> HeroBanner(string article)
+        {
+            logger.LogWarning($"{nameof(HeroBanner)} has returned no content for: {article}");
+
+            return NoContent();
+        }
+
         private static BreadcrumbViewModel BuildBreadcrumb(string segmentPath, BreadcrumbItemModel? breadcrumbItemModel)
         {
+            const string slash = "/";
             var viewModel = new BreadcrumbViewModel
             {
                 Breadcrumbs = new List<BreadcrumbItemViewModel>()
                 {
                     new BreadcrumbItemViewModel()
                     {
-                        Route = "/",
+                        Route = slash,
                         Title = "Home",
                     },
                 },
             };
 
-            if (breadcrumbItemModel?.Title != null &&
-                !string.IsNullOrWhiteSpace(breadcrumbItemModel.Route))
+            if (breadcrumbItemModel?.Title != null && !string.IsNullOrWhiteSpace(breadcrumbItemModel.Route))
             {
                 var articlePathViewModel = new BreadcrumbItemViewModel
                 {
-                    Route = "/" + segmentPath,
+                    Route = slash + segmentPath,
                     Title = breadcrumbItemModel.Title,
                 };
 

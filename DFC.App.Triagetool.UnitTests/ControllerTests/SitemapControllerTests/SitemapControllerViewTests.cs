@@ -12,7 +12,7 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.SitemapControllerTests
         public void SitemapControllerViewReturnsSuccess()
         {
             // Arrange
-            var controller = BuildSitemapController();
+            using var controller = BuildSitemapController();
 
             // Act
             var result = controller.SitemapView();
@@ -21,8 +21,6 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.SitemapControllerTests
             var contentResult = Assert.IsType<ContentResult>(result);
 
             contentResult.ContentType.Should().Be(MediaTypeNames.Application.Xml);
-
-            controller.Dispose();
         }
     }
 }

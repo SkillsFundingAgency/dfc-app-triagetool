@@ -12,7 +12,7 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.HomeControllerTests
         public void HomeControllerErrorTestsReturnsSuccess()
         {
             // Arrange
-            var controller = BuildHomeController(MediaTypeNames.Text.Html);
+            using var controller = BuildHomeController(MediaTypeNames.Text.Html);
 
             // Act
             var result = controller.Error();
@@ -20,8 +20,6 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.HomeControllerTests
             // Assert
             var viewResult = Assert.IsType<ViewResult>(result);
             _ = Assert.IsAssignableFrom<ErrorViewModel>(viewResult.ViewData.Model);
-
-            controller.Dispose();
         }
     }
 }

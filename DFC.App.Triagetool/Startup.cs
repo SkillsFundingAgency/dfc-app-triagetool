@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using DFC.App.Triagetool.Data.Contracts;
-using DFC.App.Triagetool.Data.Models;
+using DFC.App.Triagetool.Data.Models.ContentModels;
 using DFC.App.Triagetool.HostedServices;
 using DFC.App.Triagetool.Services.CacheContentService;
 using DFC.Compui.Cosmos;
@@ -22,7 +22,6 @@ namespace DFC.App.Triagetool
     [ExcludeFromCodeCoverage]
     public class Startup
     {
-        private const string CosmosDbContentPagesConfigAppSettings = "Configuration:CosmosDbConnections:ContentPages";
         private const string CosmosDbSharedContentConfigAppSettings = "Configuration:CosmosDbConnections:SharedContent";
 
         private readonly IConfiguration configuration;
@@ -61,9 +60,7 @@ namespace DFC.App.Triagetool
 
         public void ConfigureServices(IServiceCollection services)
         {
-            var cosmosDbConnectionContentPages = configuration.GetSection(CosmosDbContentPagesConfigAppSettings).Get<CosmosDbConnection>();
             var cosmosDbConnectionSharedContent = configuration.GetSection(CosmosDbSharedContentConfigAppSettings).Get<CosmosDbConnection>();
-            //    services.AddDocumentServices<TriageToolModel>(cosmosDbConnectionContentPages, env.IsDevelopment());
             services.AddDocumentServices<SharedContentItemModel>(cosmosDbConnectionSharedContent, env.IsDevelopment());
 
             services.AddApplicationInsightsTelemetry();

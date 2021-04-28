@@ -17,7 +17,7 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.HealthControllerTests
         {
             // Arrange
             bool expectedResult = true;
-            var controller = BuildHealthController(mediaTypeName);
+            using var controller = BuildHealthController(mediaTypeName);
 
             A.CallTo(() => FakeContentPageService.PingAsync()).Returns(expectedResult);
 
@@ -27,8 +27,6 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.HealthControllerTests
             // Assert
             var viewResult = Assert.IsType<ViewResult>(result);
             _ = Assert.IsAssignableFrom<HealthViewModel>(viewResult.ViewData.Model);
-
-            controller.Dispose();
         }
 
         [Theory]
@@ -37,7 +35,7 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.HealthControllerTests
         {
             // Arrange
             bool expectedResult = true;
-            var controller = BuildHealthController(mediaTypeName);
+            using var controller = BuildHealthController(mediaTypeName);
 
             A.CallTo(() => FakeContentPageService.PingAsync()).Returns(expectedResult);
 
@@ -47,8 +45,6 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.HealthControllerTests
             // Assert
             var jsonResult = Assert.IsType<OkObjectResult>(result);
             _ = Assert.IsAssignableFrom<IList<HealthItemViewModel>>(jsonResult.Value);
-
-            controller.Dispose();
         }
 
         [Theory]
@@ -57,7 +53,7 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.HealthControllerTests
         {
             // Arrange
             bool expectedResult = true;
-            var controller = BuildHealthController(mediaTypeName);
+            using var controller = BuildHealthController(mediaTypeName);
 
             A.CallTo(() => FakeContentPageService.PingAsync()).Returns(expectedResult);
 
@@ -68,8 +64,6 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.HealthControllerTests
             var statusResult = Assert.IsType<StatusCodeResult>(result);
 
             A.Equals((int)HttpStatusCode.NotAcceptable, statusResult.StatusCode);
-
-            controller.Dispose();
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using DFC.App.Triagetool.Data.Models;
+﻿using DFC.App.Triagetool.Data.Models.CmsApiModels;
+using DFC.App.Triagetool.Data.Models.ContentModels;
 using DFC.Compui.Cosmos.Contracts;
 using DFC.Content.Pkg.Netcore.Data.Contracts;
 using FakeItEasy;

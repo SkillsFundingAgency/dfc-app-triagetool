@@ -2,7 +2,6 @@
 using FakeItEasy;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -20,7 +19,7 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.HealthControllerTests
         {
             // Arrange
             bool expectedResult = true;
-            var controller = BuildHealthController(MediaTypeNames.Application.Json);
+            using var controller = BuildHealthController(MediaTypeNames.Application.Json);
 
             A.CallTo(() => FakeContentPageService.PingAsync()).Returns(expectedResult);
 
@@ -36,8 +35,6 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.HealthControllerTests
             models.Count.Should().BeGreaterThan(0);
             models.First().Service.Should().NotBeNullOrWhiteSpace();
             models.First().Message.Should().NotBeNullOrWhiteSpace();
-
-            controller.Dispose();
         }
 
         [Fact]
@@ -45,7 +42,7 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.HealthControllerTests
         {
             // Arrange
             bool expectedResult = false;
-            var controller = BuildHealthController(MediaTypeNames.Application.Json);
+            using var controller = BuildHealthController(MediaTypeNames.Application.Json);
 
             A.CallTo(() => FakeContentPageService.PingAsync()).Returns(expectedResult);
 
@@ -58,8 +55,6 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.HealthControllerTests
             var statusResult = Assert.IsType<StatusCodeResult>(result);
 
             A.Equals((int)HttpStatusCode.ServiceUnavailable, statusResult.StatusCode);
-
-            controller.Dispose();
         }
     }
 }

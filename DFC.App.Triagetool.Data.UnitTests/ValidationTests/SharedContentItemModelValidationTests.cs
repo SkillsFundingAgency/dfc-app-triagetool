@@ -1,4 +1,4 @@
-﻿using DFC.App.Triagetool.Data.Models;
+﻿using DFC.App.Triagetool.Data.Models.ContentModels;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;

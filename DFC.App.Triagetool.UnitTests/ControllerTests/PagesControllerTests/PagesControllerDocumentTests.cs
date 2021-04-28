@@ -1,4 +1,4 @@
-using DFC.App.Triagetool.Data.Models;
+using DFC.App.Triagetool.Data.Models.ContentModels;
 using DFC.App.Triagetool.ViewModels;
 using FakeItEasy;
 using Microsoft.AspNetCore.Mvc;
@@ -18,7 +18,7 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
         {
             // Arrange
             var expectedResult = A.Fake<SharedContentItemModel>();
-            var controller = BuildPagesController(mediaTypeName);
+            using var controller = BuildPagesController(mediaTypeName);
             var expectedModel = new DocumentViewModel
             {
                 Id = Guid.NewGuid(),
@@ -42,8 +42,6 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
             _ = Assert.IsAssignableFrom<DocumentViewModel>(viewResult.ViewData.Model);
             var model = viewResult.ViewData.Model as DocumentViewModel;
             Assert.Equal(expectedModel, model);
-
-            controller.Dispose();
         }
 
         [Theory]
@@ -52,7 +50,7 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
         {
             // Arrange
             var expectedResult = A.Fake<SharedContentItemModel>();
-            var controller = BuildPagesController(mediaTypeName);
+            using var controller = BuildPagesController(mediaTypeName);
 
             A.CallTo(() => FakeSharedContentItemDocumentService.GetByIdAsync(A<Guid>.Ignored, A<string>.Ignored)).Returns(expectedResult);
             A.CallTo(() => FakeMapper.Map<DocumentViewModel>(A<SharedContentItemModel>.Ignored)).Returns(A.Fake<DocumentViewModel>());
@@ -66,8 +64,6 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
 
             var jsonResult = Assert.IsType<OkObjectResult>(result);
             _ = Assert.IsAssignableFrom<DocumentViewModel>(jsonResult.Value);
-
-            controller.Dispose();
         }
 
         [Theory]
@@ -77,7 +73,7 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
         {
             // Arrange
             SharedContentItemModel? expectedResult = null;
-            var controller = BuildPagesController(mediaTypeName);
+            using var controller = BuildPagesController(mediaTypeName);
 
             A.CallTo(() => FakeSharedContentItemDocumentService.GetByIdAsync(A<Guid>.Ignored, A<string>.Ignored)).Returns(expectedResult);
 
@@ -90,8 +86,6 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
             var statusResult = Assert.IsType<NoContentResult>(result);
 
             A.Equals((int)HttpStatusCode.NoContent, statusResult.StatusCode);
-
-            controller.Dispose();
         }
 
         [Theory]
@@ -100,7 +94,7 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
         {
             // Arrange
             var expectedResult = A.Fake<SharedContentItemModel>();
-            var controller = BuildPagesController(mediaTypeName);
+            using var controller = BuildPagesController(mediaTypeName);
 
             A.CallTo(() => FakeSharedContentItemDocumentService.GetByIdAsync(A<Guid>.Ignored, A<string>.Ignored)).Returns(expectedResult);
             A.CallTo(() => FakeMapper.Map<DocumentViewModel>(A<SharedContentItemModel>.Ignored)).Returns(A.Fake<DocumentViewModel>());
@@ -115,8 +109,6 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
             var statusResult = Assert.IsType<StatusCodeResult>(result);
 
             A.Equals((int)HttpStatusCode.NotAcceptable, statusResult.StatusCode);
-
-            controller.Dispose();
         }
     }
 }

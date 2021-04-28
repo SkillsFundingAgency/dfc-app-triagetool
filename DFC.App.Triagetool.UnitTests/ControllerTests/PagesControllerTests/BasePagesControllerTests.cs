@@ -1,5 +1,5 @@
 ﻿using DFC.App.Triagetool.Controllers;
-using DFC.App.Triagetool.Data.Models;
+using DFC.App.Triagetool.Data.Models.ContentModels;
 using DFC.Compui.Cosmos.Contracts;
 using FakeItEasy;
 using Microsoft.AspNetCore.Http;

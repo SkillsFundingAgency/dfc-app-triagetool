@@ -1,5 +1,5 @@
 ﻿using DFC.App.Triagetool.Controllers;
-using DFC.App.Triagetool.Data.Models;
+using DFC.App.Triagetool.Data.Models.ContentModels;
 using FakeItEasy;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -27,7 +27,7 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
         public async Task PagesControllerCallsContentPageServiceUsingPagesRouteForOkResult(string route, Guid documentId, string actionMethod)
         {
             // Arrange
-            var controller = BuildController(route);
+            using var controller = BuildController(route);
             var expectedResult = new SharedContentItemModel() { Content = "<h1>A document</h1>" };
             var expectedResults = new List<SharedContentItemModel> { expectedResult };
 
@@ -41,8 +41,6 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
             Assert.IsType<OkObjectResult>(result);
             A.CallTo(() => FakeSharedContentItemDocumentService.GetAllAsync(A<string>.Ignored)).MustHaveHappenedOnceOrLess();
             A.CallTo(() => FakeSharedContentItemDocumentService.GetByIdAsync(A<Guid>.Ignored, A<string>.Ignored)).MustHaveHappenedOnceOrLess();
-
-            controller.Dispose();
         }
 
         private static async Task<IActionResult> RunControllerAction(PagesController controller, Guid documentId, string actionName)

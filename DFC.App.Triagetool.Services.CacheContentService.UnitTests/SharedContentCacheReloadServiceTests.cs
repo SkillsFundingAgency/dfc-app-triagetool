@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using DFC.App.Triagetool.Data.Helpers;
-using DFC.App.Triagetool.Data.Models;
+using DFC.App.Triagetool.Data.Models.CmsApiModels;
+using DFC.App.Triagetool.Data.Models.ContentModels;
 using DFC.Compui.Cosmos.Contracts;
 using DFC.Content.Pkg.Netcore.Data.Contracts;
 using FakeItEasy;
@@ -38,9 +39,9 @@ namespace DFC.App.Triagetool.Services.CacheContentService.UnitTests
         public async Task SharedContentCacheReloadServiceReloadAllReloadsItems()
         {
             //Arrange
-            var fakeContentItem = A.Dummy<SharedContentItemApiDataModel>();
+            var dummyContentItem = A.Dummy<SharedContentItemApiDataModel>();
 
-            A.CallTo(() => fakeCmsApiService.GetItemAsync<SharedContentItemApiDataModel>(A<string>.Ignored, A<Guid>.Ignored)).Returns(fakeContentItem);
+            A.CallTo(() => fakeCmsApiService.GetItemAsync<SharedContentItemApiDataModel>(A<string>.Ignored, A<Guid>.Ignored)).Returns(dummyContentItem);
             var sharedContentCacheReloadService = new SharedContentCacheReloadService(A.Fake<ILogger<SharedContentCacheReloadService>>(), fakeMapper, fakeSharedContentItemDocumentService, fakeCmsApiService);
 
             //Act
@@ -49,6 +50,40 @@ namespace DFC.App.Triagetool.Services.CacheContentService.UnitTests
             //Assert
             A.CallTo(() => fakeCmsApiService.GetItemAsync<SharedContentItemApiDataModel>(A<string>.Ignored, A<Guid>.Ignored)).MustHaveHappened(SharedContentKeyHelper.GetSharedContentKeys().Count(), Times.Exactly);
             A.CallTo(() => fakeSharedContentItemDocumentService.UpsertAsync(A<SharedContentItemModel>.Ignored)).MustHaveHappened(SharedContentKeyHelper.GetSharedContentKeys().Count(), Times.Exactly);
+        }
+
+        [Fact]
+        public async Task SharedContentCacheReloadServiceReloadSharedContentSuccessful()
+        {
+            //Arrange
+            var dummyContentItem = A.Dummy<SharedContentItemApiDataModel>();
+
+            A.CallTo(() => fakeCmsApiService.GetItemAsync<SharedContentItemApiDataModel>(A<string>.Ignored, A<Guid>.Ignored)).Returns(dummyContentItem);
+            var sharedContentCacheReloadService = new SharedContentCacheReloadService(A.Fake<ILogger<SharedContentCacheReloadService>>(), fakeMapper, fakeSharedContentItemDocumentService, fakeCmsApiService);
+
+            //Act
+            await sharedContentCacheReloadService.ReloadSharedContent(CancellationToken.None).ConfigureAwait(false);
+
+            //Assert
+            A.CallTo(() => fakeCmsApiService.GetItemAsync<SharedContentItemApiDataModel>(A<string>.Ignored, A<Guid>.Ignored)).MustHaveHappened(SharedContentKeyHelper.GetSharedContentKeys().Count(), Times.Exactly);
+            A.CallTo(() => fakeSharedContentItemDocumentService.UpsertAsync(A<SharedContentItemModel>.Ignored)).MustHaveHappened(SharedContentKeyHelper.GetSharedContentKeys().Count(), Times.Exactly);
+        }
+
+        [Fact]
+        public async Task SharedContentCacheReloadServiceReloadSharedContentNullApiResponse()
+        {
+            //Arrange
+            SharedContentItemApiDataModel? nullContentItem = null;
+
+            A.CallTo(() => fakeCmsApiService.GetItemAsync<SharedContentItemApiDataModel>(A<string>.Ignored, A<Guid>.Ignored)).Returns(nullContentItem);
+            var sharedContentCacheReloadService = new SharedContentCacheReloadService(A.Fake<ILogger<SharedContentCacheReloadService>>(), fakeMapper, fakeSharedContentItemDocumentService, fakeCmsApiService);
+
+            //Act
+            await sharedContentCacheReloadService.ReloadSharedContent(CancellationToken.None).ConfigureAwait(false);
+
+            //Assert
+            A.CallTo(() => fakeCmsApiService.GetItemAsync<SharedContentItemApiDataModel>(A<string>.Ignored, A<Guid>.Ignored)).MustHaveHappened(SharedContentKeyHelper.GetSharedContentKeys().Count(), Times.Exactly);
+            A.CallTo(() => fakeSharedContentItemDocumentService.UpsertAsync(A<SharedContentItemModel>.Ignored)).MustNotHaveHappened();
         }
     }
 }

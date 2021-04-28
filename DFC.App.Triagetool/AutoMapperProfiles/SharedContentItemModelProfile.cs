@@ -1,11 +1,10 @@
 ﻿using AutoMapper;
-using DFC.App.Triagetool.Data.Models;
+using DFC.App.Triagetool.Data.Models.CmsApiModels;
+using DFC.App.Triagetool.Data.Models.ContentModels;
 using DFC.App.Triagetool.Models;
 using DFC.App.Triagetool.ViewModels;
 using Microsoft.AspNetCore.Html;
-using System;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 
 namespace DFC.App.Triagetool.AutoMapperProfiles
 {
