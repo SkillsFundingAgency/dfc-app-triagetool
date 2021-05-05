@@ -198,6 +198,10 @@
             "apiVersion": "2017-05-10",
             "name": "[variables('WebAppName')]",
             "type": "Microsoft.Resources/deployments",
+            "dependsOn": [
+                "[variables('webAppInsightsName')]",
+                "[variables('appServicePlanName')]"
+            ],
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
@@ -312,10 +316,7 @@
                         ]
                     }
                 }
-            },
-            "dependsOn": [
-                "[variables('webAppInsightsName')]"
-            ]
+            }
         },
         {
             "name": "[variables('CosmosDbDatabaseName')]",
@@ -351,6 +352,9 @@
             "apiVersion": "2017-05-10",
             "name": "[parameters('cosmosDbCollectionName')]",
             "type": "Microsoft.Resources/deployments",
+            "dependsOn": [
+                "[variables('CosmosDbDatabaseName')]"
+            ],
             "resourceGroup": "[parameters('CosmosDbResourceGroup')]",
             "properties": {
                 "mode": "Incremental",
@@ -463,6 +467,10 @@
             "apiVersion": "2019-05-01",
             "name": "[concat(variables('AppServicePlanName'), '-CPUPercentage')]",
             "type": "Microsoft.Resources/deployments",
+            "dependsOn": [
+                "[variables('webAppInsightsName')]",
+                "[variables('appServicePlanName')]"
+            ],
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
@@ -513,6 +521,10 @@
             "apiVersion": "2019-05-01",
             "name": "[concat(variables('AppServicePlanName'), '-MemoryPercentage')]",
             "type": "Microsoft.Resources/deployments",
+            "dependsOn": [
+                "[variables('webAppInsightsName')]",
+                "[variables('appServicePlanName')]"
+            ],
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
