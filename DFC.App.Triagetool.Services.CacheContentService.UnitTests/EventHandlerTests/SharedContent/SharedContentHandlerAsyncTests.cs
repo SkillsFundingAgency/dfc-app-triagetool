@@ -1,25 +1,37 @@
 ﻿using DFC.App.Triagetool.Data.Models.CmsApiModels;
 using DFC.App.Triagetool.Data.Models.ContentModels;
+using DFC.App.Triagetool.Services.CacheContentService.UnitTests.WebhooksServiceTests;
 using FakeItEasy;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Threading.Tasks;
+using DFC.App.Triagetool.Data.Helpers;
 using Xunit;
 
-namespace DFC.App.Triagetool.Services.CacheContentService.UnitTests.WebhooksServiceTests
+namespace DFC.App.Triagetool.Services.CacheContentService.UnitTests.EventHandlerTests.SharedContent
 {
-    [Trait("Category", "Webhooks Service ProcessContentAsync Unit Tests")]
-    public class WebhooksServiceProcessContentAsyncTests : BaseWebhooksServiceTests
+    [Trait("Category", "SharedContent Event Handler ProcessContentAsync Unit Tests")]
+    [ExcludeFromCodeCoverage]
+    public class SharedContentHandlerAsyncTests : BaseEventHandlerTests
     {
+
         [Fact]
-        public async Task WebhooksServiceProcessContentAsyncForCreateReturnsSuccess()
+        public void SharedContentHandlerProcessTypeReturnsCorrectValue()
+        {
+            var service = BuildSharedContentEventHandler();
+            Assert.Equal(service.ProcessType, DependencyInjectionKeyHelpers.SharedContentEventHandler);
+        }
+
+        [Fact]
+        public async Task SharedContentHandlerContentAsyncForCreateReturnsSuccess()
         {
             // Arrange
             const HttpStatusCode expectedResponse = HttpStatusCode.Created;
             var expectedValidContentItemApiDataModel = BuildValidContentItemApiDataModel();
             var expectedValidContentItemModel = BuildValidContentItemModel();
             var url = new Uri("https://somewhere.com");
-            var service = BuildWebhooksService();
+            var service = BuildSharedContentEventHandler();
 
             A.CallTo(() => FakeCmsApiService.GetItemAsync<SharedContentItemApiDataModel>(A<Uri>.Ignored)).Returns(expectedValidContentItemApiDataModel);
             A.CallTo(() => FakeMapper.Map<SharedContentItemModel>(A<SharedContentItemApiDataModel>.Ignored)).Returns(expectedValidContentItemModel);
@@ -39,14 +51,14 @@ namespace DFC.App.Triagetool.Services.CacheContentService.UnitTests.WebhooksServ
         }
 
         [Fact]
-        public async Task WebhooksServiceProcessContentAsyncForUpdateReturnsSuccess()
+        public async Task SharedContentHandlerContentAsyncForUpdateReturnsSuccess()
         {
             // Arrange
             const HttpStatusCode expectedResponse = HttpStatusCode.OK;
             var expectedValidContentItemApiDataModel = BuildValidContentItemApiDataModel();
             var expectedValidContentItemModel = BuildValidContentItemModel();
             var url = new Uri("https://somewhere.com");
-            var service = BuildWebhooksService();
+            var service = BuildSharedContentEventHandler();
 
             A.CallTo(() => FakeCmsApiService.GetItemAsync<SharedContentItemApiDataModel>(A<Uri>.Ignored)).Returns(expectedValidContentItemApiDataModel);
             A.CallTo(() => FakeMapper.Map<SharedContentItemModel>(A<SharedContentItemApiDataModel>.Ignored)).Returns(expectedValidContentItemModel);
@@ -66,14 +78,14 @@ namespace DFC.App.Triagetool.Services.CacheContentService.UnitTests.WebhooksServ
         }
 
         [Fact]
-        public async Task WebhooksServiceProcessContentAsyncForUpdateReturnsNoContent()
+        public async Task SharedContentHandlerContentAsyncForUpdateReturnsNoContent()
         {
             // Arrange
             const HttpStatusCode expectedResponse = HttpStatusCode.NoContent;
             var expectedValidContentItemApiDataModel = BuildValidContentItemApiDataModel();
             SharedContentItemModel? expectedValidContentItemModel = default;
             var url = new Uri("https://somewhere.com");
-            var service = BuildWebhooksService();
+            var service = BuildSharedContentEventHandler();
 
             A.CallTo(() => FakeCmsApiService.GetItemAsync<SharedContentItemApiDataModel>(A<Uri>.Ignored)).Returns(expectedValidContentItemApiDataModel);
             A.CallTo(() => FakeMapper.Map<SharedContentItemModel?>(A<SharedContentItemApiDataModel>.Ignored)).Returns(expectedValidContentItemModel);
@@ -92,14 +104,14 @@ namespace DFC.App.Triagetool.Services.CacheContentService.UnitTests.WebhooksServ
         }
 
         [Fact]
-        public async Task WebhooksServiceProcessContentAsyncForUpdateReturnsBadRequest()
+        public async Task SharedContentHandlerContentAsyncForUpdateReturnsBadRequest()
         {
             // Arrange
             const HttpStatusCode expectedResponse = HttpStatusCode.BadRequest;
             var expectedValidContentItemApiDataModel = BuildValidContentItemApiDataModel();
             var expectedValidContentItemModel = new SharedContentItemModel();
             var url = new Uri("https://somewhere.com");
-            var service = BuildWebhooksService();
+            var service = BuildSharedContentEventHandler();
 
             A.CallTo(() => FakeCmsApiService.GetItemAsync<SharedContentItemApiDataModel>(A<Uri>.Ignored)).Returns(expectedValidContentItemApiDataModel);
             A.CallTo(() => FakeMapper.Map<SharedContentItemModel>(A<SharedContentItemApiDataModel>.Ignored)).Returns(expectedValidContentItemModel);

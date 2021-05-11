@@ -1,11 +1,14 @@
-﻿using DFC.App.Triagetool.Data.Models.ContentModels;
-using System;
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
+using DFC.App.Triagetool.Data.Models.ContentModels;
+using DFC.App.Triagetool.Services.CacheContentService.UnitTests.WebhooksServiceTests;
 using Xunit;
 
-namespace DFC.App.Triagetool.Services.CacheContentService.UnitTests.WebhooksServiceTests
+namespace DFC.App.Triagetool.Services.CacheContentService.UnitTests.EventHandlerTests.SharedContent
 {
-    [Trait("Category", "Webhooks Service TryValidateModel Unit Tests")]
-    public class WebhooksServiceTryValidateModelTests : BaseWebhooksServiceTests
+    [Trait("Category", "SharedContent Event Handler TryValidateModel Unit Tests")]
+    [ExcludeFromCodeCoverage]
+    public class SharedContentTryValidateModelTests : BaseEventHandlerTests
     {
         [Fact]
         public void WebhooksServiceTryValidateModelForCreateReturnsSuccess()
@@ -13,10 +16,10 @@ namespace DFC.App.Triagetool.Services.CacheContentService.UnitTests.WebhooksServ
             // Arrange
             const bool expectedResponse = true;
             var expectedValidContentItemModel = BuildValidContentItemModel();
-            var service = BuildWebhooksService();
+            var handler = BuildSharedContentEventHandler();
 
             // Act
-            var result = service.TryValidateModel(expectedValidContentItemModel);
+            var result = handler.TryValidateModel(expectedValidContentItemModel);
 
             // Assert
             Assert.Equal(expectedResponse, result);
@@ -28,10 +31,10 @@ namespace DFC.App.Triagetool.Services.CacheContentService.UnitTests.WebhooksServ
             // Arrange
             const bool expectedResponse = false;
             var expectedInvalidContentItemModel = new SharedContentItemModel();
-            var service = BuildWebhooksService();
+            var handler = BuildSharedContentEventHandler();
 
             // Act
-            var result = service.TryValidateModel(expectedInvalidContentItemModel);
+            var result = handler.TryValidateModel(expectedInvalidContentItemModel);
 
             // Assert
             Assert.Equal(expectedResponse, result);
@@ -42,10 +45,10 @@ namespace DFC.App.Triagetool.Services.CacheContentService.UnitTests.WebhooksServ
         {
             // Arrange
             SharedContentItemModel? nullContentItemModel = null;
-            var service = BuildWebhooksService();
+            var handler = BuildSharedContentEventHandler();
 
             // Act
-            var exceptionResult = Assert.Throws<ArgumentNullException>(() => service.TryValidateModel(nullContentItemModel));
+            var exceptionResult = Assert.Throws<ArgumentNullException>(() => handler.TryValidateModel(nullContentItemModel));
 
             // Assert
             Assert.Equal("Value cannot be null. (Parameter 'sharedContentItemModel')", exceptionResult.Message);

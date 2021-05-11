@@ -1,13 +1,16 @@
-﻿using FakeItEasy;
+﻿using DFC.App.Triagetool.Services.CacheContentService.UnitTests.WebhooksServiceTests;
+using FakeItEasy;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace DFC.App.Triagetool.Services.CacheContentService.UnitTests.WebhooksServiceTests
+namespace DFC.App.Triagetool.Services.CacheContentService.UnitTests.EventHandlerTests.SharedContent
 {
-    [Trait("Category", "Webhooks Service DeleteContentAsync Unit Tests")]
-    public class WebhooksServiceDeleteContentAsyncTests : BaseWebhooksServiceTests
+    [Trait("Category", "SharedContent Event Handler DeleteContentAsync Unit Tests")]
+    [ExcludeFromCodeCoverage]
+    public class WebhooksServiceDeleteContentAsyncTests : BaseEventHandlerTests
     {
         [Fact]
         public async Task WebhooksServiceDeleteContentAsyncForCreateReturnsSuccess()
@@ -15,7 +18,7 @@ namespace DFC.App.Triagetool.Services.CacheContentService.UnitTests.WebhooksServ
             // Arrange
             const bool expectedResponse = true;
             const HttpStatusCode expectedResult = HttpStatusCode.OK;
-            var service = BuildWebhooksService();
+            var service = BuildSharedContentEventHandler();
 
             A.CallTo(() => FakeSharedContentItemDocumentService.DeleteAsync(A<Guid>.Ignored)).Returns(expectedResponse);
 
@@ -34,7 +37,7 @@ namespace DFC.App.Triagetool.Services.CacheContentService.UnitTests.WebhooksServ
             // Arrange
             const bool expectedResponse = false;
             const HttpStatusCode expectedResult = HttpStatusCode.NoContent;
-            var service = BuildWebhooksService();
+            var service = BuildSharedContentEventHandler();
 
             A.CallTo(() => FakeSharedContentItemDocumentService.DeleteAsync(A<Guid>.Ignored)).Returns(expectedResponse);
 

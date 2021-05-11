@@ -23,6 +23,7 @@ namespace DFC.App.Triagetool
     public class Startup
     {
         private const string CosmosDbSharedContentConfigAppSettings = "Configuration:CosmosDbConnections:SharedContent";
+        private const string CosmosDbCmsContentConfigAppSettings = "Configuration:CosmosDbConnections:TriageTool";
 
         private readonly IConfiguration configuration;
         private readonly IWebHostEnvironment env;
@@ -61,17 +62,23 @@ namespace DFC.App.Triagetool
         public void ConfigureServices(IServiceCollection services)
         {
             var cosmosDbConnectionSharedContent = configuration.GetSection(CosmosDbSharedContentConfigAppSettings).Get<CosmosDbConnection>();
+            var cosmosDbConnectionCmsContent = configuration.GetSection(CosmosDbCmsContentConfigAppSettings).Get<CosmosDbConnection>();
             services.AddDocumentServices<SharedContentItemModel>(cosmosDbConnectionSharedContent, env.IsDevelopment());
+            services.AddDocumentServices<TriageToolOptionDocumentModel>(cosmosDbConnectionCmsContent, env.IsDevelopment());
 
             services.AddApplicationInsightsTelemetry();
             services.AddHttpContextAccessor();
             services.AddTransient<ISharedContentCacheReloadService, SharedContentCacheReloadService>();
             services.AddTransient<IWebhooksService, WebhooksService>();
+            services.AddTransient<ICacheReloadService, CacheReloadService>();
+            services.AddTransient<IEventHandler, SharedContentEventHandler>();
+            services.AddTransient<IEventHandler, CmsEventHandler>();
 
             services.AddAutoMapper(typeof(Startup).Assembly);
             services.AddSingleton(configuration.GetSection(nameof(CmsApiClientOptions)).Get<CmsApiClientOptions>() ?? new CmsApiClientOptions());
             services.AddHostedServiceTelemetryWrapper();
             services.AddHostedService<SharedContentCacheReloadBackgroundService>();
+            services.AddHostedService<ContentCacheReloadBackgroundService>();
             services.AddSubscriptionBackgroundService(configuration);
 
             var policyRegistry = services.AddPolicyRegistry();

@@ -7,6 +7,7 @@ using DFC.Content.Pkg.Netcore.Data.Contracts;
 using FakeItEasy;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -14,6 +15,7 @@ using Xunit;
 
 namespace DFC.App.Triagetool.Services.CacheContentService.UnitTests
 {
+    [ExcludeFromCodeCoverage]
     public class SharedContentCacheReloadServiceTests
     {
         private readonly IMapper fakeMapper = A.Fake<IMapper>();
