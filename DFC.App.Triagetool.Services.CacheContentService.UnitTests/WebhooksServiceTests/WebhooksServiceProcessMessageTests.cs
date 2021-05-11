@@ -1,8 +1,7 @@
 ﻿using DFC.App.Triagetool.Data.Enums;
-using DFC.App.Triagetool.Data.Models.CmsApiModels;
-using DFC.App.Triagetool.Data.Models.ContentModels;
 using FakeItEasy;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Net;
 using System.Threading.Tasks;
@@ -11,6 +10,7 @@ using Xunit;
 namespace DFC.App.Triagetool.Services.CacheContentService.UnitTests.WebhooksServiceTests
 {
     [Trait("Category", "Webhooks Service ProcessMessageAsync Unit Tests")]
+    [ExcludeFromCodeCoverage]
     public class WebhooksServiceProcessMessageTests : BaseWebhooksServiceTests
     {
         [Fact]
@@ -18,36 +18,35 @@ namespace DFC.App.Triagetool.Services.CacheContentService.UnitTests.WebhooksServ
         {
             // Arrange
             const HttpStatusCode expectedResponse = HttpStatusCode.BadRequest;
-            var url = "https://somewhere.com";
+            var url = "https://somewhere.com/SharedContent";
             var service = BuildWebhooksService();
+            var handler = AddSharedEventHandler();
 
             // Act
             var result = await service.ProcessMessageAsync(WebhookCacheOperation.None, Guid.NewGuid(), ContentIdForCreate, url).ConfigureAwait(false);
 
             // Assert
-            A.CallTo(() => FakeCmsApiService.GetItemAsync<SharedContentItemApiDataModel>(A<Uri>.Ignored)).MustNotHaveHappened();
-            A.CallTo(() => FakeMapper.Map<SharedContentItemModel>(A<SharedContentItemApiDataModel>.Ignored)).MustNotHaveHappened();
-            A.CallTo(() => FakeSharedContentItemDocumentService.UpsertAsync(A<SharedContentItemModel>.Ignored)).MustNotHaveHappened();
-            A.CallTo(() => FakeSharedContentItemDocumentService.DeleteAsync(A<Guid>.Ignored)).MustNotHaveHappened();
+            A.CallTo(() => handler.ProcessContentAsync(A<Uri>.Ignored)).MustNotHaveHappened();
 
             Assert.Equal(expectedResponse, result);
         }
 
         [Fact]
-        public async Task WebhooksServiceProcessMessageAsyncContentThrowsErrorForInvalidUrl()
+        public async Task WebhooksServiceProcessMessageAsyncNullUriReturnsSuccess()
         {
             // Arrange
-            var expectedValidContentItemApiDataModel = BuildValidContentItemApiDataModel();
-            var expectedValidContentItemModel = BuildValidContentItemModel();
-            var url = "/somewhere.com";
+            const HttpStatusCode expectedResponse = HttpStatusCode.Accepted;
+            var url = "https://somewhere.com/SharedContent";
             var service = BuildWebhooksService();
-
-            A.CallTo(() => FakeCmsApiService.GetItemAsync<SharedContentItemApiDataModel>(A<Uri>.Ignored)).Returns(expectedValidContentItemApiDataModel);
-            A.CallTo(() => FakeMapper.Map<SharedContentItemModel>(A<SharedContentItemApiDataModel>.Ignored)).Returns(expectedValidContentItemModel);
-            A.CallTo(() => FakeSharedContentItemDocumentService.UpsertAsync(A<SharedContentItemModel>.Ignored)).Returns(HttpStatusCode.Created);
+            var handler = AddSharedEventHandler();
 
             // Act
-            await Assert.ThrowsAsync<InvalidDataException>(async () => await service.ProcessMessageAsync(WebhookCacheOperation.CreateOrUpdate, Guid.NewGuid(), ContentIdForCreate, url).ConfigureAwait(false)).ConfigureAwait(false);
+            var result = await service.ProcessMessageAsync(WebhookCacheOperation.None, Guid.NewGuid(), ContentIdForCreate, null).ConfigureAwait(false);
+
+            // Assert
+            A.CallTo(() => handler.ProcessContentAsync(A<Uri>.Ignored)).MustNotHaveHappened();
+
+            Assert.Equal(expectedResponse, result);
         }
 
         [Fact]
@@ -55,49 +54,18 @@ namespace DFC.App.Triagetool.Services.CacheContentService.UnitTests.WebhooksServ
         {
             // Arrange
             const HttpStatusCode expectedResponse = HttpStatusCode.Created;
-            var expectedValidContentItemApiDataModel = BuildValidContentItemApiDataModel();
-            var expectedValidContentItemModel = BuildValidContentItemModel();
-            var url = "https://somewhere.com";
+            var url = "https://somewhere.com/SharedContent";
             var service = BuildWebhooksService();
+            var handler = AddSharedEventHandler();
 
-            A.CallTo(() => FakeCmsApiService.GetItemAsync<SharedContentItemApiDataModel>(A<Uri>.Ignored)).Returns(expectedValidContentItemApiDataModel);
-            A.CallTo(() => FakeMapper.Map<SharedContentItemModel>(A<SharedContentItemApiDataModel>.Ignored)).Returns(expectedValidContentItemModel);
-            A.CallTo(() => FakeSharedContentItemDocumentService.UpsertAsync(A<SharedContentItemModel>.Ignored)).Returns(HttpStatusCode.Created);
+            A.CallTo(() => handler.ProcessContentAsync(A<Uri>.Ignored)).Returns(HttpStatusCode.Created);
 
             // Act
             var result = await service.ProcessMessageAsync(WebhookCacheOperation.CreateOrUpdate, Guid.NewGuid(), ContentIdForCreate, url).ConfigureAwait(false);
 
             // Assert
-            A.CallTo(() => FakeCmsApiService.GetItemAsync<SharedContentItemApiDataModel>(A<Uri>.Ignored)).MustHaveHappenedOnceExactly();
-            A.CallTo(() => FakeMapper.Map<SharedContentItemModel>(A<SharedContentItemApiDataModel>.Ignored)).MustHaveHappenedOnceExactly();
-            A.CallTo(() => FakeSharedContentItemDocumentService.UpsertAsync(A<SharedContentItemModel>.Ignored)).MustHaveHappenedOnceExactly();
-            A.CallTo(() => FakeSharedContentItemDocumentService.DeleteAsync(A<Guid>.Ignored)).MustNotHaveHappened();
-
-            Assert.Equal(expectedResponse, result);
-        }
-
-        [Fact]
-        public async Task WebhooksServiceProcessMessageAsyncContentUpdateReturnsSuccess()
-        {
-            // Arrange
-            const HttpStatusCode expectedResponse = HttpStatusCode.OK;
-            var expectedValidContentItemApiDataModel = BuildValidContentItemApiDataModel();
-            var expectedValidContentItemModel = BuildValidContentItemModel();
-            var url = "https://somewhere.com";
-            var service = BuildWebhooksService();
-
-            A.CallTo(() => FakeCmsApiService.GetItemAsync<SharedContentItemApiDataModel>(A<Uri>.Ignored)).Returns(expectedValidContentItemApiDataModel);
-            A.CallTo(() => FakeMapper.Map<SharedContentItemModel>(A<SharedContentItemApiDataModel>.Ignored)).Returns(expectedValidContentItemModel);
-            A.CallTo(() => FakeSharedContentItemDocumentService.UpsertAsync(A<SharedContentItemModel>.Ignored)).Returns(HttpStatusCode.OK);
-
-            // Act
-            var result = await service.ProcessMessageAsync(WebhookCacheOperation.CreateOrUpdate, Guid.NewGuid(), ContentIdForUpdate, url).ConfigureAwait(false);
-
-            // Assert
-            A.CallTo(() => FakeCmsApiService.GetItemAsync<SharedContentItemApiDataModel>(A<Uri>.Ignored)).MustHaveHappenedOnceExactly();
-            A.CallTo(() => FakeMapper.Map<SharedContentItemModel>(A<SharedContentItemApiDataModel>.Ignored)).MustHaveHappenedOnceExactly();
-            A.CallTo(() => FakeSharedContentItemDocumentService.UpsertAsync(A<SharedContentItemModel>.Ignored)).MustHaveHappenedOnceExactly();
-            A.CallTo(() => FakeSharedContentItemDocumentService.DeleteAsync(A<Guid>.Ignored)).MustNotHaveHappened();
+            A.CallTo(() => handler.ProcessContentAsync(A<Uri>.Ignored)).MustHaveHappenedOnceExactly();
+            A.CallTo(() => handler.DeleteContentAsync(A<Guid>.Ignored)).MustNotHaveHappened();
 
             Assert.Equal(expectedResponse, result);
         }
@@ -107,20 +75,53 @@ namespace DFC.App.Triagetool.Services.CacheContentService.UnitTests.WebhooksServ
         {
             // Arrange
             const HttpStatusCode expectedResponse = HttpStatusCode.OK;
-            var url = "https://somewhere.com";
+            var url = "https://somewhere.com/SharedContent";
             var service = BuildWebhooksService();
+            var handler = AddSharedEventHandler();
 
-            A.CallTo(() => FakeSharedContentItemDocumentService.DeleteAsync(A<Guid>.Ignored)).Returns(true);
+            A.CallTo(() => handler.DeleteContentAsync(A<Guid>.Ignored)).Returns(HttpStatusCode.OK);
 
             // Act
             var result = await service.ProcessMessageAsync(WebhookCacheOperation.Delete, Guid.NewGuid(), ContentIdForDelete, url).ConfigureAwait(false);
 
             // Assert
-            A.CallTo(() => FakeCmsApiService.GetItemAsync<SharedContentItemApiDataModel>(A<Uri>.Ignored)).MustNotHaveHappened();
-            A.CallTo(() => FakeSharedContentItemDocumentService.UpsertAsync(A<SharedContentItemModel>.Ignored)).MustNotHaveHappened();
-            A.CallTo(() => FakeSharedContentItemDocumentService.DeleteAsync(A<Guid>.Ignored)).MustHaveHappenedOnceExactly();
+            A.CallTo(() => handler.ProcessContentAsync(A<Uri>.Ignored)).MustNotHaveHappened();
+            A.CallTo(() => handler.DeleteContentAsync(A<Guid>.Ignored)).MustHaveHappenedOnceExactly();
 
             Assert.Equal(expectedResponse, result);
+        }
+
+        [Fact]
+        public async Task WebhooksServiceProcessMessageAsyncContentThrowsErrorForInvalidUrl()
+        {
+            // Arrange
+            var url = "/somewhere.com";
+            var service = BuildWebhooksService();
+            AddSharedEventHandler();
+            // Act
+            await Assert.ThrowsAsync<InvalidDataException>(async () => await service.ProcessMessageAsync(WebhookCacheOperation.CreateOrUpdate, Guid.NewGuid(), ContentIdForCreate, url).ConfigureAwait(false)).ConfigureAwait(false);
+        }
+
+        [Fact]
+        public async Task WebhooksServiceProcessMessageAsyncContentThrowsErrorForUnknownHandler()
+        {
+            // Arrange
+            var url = "https://somewhere.com/SharedContent";
+            var service = BuildWebhooksService();
+            // Act
+            await Assert.ThrowsAsync<InvalidOperationException>(async () => await service.ProcessMessageAsync(WebhookCacheOperation.CreateOrUpdate, Guid.NewGuid(), ContentIdForCreate, url).ConfigureAwait(false)).ConfigureAwait(false);
+
+        }
+
+        [Fact]
+        public async Task WebhooksServiceProcessMessageAsyncContentThrowsErrorForUnknownCmsHandler()
+        {
+            // Arrange
+            var url = "https://somewhere.com/";
+            var service = BuildWebhooksService();
+            // Act
+            await Assert.ThrowsAsync<InvalidOperationException>(async () => await service.ProcessMessageAsync(WebhookCacheOperation.CreateOrUpdate, Guid.NewGuid(), ContentIdForCreate, url).ConfigureAwait(false)).ConfigureAwait(false);
+
         }
     }
 }

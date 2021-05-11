@@ -1,31 +1,27 @@
-﻿using DFC.App.Triagetool.Data.Contracts;
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
+using DFC.App.Triagetool.Data.Contracts;
 using DFC.App.Triagetool.Data.Models.CmsApiModels;
 using DFC.App.Triagetool.Data.Models.ContentModels;
+using DFC.Compui.Cosmos.Contracts;
+using DFC.Content.Pkg.Netcore.Data.Contracts;
 using FakeItEasy;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using DFC.App.Triagetool.Data.Helpers;
 
-namespace DFC.App.Triagetool.Services.CacheContentService.UnitTests.WebhooksServiceTests
+namespace DFC.App.Triagetool.Services.CacheContentService.UnitTests.EventHandlerTests
 {
     [ExcludeFromCodeCoverage]
-    public abstract class BaseWebhooksServiceTests
+    public abstract class BaseEventHandlerTests
     {
-        protected const string EventTypePublished = "published";
-        protected const string EventTypeDraft = "draft";
-        protected const string EventTypeDraftDiscarded = "draft-discarded";
-        protected const string EventTypeDeleted = "deleted";
-        protected const string EventTypeUnpublished = "unpublished";
-
-        protected BaseWebhooksServiceTests()
+        protected BaseEventHandlerTests()
         {
             Logger = A.Fake<ILogger<WebhooksService>>();
-            FakeEventHandlers = new List<IEventHandler>();
+            FakeMapper = A.Fake<AutoMapper.IMapper>();
+            FakeCmsApiService = A.Fake<ICmsApiService>();
+            FakeSharedContentItemDocumentService = A.Fake<IDocumentService<SharedContentItemModel>>();
+            FakeReloadService = A.Fake<ICacheReloadService>();
         }
 
-        protected Guid ContentIdForCreate { get; } = Guid.NewGuid();
 
         protected Guid ContentIdForUpdate { get; } = Guid.NewGuid();
 
@@ -33,7 +29,13 @@ namespace DFC.App.Triagetool.Services.CacheContentService.UnitTests.WebhooksServ
 
         protected ILogger<WebhooksService> Logger { get; }
 
-        protected IList<IEventHandler> FakeEventHandlers { get; }
+        protected AutoMapper.IMapper FakeMapper { get; }
+
+        protected ICmsApiService FakeCmsApiService { get; }
+
+        protected IDocumentService<SharedContentItemModel> FakeSharedContentItemDocumentService { get; }
+
+        protected ICacheReloadService FakeReloadService { get; set; }
 
         protected static SharedContentItemApiDataModel BuildValidContentItemApiDataModel()
         {
@@ -66,21 +68,18 @@ namespace DFC.App.Triagetool.Services.CacheContentService.UnitTests.WebhooksServ
             return model;
         }
 
-        protected WebhooksService BuildWebhooksService()
+        protected SharedContentEventHandler BuildSharedContentEventHandler()
         {
-            var service = new WebhooksService(Logger, FakeEventHandlers);
+            var handler = new SharedContentEventHandler(Logger, FakeMapper, FakeCmsApiService, FakeSharedContentItemDocumentService);
 
-            return service;
-        }
-
-        protected IEventHandler AddSharedEventHandler()
-        {
-            var handler = A.Fake<IEventHandler>();
-            FakeEventHandlers.Add(handler);
-            A.CallTo(() => handler.ProcessType).Returns(DependencyInjectionKeyHelpers.SharedContentEventHandler);
-            FakeEventHandlers.Add(handler);
             return handler;
         }
 
+        protected CmsEventHandler BuildCmsEventHandler()
+        {
+            var handler = new CmsEventHandler(Logger, FakeReloadService);
+
+            return handler;
+        }
     }
 }
