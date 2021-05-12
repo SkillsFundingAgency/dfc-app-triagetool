@@ -5,6 +5,8 @@ variables:
   value: $(WebAppPrefix)-as
 - name: cosmosDBCollectionName
   value: shared-content
+- name: triagetoolDbCollectionName
+  value: triagetool
 - name: ResourceGroup
   value: $(WebAppPrefix)-rg
 - name: WebAppProjectName
@@ -33,6 +35,12 @@ variables:
   value:
 - name: SubscriptionSettingsFilterPropertyContainsFilters0Values0
   value: 2c9da1b3-3529-4834-afc9-9cd741e59788
+- name: SubscriptionSettingsFilterPropertyContainsFilters0Values1
+  value: /content/page/
+- name: SubscriptionSettingsFilterPropertyContainsFilters0Values2
+  value: /content/triagetooloption/
+- name: SubscriptionSettingsFilterPropertyContainsFilters0Values3
+  value: /content/triagetoolfilter/
 - name: EnableAzureMonitorAlerting
   value: true
 - name: aspTier
