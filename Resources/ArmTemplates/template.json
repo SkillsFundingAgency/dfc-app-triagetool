@@ -307,6 +307,10 @@
                                 "value": "[parameters('contentUrl')]"
                             },
                             {
+                                "name": "CmsApiClientOptions__SummaryEndpoint",
+                                "value": "/"
+                            },
+                            {
                                 "name": "Configuration__ApplicationName",
                                 "value": "[parameters('ApplicationName')]"
                             },
