@@ -24,6 +24,8 @@ namespace DFC.App.Triagetool.Data.Models.ContentModels
 
         public string? Title { get; set; }
 
+        public DateTime LastCached { get; set; } = DateTime.UtcNow;
+
         public List<string> FilterIds { get; set; }
 
         public List<string> PageIds { get; set; }
