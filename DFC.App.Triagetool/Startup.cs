@@ -34,7 +34,7 @@ namespace DFC.App.Triagetool
             this.env = env;
         }
 
-        public static void Configure(IApplicationBuilder app, IWebHostEnvironment env, IMapper mapper)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IMapper mapper)
         {
             if (env.IsDevelopment())
             {
@@ -84,7 +84,6 @@ namespace DFC.App.Triagetool
             var policyRegistry = services.AddPolicyRegistry();
 
             services.AddApiServices(configuration, policyRegistry);
-
             services.AddMvc(config =>
                 {
                     config.RespectBrowserAcceptHeader = true;

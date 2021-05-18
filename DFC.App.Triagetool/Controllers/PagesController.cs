@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using DFC.App.Triagetool.Data.Models.ContentModels;
-using DFC.App.Triagetool.Extensions;
 using DFC.App.Triagetool.Models;
 using DFC.App.Triagetool.ViewModels;
 using DFC.Compui.Cosmos.Contracts;
@@ -8,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -24,76 +24,23 @@ namespace DFC.App.Triagetool.Controllers
         private readonly ILogger<PagesController> logger;
         private readonly AutoMapper.IMapper mapper;
         private readonly IDocumentService<SharedContentItemModel> sharedContentItemDocumentService;
+        private readonly IDocumentService<TriageToolOptionDocumentModel> triageToolDocumentService;
 
         public PagesController(
             ILogger<PagesController> logger,
             IMapper mapper,
-            IDocumentService<SharedContentItemModel> sharedContentItemDocumentService)
+            IDocumentService<SharedContentItemModel> sharedContentItemDocumentService,
+            IDocumentService<TriageToolOptionDocumentModel> triageToolDocumentService)
         {
             this.logger = logger;
             this.mapper = mapper;
             this.sharedContentItemDocumentService = sharedContentItemDocumentService;
+            this.triageToolDocumentService = triageToolDocumentService;
         }
 
         [HttpGet]
-        [Route("/")]
-        [Route("pages")]
-        public async Task<IActionResult> Index()
-        {
-            var viewModel = new IndexViewModel()
-            {
-                Path = LocalPath,
-                Documents = new List<IndexDocumentViewModel>()
-                {
-                    new IndexDocumentViewModel { Title = HealthController.HealthViewCanonicalName },
-                    new IndexDocumentViewModel { Title = SitemapController.SitemapViewCanonicalName },
-                    new IndexDocumentViewModel { Title = RobotController.RobotsViewCanonicalName },
-                },
-            };
-            var sharedContentItemModels = await sharedContentItemDocumentService.GetAllAsync().ConfigureAwait(false);
-
-            if (sharedContentItemModels != null)
-            {
-                var documents = from a in sharedContentItemModels.OrderBy(o => o.Title)
-                                select mapper.Map<IndexDocumentViewModel>(a);
-
-                viewModel.Documents.AddRange(documents);
-
-                logger.LogInformation($"{nameof(Index)} has succeeded");
-            }
-            else
-            {
-                logger.LogWarning($"{nameof(Index)} has returned with no results");
-            }
-
-            return this.NegotiateContentResult(viewModel);
-        }
-
-        [HttpGet]
-        [Route("pages/{documentId}/document")]
-        public async Task<IActionResult> Document(Guid documentId)
-        {
-            var sharedContentItemModel = await sharedContentItemDocumentService.GetByIdAsync(documentId).ConfigureAwait(false);
-
-            if (sharedContentItemModel != null)
-            {
-                var viewModel = mapper.Map<DocumentViewModel>(sharedContentItemModel);
-                var breadcrumbItemModel = mapper.Map<BreadcrumbItemModel>(sharedContentItemModel);
-
-                viewModel.Breadcrumb = BuildBreadcrumb(LocalPath, breadcrumbItemModel);
-
-                logger.LogInformation($"{nameof(Document)} has succeeded for: {documentId}");
-
-                return this.NegotiateContentResult(viewModel);
-            }
-
-            logger.LogWarning($"{nameof(Document)} has returned no content for: {documentId}");
-
-            return NoContent();
-        }
-
-        [HttpGet]
-        [Route("pages/{article}/htmlhead")]
+        [Route("pages/htmlhead")]
+        [Route("pages/{article?}/htmlhead")]
         public async Task<IActionResult> HtmlHead(string article)
         {
             logger.LogWarning($"{nameof(HtmlHead)} has returned no content for: {article}");
@@ -102,51 +49,9 @@ namespace DFC.App.Triagetool.Controllers
         }
 
         [HttpGet]
-        [Route("pages/{article}/breadcrumb")]
+        [Route("pages/breadcrumb")]
+        [Route("pages/{article?}/breadcrumb")]
         public async Task<IActionResult> Breadcrumb(string article)
-        {
-            logger.LogWarning($"{nameof(Breadcrumb)} has returned no content for: {article}");
-
-            return NoContent();
-        }
-
-        [HttpGet]
-        [Route("pages/{article}/bodytop")]
-        public async Task<IActionResult> BodyTop(string article)
-        {
-            logger.LogWarning($"{nameof(BodyTop)} has returned no content for: {article}");
-
-            return NoContent();
-        }
-
-        [HttpGet]
-        [Route("pages/{article}/body")]
-        public async Task<IActionResult> Body(string article)
-        {
-            logger.LogWarning($"{nameof(Body)} has returned not found for: {article}");
-
-            return NotFound();
-        }
-
-        [HttpGet]
-        [Route("pages/{article}/bodyfooter")]
-        public async Task<IActionResult> BodyFooter(string article)
-        {
-            logger.LogWarning($"{nameof(BodyFooter)} has returned no content for: {article}");
-
-            return NoContent();
-        }
-
-        [HttpGet]
-        [Route("pages/{article}/herobanner")]
-        public async Task<IActionResult> HeroBanner(string article)
-        {
-            logger.LogWarning($"{nameof(HeroBanner)} has returned no content for: {article}");
-
-            return NoContent();
-        }
-
-        private static BreadcrumbViewModel BuildBreadcrumb(string segmentPath, BreadcrumbItemModel? breadcrumbItemModel)
         {
             const string slash = "/";
             var viewModel = new BreadcrumbViewModel
@@ -158,23 +63,119 @@ namespace DFC.App.Triagetool.Controllers
                         Route = slash,
                         Title = "Home",
                     },
+                    new BreadcrumbItemViewModel
+                    {
+                        AddHyperlink = false,
+                        Title = "Personalised careers advice and information",
+                    },
                 },
             };
+            logger.LogWarning($"{nameof(Breadcrumb)} has returned no content for: {article}");
 
-            if (breadcrumbItemModel?.Title != null && !string.IsNullOrWhiteSpace(breadcrumbItemModel.Route))
+            return View(viewModel);
+        }
+
+        [HttpGet]
+        [Route("pages/bodytop")]
+        [Route("pages/{article?}/bodytop")]
+        public async Task<IActionResult> BodyTop(string article)
+        {
+            logger.LogWarning($"{nameof(BodyTop)} has returned no content for: {article}");
+
+            return NoContent();
+        }
+
+        [HttpGet]
+        [Route("pages/body")]
+        [Route("pages/{article?}/body")]
+        public async Task<IActionResult> Body(string article)
+        {
+            var documents = await triageToolDocumentService
+                .GetAllAsync(TriageToolOptionDocumentModel.DefaultPartitionKey).ConfigureAwait(false);
+            var sharedContent = await sharedContentItemDocumentService.GetAllAsync().ConfigureAwait(false);
+
+            var document = !string.IsNullOrEmpty(article)
+                ? documents?.FirstOrDefault(x => string.Equals(x.Title, article, StringComparison.CurrentCultureIgnoreCase))
+                : documents?.FirstOrDefault();
+
+            var model = mapper.Map<TriageToolOptionViewModel>(document);
+            model.SharedContent = sharedContent?.FirstOrDefault()?.Content;
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [Route("pages/body")]
+        [Route("pages/{article}/body")]
+        public async Task<IActionResult> Post(OptionPostViewModel postData)
+        {
+            var documents = (await triageToolDocumentService
+                .GetAllAsync(TriageToolOptionDocumentModel.DefaultPartitionKey).ConfigureAwait(false))?.ToList();
+
+            if (documents == null || !documents.Any())
             {
-                var articlePathViewModel = new BreadcrumbItemViewModel
-                {
-                    Route = slash + segmentPath,
-                    Title = breadcrumbItemModel.Title,
-                };
-
-                viewModel.Breadcrumbs.Add(articlePathViewModel);
+                throw new FileNotFoundException("Unable to Find any Triage Tool documents");
             }
 
-            viewModel.Breadcrumbs.Last().AddHyperlink = false;
+            var document = documents?.FirstOrDefault(x => string.Equals(x.Title, postData.Title, StringComparison.CurrentCultureIgnoreCase)) ?? documents?.FirstOrDefault();
 
-            return viewModel;
+            if (postData?.Filters != null && postData.Filters.Split(",").Any() && document != null)
+            {
+                document.Pages = document.Pages.Where(p => postData.Filters.Split(",").Any(pdf => p.Filters.Contains(pdf))).ToList();
+            }
+
+            var model = mapper.Map<TriageToolOptionViewModel>(document);
+
+            if (postData?.Filters != null && postData.Filters.Any())
+            {
+                foreach (var filter in model.Filters)
+                {
+                   filter.Selected = postData.Filters.Split(",").Any(pdf => string.Equals(pdf ,filter?.Url?.ToString(), StringComparison.CurrentCultureIgnoreCase));
+                }
+
+                model.SelectedFilters = postData.Filters.Split(",").ToList();
+            }
+
+            var sharedContent = await sharedContentItemDocumentService.GetAllAsync().ConfigureAwait(false);
+            model.SharedContent = sharedContent?.FirstOrDefault()?.Content;
+
+            return View("Body", model);
+        }
+
+        [HttpGet]
+        [Route("pages/bodyfooter")]
+        [Route("pages/{article?}/bodyfooter")]
+        public async Task<IActionResult> BodyFooter(string article)
+        {
+            logger.LogWarning($"{nameof(BodyFooter)} has returned no content for: {article}");
+
+            return NoContent();
+        }
+
+        [HttpGet]
+        [Route("pages/herobanner")]
+        [Route("pages/{article?}/herobanner")]
+        public async Task<IActionResult> HeroBanner(string article)
+        {
+            var options = await triageToolDocumentService.GetAllAsync(TriageToolOptionDocumentModel.DefaultPartitionKey).ConfigureAwait(false);
+
+            var viewModel = new HeroBannerViewModel();
+
+            if (options != null && options.Any())
+            {
+                viewModel.Options = options.Select(x => x.Title).ToList()!;
+            }
+
+            return View(viewModel);
+        }
+
+        [HttpGet]
+        [Route("api/TriageToolOption/GetOptions/ajax")]
+        public async Task<IActionResult> Data()
+        {
+            var documents = await triageToolDocumentService.GetAllAsync().ConfigureAwait(false);
+            var models = mapper.Map<IList<TriageToolOptionViewModel>>(documents);
+            return Json(models);
         }
     }
 }
