@@ -2,6 +2,7 @@
 using DFC.App.Triagetool.Data.Helpers;
 using DFC.App.Triagetool.Data.Models.CmsApiModels;
 using DFC.App.Triagetool.Data.Models.ContentModels;
+using DFC.App.Triagetool.ViewModels;
 using DFC.Content.Pkg.Netcore.Data.Models;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
@@ -41,6 +42,15 @@ namespace DFC.App.Triagetool.AutoMapperProfiles
                 .ForMember(d => d.Url, s => s.MapFrom(m => m.Url))
                 .ForMember(d => d.Title, s =>s.MapFrom(m => m.Title))
                 .ForAllOtherMembers(d => d.Ignore());
+
+            CreateMap<TriageToolOptionDocumentModel, TriageToolOptionViewModel>()
+                .ForMember(d => d.SelectedFilters, s => s.Ignore())
+                .ForMember(d => d.SharedContent, s => s.Ignore());
+
+            CreateMap<PageDocumentModel, TriageToolPageViewModel>();
+
+            CreateMap<TriageToolFilterDocumentModel, TriageToolFilterViewModel>()
+                .ForMember(d => d.Selected, s => s.Ignore());
         }
     }
 }
