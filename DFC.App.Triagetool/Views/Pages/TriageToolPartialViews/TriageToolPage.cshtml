@@ -1,10 +1,10 @@
 ﻿@model TriageToolOptionViewModel
 
 
-<ol class="results-list">
+<ol class="triage-result-list results-list">
     @foreach (var pageItem in Model.Pages)
     {
-        <li class="dfc-code-search-resultitem info-card" id="@pageItem." style="display: list-item;">
+        <li class="dfc-code-search-resultitem triage-search-result-item info-card" id="@pageItem.">
             <div class="info-card-content">
                 <h3 class="govuk-heading-m"><a class="govuk-link" href="@pageItem.Link">@pageItem.Title</a></h3>
                 <p class="govuk-body">@Html.Raw(pageItem.Summary)</p>
