@@ -37,7 +37,7 @@
                     <noscript>
                         <button data-module="govuk-button" class="govuk-button" type="submit">Apply filters</button>
                     </noscript>
-                    @Html.HiddenFor(x => x.Title, new { @id = "SelectedOption" })
+                    <input id="SelectedOption" name="triage-select" type="hidden" value="@Model.Title">
                     <p class="clear-filters"><a  id="clearFilters" href="/triagetool/@Model.Title">Clear filters</a></p>
                     <div class="triage-tool-sidebar app-related-items">
                         @Html.Raw(Model.SharedContent)
