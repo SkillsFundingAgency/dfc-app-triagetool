@@ -84,6 +84,7 @@ namespace DFC.App.Triagetool.Services.CacheContentService.UnitTests.CmsReload
             A.CallTo(() => fakeCmsApiService.GetItemAsync<TriageToolOptionItemModel>(A<Uri>.Ignored)).MustHaveHappened();
             A.CallTo(() => fakeCmsApiService.GetItemAsync<CmsApiDataModel>(A<Uri>.Ignored)).MustHaveHappened();
             A.CallTo(() => fakeDocumentService.UpsertAsync(A<TriageToolOptionDocumentModel>.Ignored)).MustHaveHappened();
+            A.CallTo(() => fakeDocumentService.PurgeAsync()).MustHaveHappened();
         }
 
         [Fact]
@@ -130,40 +131,6 @@ namespace DFC.App.Triagetool.Services.CacheContentService.UnitTests.CmsReload
             //Assert
             A.CallTo(() => fakeCmsApiService.GetItemAsync<TriageToolOptionSummaryModel>(A<string>.Ignored, A<Guid>.Ignored)).MustNotHaveHappened();
             A.CallTo(() => fakeDocumentService.UpsertAsync(A<TriageToolOptionDocumentModel>.Ignored)).MustNotHaveHappened();
-        }
-
-        [Fact]
-        public async Task CacheReloadServiceReloadDeleteNoLongerFoundOptions()
-        {
-            //Arrange
-            var options = GetValidCmsOptionSummary();
-
-            A.CallTo(() =>
-                    fakeCmsApiService.GetSummaryAsync<TriageToolOptionSummaryModel>(CmsContentKeyHelper.OptionTag))
-                .Returns(options);
-            A.CallTo(() =>
-                    fakeCmsApiService.GetSummaryAsync<CmsApiSummaryItemModel>(CmsContentKeyHelper.PageTag))
-                .Returns(GetValidPagesSummary());
-            A.CallTo(() => fakeCmsApiService.GetItemAsync<TriageToolOptionItemModel>(A<string>.Ignored, A<Guid>.Ignored)).Returns(GetValidOptionItem());
-            var Service = new CacheReloadService(A.Fake<ILogger<CacheReloadService>>(), fakeMapper, fakeDocumentService, fakeCmsApiService, fakeContentTypeMappingService);
-            A.CallTo(() => fakeMapper.Map<IList<PageDocumentModel>>(A<IList<CmsApiDataModel>>.Ignored))
-                .Returns(new List<PageDocumentModel> { GetPageDocumentModel(), });
-            A.CallTo(() => fakeMapper.Map<IList<TriageToolOptionDocumentModel>>(A<IList<TriageToolOptionItemModel>>.Ignored))
-                .Returns(new List<TriageToolOptionDocumentModel> { GetTriageToolOptionDocumentModel(), });
-            A.CallTo(() => fakeDocumentService.GetAllAsync(A<string>.Ignored)).Returns(
-                new List<TriageToolOptionDocumentModel>
-                {
-                    GetTriageToolOptionDocumentModel(uri: new Uri("http://tetsing.com")),
-                });
-
-            //Act
-            await Service.Reload(CancellationToken.None).ConfigureAwait(false);
-
-            //Assert
-            A.CallTo(() => fakeCmsApiService.GetItemAsync<TriageToolOptionItemModel>(A<Uri>.Ignored)).MustHaveHappened();
-            A.CallTo(() => fakeCmsApiService.GetItemAsync<CmsApiDataModel>(A<Uri>.Ignored)).MustHaveHappened();
-            A.CallTo(() => fakeDocumentService.UpsertAsync(A<TriageToolOptionDocumentModel>.Ignored)).MustHaveHappened();
-            A.CallTo(() => fakeDocumentService.DeleteAsync(A<Guid>.Ignored)).MustHaveHappened();
         }
     }
 }

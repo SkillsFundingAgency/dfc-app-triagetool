@@ -126,17 +126,9 @@ namespace DFC.App.Triagetool.Services.CacheContentService
         {
             var currentOptions = await cmsContentDocumentService.GetAllAsync().ConfigureAwait(false);
             var existingDocuments = currentOptions?.ToList();
-            if (existingDocuments != null)
-            {
-                var optionsToDelete = existingDocuments.Where(co => !options.Select(s => s.Url).ToList().Contains(co.Url));
 
-                foreach (var optionToDelete in optionsToDelete)
-                {
-                    logger.LogInformation("Deleting options no longer on the content API");
-                    await cmsContentDocumentService.DeleteAsync(optionToDelete.Id).ConfigureAwait(false);
-                }
-            }
-
+            await cmsContentDocumentService.PurgeAsync().ConfigureAwait(false);
+            
             foreach (var option in options)
             {
                 var existingDocument = existingDocuments?.FirstOrDefault(tto => tto.Url == option.Url);
