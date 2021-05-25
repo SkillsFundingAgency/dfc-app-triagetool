@@ -1,8 +1,8 @@
 ﻿using DFC.App.Triagetool.Data.Common;
 using DFC.App.Triagetool.Data.Contracts;
 using DFC.App.Triagetool.Data.Helpers;
-using DFC.App.Triagetool.Data.Models;
 using DFC.App.Triagetool.Data.Models.CmsApiModels;
+using DFC.App.Triagetool.Data.Models.ContentModels;
 using DFC.Compui.Cosmos.Contracts;
 using DFC.Content.Pkg.Netcore.Data.Contracts;
 using Microsoft.Extensions.Logging;
@@ -11,7 +11,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using DFC.App.Triagetool.Data.Models.ContentModels;
 
 namespace DFC.App.Triagetool.Services.CacheContentService
 {
@@ -114,6 +113,8 @@ namespace DFC.App.Triagetool.Services.CacheContentService
 
                 if (pagesForOption.Any())
                 {
+                    optionDocument.FilterIds = optionDocument.FilterIds.Intersect(pagesForOption.SelectMany(s => s.Filters)).ToList();
+                    optionDocument.Filters = optionDocument.Filters.Where(w => w.Url != null && optionDocument.FilterIds.Contains(w.Url.ToString())).ToList();
                     optionDocument.Pages = pagesForOption.ToList();
                     optionDocument.PageIds = pagesForOption.Select(s => s.Uri!.ToString()).ToList();
                 }
@@ -128,7 +129,7 @@ namespace DFC.App.Triagetool.Services.CacheContentService
             var existingDocuments = currentOptions?.ToList();
 
             await cmsContentDocumentService.PurgeAsync().ConfigureAwait(false);
-            
+
             foreach (var option in options)
             {
                 var existingDocument = existingDocuments?.FirstOrDefault(tto => tto.Url == option.Url);
