@@ -120,7 +120,7 @@ namespace DFC.App.Triagetool.Services.CacheContentService
                 }
             }
 
-            return optionsDocuments;
+            return optionsDocuments.Where(w => w.Filters != null && w.Filters.Any() && w.Pages != null && w.Pages.Any()).ToList();
         }
 
         private async Task UpdateDocuments(IList<TriageToolOptionDocumentModel> options)
