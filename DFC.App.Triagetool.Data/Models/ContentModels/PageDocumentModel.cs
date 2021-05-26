@@ -21,5 +21,7 @@ namespace DFC.App.Triagetool.Data.Models.ContentModels
         public Uri? Uri { get; set; } = null!;
 
         public List<string> Filters { get; set; }
+
+        public DateTime? Published { get; set; }
     }
 }
