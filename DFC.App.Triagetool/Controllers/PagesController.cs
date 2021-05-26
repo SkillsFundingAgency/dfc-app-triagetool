@@ -94,8 +94,8 @@ namespace DFC.App.Triagetool.Controllers
                 .GetAllAsync(TriageToolOptionDocumentModel.DefaultPartitionKey).ConfigureAwait(false);
             var sharedContent = await sharedContentItemDocumentService.GetAllAsync().ConfigureAwait(false);
 
-            var document = !string.IsNullOrEmpty(article)
-                ? documents?.FirstOrDefault(x => string.Equals(x.Title, article, StringComparison.CurrentCultureIgnoreCase))
+            var document = !string.IsNullOrWhiteSpace(article)
+                ? documents?.FirstOrDefault(x => string.Equals(x.Title, article, StringComparison.CurrentCultureIgnoreCase)) ?? documents?.FirstOrDefault()
                 : documents?.FirstOrDefault();
 
             var model = mapper.Map<TriageToolOptionViewModel>(document);
