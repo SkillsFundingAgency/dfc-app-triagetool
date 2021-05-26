@@ -9,5 +9,7 @@ namespace DFC.App.Triagetool.Data.Models.ContentModels
         public string? Title { get; set; }
 
         public Uri? Url { get; set; }
+
+        public int? Ordinal { get; set; }
     }
 }
