@@ -43,9 +43,21 @@ namespace DFC.App.Triagetool.Services.CacheContentService
 
                 if (options.Any())
                 {
+                    var allPagesAndViews = new List<CmsApiDataModel>();
                     var pages = await GetTriagePages().ConfigureAwait(false);
+                    var applicationViews = await GetTriageApplicationViews().ConfigureAwait(false);
 
-                    var documents = GetDocumentOptionModel(options, pages);
+                    if (pages != null && pages.Any())
+                    {
+                        allPagesAndViews.AddRange(pages);
+                    }
+
+                    if (applicationViews != null && applicationViews.Any())
+                    {
+                        allPagesAndViews.AddRange(applicationViews);
+                    }
+
+                    var documents = GetDocumentOptionModel(options, allPagesAndViews);
 
                     await UpdateDocuments(documents).ConfigureAwait(false);
                 }
@@ -100,6 +112,28 @@ namespace DFC.App.Triagetool.Services.CacheContentService
             }
 
             return pages;
+        }
+
+        private async Task<IList<CmsApiDataModel>> GetTriageApplicationViews()
+        {
+            var applicationViews = new List<CmsApiDataModel>();
+
+            var applicationViewSummary = await cmsApiService.GetSummaryAsync<CmsApiSummaryItemModel>(CmsContentKeyHelper.ApplicationViewTag)
+                .ConfigureAwait(false);
+
+            if (applicationViewSummary != null && applicationViewSummary.Any())
+            {
+                foreach (var applicationViewItem in applicationViewSummary)
+                {
+                    var applicationView = await cmsApiService.GetItemAsync<CmsApiDataModel>(applicationViewItem.Url!).ConfigureAwait(false);
+                    if (applicationView != null && applicationView.UseInTriageTool)
+                    {
+                        applicationViews.Add(applicationView);
+                    }
+                }
+            }
+
+            return applicationViews;
         }
 
         private IList<TriageToolOptionDocumentModel> GetDocumentOptionModel(IList<TriageToolOptionItemModel> options, IList<CmsApiDataModel> pages)

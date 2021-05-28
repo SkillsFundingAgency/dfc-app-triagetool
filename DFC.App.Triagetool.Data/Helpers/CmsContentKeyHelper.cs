@@ -7,6 +7,8 @@ namespace DFC.App.Triagetool.Data.Helpers
     {
         public const string PageTag = "Page";
 
+        public const string ApplicationViewTag = "ApplicationView";
+
         public const string OptionTag = "TriageToolOption";
 
         public const string FilterTag = "TriageToolFilter";
