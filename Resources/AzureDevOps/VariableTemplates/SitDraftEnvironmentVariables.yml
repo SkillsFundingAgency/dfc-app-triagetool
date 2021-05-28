@@ -41,6 +41,8 @@ variables:
   value: /content/triagetooloption/
 - name: SubscriptionSettingsFilterPropertyContainsFilters0Values3
   value: /content/triagetoolfilter/
+- name: SubscriptionSettingsFilterPropertyContainsFilters0Values4
+  value: /content/applicationview/
 - name: EnableAzureMonitorAlerting
   value: true
 - name: aspTier

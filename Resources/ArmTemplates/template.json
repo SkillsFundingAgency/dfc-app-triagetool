@@ -79,6 +79,9 @@
         "SubscriptionSettingsFilterPropertyContainsFilters0Values3": {
             "type": "string"
         },
+        "SubscriptionSettingsFilterPropertyContainsFilters0Values4": {
+            "type": "string"
+        },
         "ApplicationName": {
             "type": "string"
         },
@@ -361,6 +364,10 @@
                             {
                                 "name": "SubscriptionSettings__Filter__PropertyContainsFilters__0__Values__3",
                                 "value": "[parameters('SubscriptionSettingsFilterPropertyContainsFilters0Values3')]"
+                            },
+                            {
+                                "name": "SubscriptionSettings__Filter__PropertyContainsFilters__0__Values__4",
+                                "value": "[parameters('SubscriptionSettingsFilterPropertyContainsFilters0Values4')]"
                             }
                         ]
                     }
