@@ -27,8 +27,7 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
 
             var model = statusResult.Model as BreadcrumbViewModel;
 
-            Assert.True(model.Breadcrumbs.Any());
-
+            Assert.True(model!.Breadcrumbs.Any());
         }
     }
 }

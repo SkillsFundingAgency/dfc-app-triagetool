@@ -1,7 +1,6 @@
-﻿using System;
+﻿using DFC.App.Triagetool.Data.Models.ContentModels;
+using System;
 using System.Diagnostics.CodeAnalysis;
-using DFC.App.Triagetool.Data.Models.ContentModels;
-using DFC.App.Triagetool.Services.CacheContentService.UnitTests.WebhooksServiceTests;
 using Xunit;
 
 namespace DFC.App.Triagetool.Services.CacheContentService.UnitTests.EventHandlerTests.SharedContent

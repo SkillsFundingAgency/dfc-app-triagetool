@@ -111,6 +111,5 @@ namespace DFC.App.Triagetool.Services.CacheContentService.UnitTests.CmsReload
                 Uri = pageId,
             };
         }
-
     }
 }

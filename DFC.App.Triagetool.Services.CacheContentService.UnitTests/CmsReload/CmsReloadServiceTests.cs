@@ -28,10 +28,10 @@ namespace DFC.App.Triagetool.Services.CacheContentService.UnitTests.CmsReload
         {
             //Arrange
             var cancellationToken = new CancellationToken(true);
-            var Service = new CacheReloadService(A.Fake<ILogger<CacheReloadService>>(), fakeMapper, fakeDocumentService, fakeCmsApiService, fakeContentTypeMappingService);
+            var service = new CacheReloadService(A.Fake<ILogger<CacheReloadService>>(), fakeMapper, fakeDocumentService, fakeCmsApiService, fakeContentTypeMappingService);
 
             //Act
-            await Service.Reload(cancellationToken).ConfigureAwait(false);
+            await service.Reload(cancellationToken).ConfigureAwait(false);
 
             //Assert
             A.CallTo(() => fakeCmsApiService.GetItemAsync<TriageToolOptionSummaryModel>(A<string>.Ignored, A<Guid>.Ignored)).MustNotHaveHappened();
@@ -45,10 +45,10 @@ namespace DFC.App.Triagetool.Services.CacheContentService.UnitTests.CmsReload
             var dummyContentItem = A.Dummy<TriageToolOptionSummaryModel>();
 
             A.CallTo(() => fakeCmsApiService.GetItemAsync<TriageToolOptionSummaryModel>(A<string>.Ignored, A<Guid>.Ignored)).Returns(dummyContentItem);
-            var Service = new CacheReloadService(A.Fake<ILogger<CacheReloadService>>(), fakeMapper, fakeDocumentService, fakeCmsApiService, fakeContentTypeMappingService);
+            var service = new CacheReloadService(A.Fake<ILogger<CacheReloadService>>(), fakeMapper, fakeDocumentService, fakeCmsApiService, fakeContentTypeMappingService);
 
             //Act
-            await Service.Reload(CancellationToken.None).ConfigureAwait(false);
+            await service.Reload(CancellationToken.None).ConfigureAwait(false);
 
             //Assert
             A.CallTo(() => fakeCmsApiService.GetItemAsync<TriageToolOptionItemModel>(A<string>.Ignored, A<Guid>.Ignored)).MustNotHaveHappened();
@@ -74,14 +74,14 @@ namespace DFC.App.Triagetool.Services.CacheContentService.UnitTests.CmsReload
                 .Returns(GetValidApplicationViewSummary());
             A.CallTo(() => fakeCmsApiService.GetItemAsync<TriageToolOptionItemModel>(A<string>.Ignored, A<Guid>.Ignored)).Returns(GetValidOptionItem());
             A.CallTo(() => fakeCmsApiService.GetItemAsync<CmsApiDataModel>(A<Uri>.Ignored)).Returns(GetValidPage());
-            var Service = new CacheReloadService(A.Fake<ILogger<CacheReloadService>>(), fakeMapper, fakeDocumentService, fakeCmsApiService, fakeContentTypeMappingService);
+            var service = new CacheReloadService(A.Fake<ILogger<CacheReloadService>>(), fakeMapper, fakeDocumentService, fakeCmsApiService, fakeContentTypeMappingService);
             A.CallTo(() => fakeMapper.Map<IList<PageDocumentModel>>(A<IList<CmsApiDataModel>>.Ignored))
                 .Returns(new List<PageDocumentModel> { GetPageDocumentModel(), });
             A.CallTo(() => fakeMapper.Map<IList<TriageToolOptionDocumentModel>>(A<IList<TriageToolOptionItemModel>>.Ignored))
                 .Returns(new List<TriageToolOptionDocumentModel> { GetTriageToolOptionDocumentModel(), });
 
             //Act
-            await Service.Reload(CancellationToken.None).ConfigureAwait(false);
+            await service.Reload(CancellationToken.None).ConfigureAwait(false);
 
             //Assert
             A.CallTo(() => fakeCmsApiService.GetItemAsync<TriageToolOptionItemModel>(A<Uri>.Ignored)).MustHaveHappened();
@@ -100,14 +100,14 @@ namespace DFC.App.Triagetool.Services.CacheContentService.UnitTests.CmsReload
                     fakeCmsApiService.GetSummaryAsync<TriageToolOptionSummaryModel>(CmsContentKeyHelper.OptionTag))
                 .Returns(options);
             A.CallTo(() => fakeCmsApiService.GetItemAsync<TriageToolOptionItemModel>(A<string>.Ignored, A<Guid>.Ignored)).Returns(GetValidOptionItem());
-            var Service = new CacheReloadService(A.Fake<ILogger<CacheReloadService>>(), fakeMapper, fakeDocumentService, fakeCmsApiService, fakeContentTypeMappingService);
+            var service = new CacheReloadService(A.Fake<ILogger<CacheReloadService>>(), fakeMapper, fakeDocumentService, fakeCmsApiService, fakeContentTypeMappingService);
             A.CallTo(() => fakeMapper.Map<IList<PageDocumentModel>>(A<IList<CmsApiDataModel>>.Ignored))
                 .Returns(new List<PageDocumentModel> { GetPageDocumentModel(), });
             A.CallTo(() => fakeMapper.Map<IList<TriageToolOptionDocumentModel>>(A<IList<TriageToolOptionItemModel>>.Ignored))
                 .Returns(new List<TriageToolOptionDocumentModel> { GetTriageToolOptionDocumentModel(), });
 
             //Act
-            await Service.Reload(CancellationToken.None).ConfigureAwait(false);
+            await service.Reload(CancellationToken.None).ConfigureAwait(false);
 
             //Assert
             A.CallTo(() => fakeCmsApiService.GetItemAsync<TriageToolOptionItemModel>(A<Uri>.Ignored)).MustHaveHappened();
@@ -122,14 +122,14 @@ namespace DFC.App.Triagetool.Services.CacheContentService.UnitTests.CmsReload
         {
             //Arrange
             var cancellationToken = new CancellationToken(true);
-            var Service = new CacheReloadService(A.Fake<ILogger<CacheReloadService>>(), fakeMapper, fakeDocumentService, fakeCmsApiService, fakeContentTypeMappingService);
+            var service = new CacheReloadService(A.Fake<ILogger<CacheReloadService>>(), fakeMapper, fakeDocumentService, fakeCmsApiService, fakeContentTypeMappingService);
 
             A.CallTo(() =>
                     fakeCmsApiService.GetSummaryAsync<TriageToolOptionSummaryModel>(CmsContentKeyHelper.OptionTag))
                 .Throws<Exception>();
 
             //Act
-            await Service.Reload(cancellationToken).ConfigureAwait(false);
+            await service.Reload(cancellationToken).ConfigureAwait(false);
 
             //Assert
             A.CallTo(() => fakeCmsApiService.GetItemAsync<TriageToolOptionSummaryModel>(A<string>.Ignored, A<Guid>.Ignored)).MustNotHaveHappened();

@@ -1,12 +1,11 @@
-﻿using DFC.App.Triagetool.Data.Models.CmsApiModels;
+﻿using DFC.App.Triagetool.Data.Helpers;
+using DFC.App.Triagetool.Data.Models.CmsApiModels;
 using DFC.App.Triagetool.Data.Models.ContentModels;
-using DFC.App.Triagetool.Services.CacheContentService.UnitTests.WebhooksServiceTests;
 using FakeItEasy;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Threading.Tasks;
-using DFC.App.Triagetool.Data.Helpers;
 using Xunit;
 
 namespace DFC.App.Triagetool.Services.CacheContentService.UnitTests.EventHandlerTests.SharedContent
@@ -15,7 +14,6 @@ namespace DFC.App.Triagetool.Services.CacheContentService.UnitTests.EventHandler
     [ExcludeFromCodeCoverage]
     public class SharedContentHandlerAsyncTests : BaseEventHandlerTests
     {
-
         [Fact]
         public void SharedContentHandlerProcessTypeReturnsCorrectValue()
         {

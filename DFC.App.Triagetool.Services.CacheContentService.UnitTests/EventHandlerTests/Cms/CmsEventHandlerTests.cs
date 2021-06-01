@@ -20,6 +20,7 @@ namespace DFC.App.Triagetool.Services.CacheContentService.UnitTests.EventHandler
             const HttpStatusCode expectedResponse = HttpStatusCode.OK;
             var url = new Uri("https://somewhere.com");
             var service = BuildCmsEventHandler();
+
             // Act
             var result = await service.ProcessContentAsync(url).ConfigureAwait(false);
 
@@ -34,8 +35,8 @@ namespace DFC.App.Triagetool.Services.CacheContentService.UnitTests.EventHandler
         {
             // Arrange
             const HttpStatusCode expectedResponse = HttpStatusCode.OK;
-            var url = new Uri("https://somewhere.com");
             var service = BuildCmsEventHandler();
+
             // Act
             var result = await service.DeleteContentAsync(Guid.NewGuid()).ConfigureAwait(false);
 

@@ -36,7 +36,6 @@ namespace DFC.App.Triagetool.Services.CacheContentService.UnitTests.WebhooksServ
         {
             // Arrange
             const HttpStatusCode expectedResponse = HttpStatusCode.Accepted;
-            var url = "https://somewhere.com/SharedContent";
             var service = BuildWebhooksService();
             var handler = AddSharedEventHandler();
 
@@ -98,6 +97,7 @@ namespace DFC.App.Triagetool.Services.CacheContentService.UnitTests.WebhooksServ
             var url = "/somewhere.com";
             var service = BuildWebhooksService();
             AddSharedEventHandler();
+
             // Act
             await Assert.ThrowsAsync<InvalidDataException>(async () => await service.ProcessMessageAsync(WebhookCacheOperation.CreateOrUpdate, Guid.NewGuid(), ContentIdForCreate, url).ConfigureAwait(false)).ConfigureAwait(false);
         }
@@ -108,9 +108,9 @@ namespace DFC.App.Triagetool.Services.CacheContentService.UnitTests.WebhooksServ
             // Arrange
             var url = "https://somewhere.com/SharedContent";
             var service = BuildWebhooksService();
+
             // Act
             await Assert.ThrowsAsync<InvalidOperationException>(async () => await service.ProcessMessageAsync(WebhookCacheOperation.CreateOrUpdate, Guid.NewGuid(), ContentIdForCreate, url).ConfigureAwait(false)).ConfigureAwait(false);
-
         }
 
         [Fact]
@@ -119,9 +119,9 @@ namespace DFC.App.Triagetool.Services.CacheContentService.UnitTests.WebhooksServ
             // Arrange
             var url = "https://somewhere.com/";
             var service = BuildWebhooksService();
+
             // Act
             await Assert.ThrowsAsync<InvalidOperationException>(async () => await service.ProcessMessageAsync(WebhookCacheOperation.CreateOrUpdate, Guid.NewGuid(), ContentIdForCreate, url).ConfigureAwait(false)).ConfigureAwait(false);
-
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using DFC.App.Triagetool.Data.Contracts;
+using DFC.App.Triagetool.Data.Helpers;
 using DFC.App.Triagetool.Data.Models.CmsApiModels;
 using DFC.App.Triagetool.Data.Models.ContentModels;
 using FakeItEasy;
@@ -6,7 +7,6 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using DFC.App.Triagetool.Data.Helpers;
 
 namespace DFC.App.Triagetool.Services.CacheContentService.UnitTests.WebhooksServiceTests
 {
@@ -81,6 +81,5 @@ namespace DFC.App.Triagetool.Services.CacheContentService.UnitTests.WebhooksServ
             FakeEventHandlers.Add(handler);
             return handler;
         }
-
     }
 }
