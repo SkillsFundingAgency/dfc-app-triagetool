@@ -7,7 +7,10 @@
         <li class="dfc-code-search-resultitem triage-search-result-item info-card" id="@pageItem.">
             <div class="info-card-content">
                 <h3 class="govuk-heading-m"><a class="govuk-link" href="@pageItem.Link">@pageItem.Title</a></h3>
-                <p class="govuk-body">@Html.Raw(pageItem.Summary)</p>
+                @if (!string.IsNullOrWhiteSpace(pageItem.Summary))
+                {
+                    @Html.Raw(pageItem.Summary)
+                }
             </div>
         </li>
     }
