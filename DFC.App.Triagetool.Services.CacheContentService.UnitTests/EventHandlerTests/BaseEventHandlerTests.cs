@@ -1,12 +1,12 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
-using DFC.App.Triagetool.Data.Contracts;
+﻿using DFC.App.Triagetool.Data.Contracts;
 using DFC.App.Triagetool.Data.Models.CmsApiModels;
 using DFC.App.Triagetool.Data.Models.ContentModels;
 using DFC.Compui.Cosmos.Contracts;
 using DFC.Content.Pkg.Netcore.Data.Contracts;
 using FakeItEasy;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace DFC.App.Triagetool.Services.CacheContentService.UnitTests.EventHandlerTests
 {
@@ -21,7 +21,6 @@ namespace DFC.App.Triagetool.Services.CacheContentService.UnitTests.EventHandler
             FakeSharedContentItemDocumentService = A.Fake<IDocumentService<SharedContentItemModel>>();
             FakeReloadService = A.Fake<ICacheReloadService>();
         }
-
 
         protected Guid ContentIdForUpdate { get; } = Guid.NewGuid();
 

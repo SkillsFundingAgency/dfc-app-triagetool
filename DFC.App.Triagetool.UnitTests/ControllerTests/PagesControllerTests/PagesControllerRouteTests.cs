@@ -18,8 +18,8 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
     {
         public static IEnumerable<object[]> PagesRouteDataOk => new List<object[]>
         {
-            new object[] { "/pages/body", "", nameof(PagesController.Body) },
-            new object[] { "/pages/{article}/body", "", nameof(PagesController.Body) },
+            new object[] { "/pages/body", string.Empty, nameof(PagesController.Body) },
+            new object[] { "/pages/{article}/body", string.Empty, nameof(PagesController.Body) },
         };
 
         [Theory]
@@ -32,7 +32,7 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
             var expectedResults = new List<SharedContentItemModel> { expectedResult };
 
             A.CallTo(() => FakeSharedContentItemDocumentService.GetAllAsync(A<string>.Ignored)).Returns(expectedResults);
-            A.CallTo(() => fakeTriageToolOptionDocumentService.GetAllAsync(A<string>.Ignored)).Returns(new List<TriageToolOptionDocumentModel>());
+            A.CallTo(() => FakeTriageToolOptionDocumentService.GetAllAsync(A<string>.Ignored)).Returns(new List<TriageToolOptionDocumentModel>());
 
             // Act
             var result = await RunControllerAction(controller, option, actionMethod).ConfigureAwait(false);
@@ -40,7 +40,7 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
             // Assert
             Assert.IsType<ViewResult>(result);
             A.CallTo(() => FakeSharedContentItemDocumentService.GetAllAsync(A<string>.Ignored)).MustHaveHappenedOnceOrLess();
-            A.CallTo(() => fakeTriageToolOptionDocumentService.GetAllAsync(A<string>.Ignored)).MustHaveHappenedOnceExactly();
+            A.CallTo(() => FakeTriageToolOptionDocumentService.GetAllAsync(A<string>.Ignored)).MustHaveHappenedOnceExactly();
         }
 
         private static async Task<IActionResult> RunControllerAction(PagesController controller, string option, string actionName)
@@ -57,7 +57,7 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
             httpContext.Request.Path = route;
             httpContext.Request.Headers[HeaderNames.Accept] = MediaTypeNames.Application.Json;
 
-            return new PagesController(Logger, FakeMapper, FakeSharedContentItemDocumentService, fakeTriageToolOptionDocumentService)
+            return new PagesController(Logger, FakeMapper, FakeSharedContentItemDocumentService, FakeTriageToolOptionDocumentService)
             {
                 ControllerContext = new ControllerContext
                 {

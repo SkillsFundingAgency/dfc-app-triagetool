@@ -20,7 +20,7 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
         {
             Logger = A.Fake<ILogger<PagesController>>();
             FakeSharedContentItemDocumentService = A.Fake<IDocumentService<SharedContentItemModel>>();
-            fakeTriageToolOptionDocumentService = A.Fake<IDocumentService<TriageToolOptionDocumentModel>>();
+            FakeTriageToolOptionDocumentService = A.Fake<IDocumentService<TriageToolOptionDocumentModel>>();
             FakeMapper = A.Fake<AutoMapper.IMapper>();
         }
 
@@ -44,7 +44,7 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
 
         protected IDocumentService<SharedContentItemModel> FakeSharedContentItemDocumentService { get; }
 
-        protected IDocumentService<TriageToolOptionDocumentModel> fakeTriageToolOptionDocumentService { get; }
+        protected IDocumentService<TriageToolOptionDocumentModel> FakeTriageToolOptionDocumentService { get; }
 
         protected AutoMapper.IMapper FakeMapper { get; }
 
@@ -54,7 +54,7 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
 
             httpContext.Request.Headers[HeaderNames.Accept] = mediaTypeName;
 
-            var controller = new PagesController(Logger, FakeMapper, FakeSharedContentItemDocumentService, fakeTriageToolOptionDocumentService)
+            var controller = new PagesController(Logger, FakeMapper, FakeSharedContentItemDocumentService, FakeTriageToolOptionDocumentService)
             {
                 ControllerContext = new ControllerContext()
                 {
@@ -79,7 +79,7 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
                             Url = new Uri("https://Uri1.com/"),
                         },
                     },
-                    Title = "page 1"
+                    Title = "page 1",
                 },
                 new TriageToolOptionDocumentModel
                 {
@@ -100,22 +100,22 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
                     {
                         new PageDocumentModel
                         {
-                            Filters =new List<string>
+                            Filters = new List<string>
                             {
-                                "https://Uri2.com"
+                                "https://Uri2.com",
                             },
                             Uri = new Uri("https://Page1.com"),
                         },
                         new PageDocumentModel
                         {
-                            Filters =new List<string>
+                            Filters = new List<string>
                             {
-                                "https://Uri1.com"
+                                "https://Uri1.com",
                             },
                             Uri = new Uri("https://Page2.com"),
                         },
                     },
-                    Title = "option 2"
+                    Title = "option 2",
                 },
             };
         }

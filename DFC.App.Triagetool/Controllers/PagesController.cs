@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using DFC.App.Triagetool.Data.Models.ContentModels;
-using DFC.App.Triagetool.Models;
 using DFC.App.Triagetool.ViewModels;
 using DFC.Compui.Cosmos.Contracts;
 using Microsoft.AspNetCore.Mvc;
@@ -130,7 +129,7 @@ namespace DFC.App.Triagetool.Controllers
             {
                 foreach (var filter in model.Filters)
                 {
-                   filter.Selected = postData.Filters.Split(",").Any(pdf => string.Equals(pdf ,filter?.Url?.ToString(), StringComparison.CurrentCultureIgnoreCase));
+                    filter.Selected = postData.Filters.Split(",").Any(pdf => string.Equals(pdf, filter?.Url?.ToString(), StringComparison.CurrentCultureIgnoreCase));
                 }
 
                 model.SelectedFilters = postData.Filters.Split(",").ToList();

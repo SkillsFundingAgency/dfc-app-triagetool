@@ -1,9 +1,12 @@
-﻿using DFC.App.Triagetool.Extensions;
+﻿using DFC.App.Triagetool.Data.Models.ContentModels;
+using DFC.App.Triagetool.Extensions;
 using DFC.App.Triagetool.Models;
+using DFC.Compui.Cosmos.Contracts;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Linq;
 using System.Net.Mime;
+using System.Threading.Tasks;
 
 namespace DFC.App.Triagetool.Controllers
 {
@@ -12,36 +15,45 @@ namespace DFC.App.Triagetool.Controllers
         public const string SitemapViewCanonicalName = "sitemap";
 
         private readonly ILogger<SitemapController> logger;
+        private readonly IDocumentService<TriageToolOptionDocumentModel> triageToolDocumentService;
 
-        public SitemapController(ILogger<SitemapController> logger)
+        public SitemapController(ILogger<SitemapController> logger, IDocumentService<TriageToolOptionDocumentModel> triageToolDocumentService)
         {
             this.logger = logger;
+            this.triageToolDocumentService = triageToolDocumentService;
         }
 
         [HttpGet]
         [Route("pages/sitemap")]
-        public IActionResult SitemapView()
+        public async Task<IActionResult> SitemapView()
         {
-            var result = Sitemap();
+            var result = await Sitemap().ConfigureAwait(false);
 
             return result;
         }
 
         [HttpGet]
         [Route("/sitemap.xml")]
-        public IActionResult Sitemap()
+        public async Task<IActionResult> Sitemap()
         {
             logger.LogInformation("Generating Sitemap");
 
             var sitemapUrlPrefix = $"{Request.GetBaseAddress()}{PagesController.RegistrationPath}";
             var sitemap = new Sitemap();
+            var triageToolOptionModels = await triageToolDocumentService.GetAllAsync().ConfigureAwait(false);
 
-            // add the defaults
-            sitemap.Add(new SitemapLocation
+            if (triageToolOptionModels != null && triageToolOptionModels.Any())
             {
-                Url = sitemapUrlPrefix,
-                Priority = 1,
-            });
+                foreach (var contentPageModel in triageToolOptionModels)
+                {
+                    sitemap.Add(new SitemapLocation
+                    {
+                        Url = $"{sitemapUrlPrefix}/{contentPageModel.Title}",
+                        Priority = 0.5,
+                        ChangeFrequency = SitemapLocation.ChangeFrequencies.Monthly,
+                    });
+                }
+            }
 
             if (!sitemap.Locations.Any())
             {

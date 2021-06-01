@@ -22,7 +22,7 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
         {
             // Arrange
             using var controller = BuildPagesController(mediaTypeName);
-            A.CallTo(() => fakeTriageToolOptionDocumentService.GetAllAsync(A<string>.Ignored))
+            A.CallTo(() => FakeTriageToolOptionDocumentService.GetAllAsync(A<string>.Ignored))
                 .Returns(new List<TriageToolOptionDocumentModel>());
             A.CallTo(() => FakeSharedContentItemDocumentService.GetAllAsync(A<string>.Ignored)).Returns(new List<SharedContentItemModel>());
 
@@ -30,7 +30,7 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
             var result = await controller.Body("an-article").ConfigureAwait(false);
 
             // Assert
-            A.CallTo(() => fakeTriageToolOptionDocumentService.GetAllAsync(A<string>.Ignored))
+            A.CallTo(() => FakeTriageToolOptionDocumentService.GetAllAsync(A<string>.Ignored))
                 .MustHaveHappenedOnceExactly();
             A.CallTo(() => FakeSharedContentItemDocumentService.GetAllAsync(A<string>.Ignored))
                 .MustHaveHappenedOnceExactly();
@@ -38,13 +38,14 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
 
             var model = statusResult.Model as TriageToolOptionViewModel;
 
-            Assert.Empty(model.Pages);
+            Assert.Empty(model!.Pages);
         }
 
         [Fact]
         public async Task PagesControllerBodyCalledWithValueReturnsCorrectView()
         {
             var pageTitle = "page 1";
+
             // Arrange
             using var controller = BuildPagesController(nameof(HtmlMediaTypes));
 
@@ -60,11 +61,11 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
                             Url = new Uri("https://Uri1.com"),
                         },
                     },
-                    Title = pageTitle
+                    Title = pageTitle,
                 },
             };
 
-            A.CallTo(() => fakeTriageToolOptionDocumentService.GetAllAsync(A<string>.Ignored))
+            A.CallTo(() => FakeTriageToolOptionDocumentService.GetAllAsync(A<string>.Ignored))
                 .Returns(documents);
             A.CallTo(() => FakeSharedContentItemDocumentService.GetAllAsync(A<string>.Ignored)).Returns(new List<SharedContentItemModel>());
 
@@ -72,7 +73,7 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
             var result = await controller.Body(pageTitle).ConfigureAwait(false);
 
             // Assert
-            A.CallTo(() => fakeTriageToolOptionDocumentService.GetAllAsync(A<string>.Ignored))
+            A.CallTo(() => FakeTriageToolOptionDocumentService.GetAllAsync(A<string>.Ignored))
                 .MustHaveHappenedOnceExactly();
             A.CallTo(() => FakeSharedContentItemDocumentService.GetAllAsync(A<string>.Ignored))
                 .MustHaveHappenedOnceExactly();
@@ -83,17 +84,18 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
 
             var model = statusResult.Model as TriageToolOptionViewModel;
 
-            Assert.Empty(model.Pages);
+            Assert.Empty(model!.Pages);
         }
 
         [Fact]
         public async Task PagesControllerBodyReturnsFirstDocumentWhenCalledWithOutOption()
         {
             var pageTitle = "page 1";
+
             // Arrange
             using var controller = BuildPagesController(nameof(HtmlMediaTypes));
 
-            A.CallTo(() => fakeTriageToolOptionDocumentService.GetAllAsync(A<string>.Ignored))
+            A.CallTo(() => FakeTriageToolOptionDocumentService.GetAllAsync(A<string>.Ignored))
                 .Returns(Getdocuments());
             A.CallTo(() => FakeSharedContentItemDocumentService.GetAllAsync(A<string>.Ignored)).Returns(new List<SharedContentItemModel>());
 
@@ -101,7 +103,7 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
             var result = await controller.Body(string.Empty).ConfigureAwait(false);
 
             // Assert
-            A.CallTo(() => fakeTriageToolOptionDocumentService.GetAllAsync(A<string>.Ignored))
+            A.CallTo(() => FakeTriageToolOptionDocumentService.GetAllAsync(A<string>.Ignored))
                 .MustHaveHappenedOnceExactly();
             A.CallTo(() => FakeSharedContentItemDocumentService.GetAllAsync(A<string>.Ignored))
                 .MustHaveHappenedOnceExactly();
@@ -112,17 +114,18 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
 
             var model = statusResult.Model as TriageToolOptionViewModel;
 
-            Assert.Empty(model.Pages);
+            Assert.Empty(model!.Pages);
         }
 
         [Fact]
         public async Task PagesControllerPostBodyReturnsCorrectPagesWhenCalledWithFilters()
         {
             var pageTitle = "option 2";
+
             // Arrange
             using var controller = BuildPagesController(nameof(HtmlMediaTypes));
 
-            A.CallTo(() => fakeTriageToolOptionDocumentService.GetAllAsync(A<string>.Ignored))
+            A.CallTo(() => FakeTriageToolOptionDocumentService.GetAllAsync(A<string>.Ignored))
                 .Returns(Getdocuments());
             A.CallTo(() => FakeSharedContentItemDocumentService.GetAllAsync(A<string>.Ignored)).Returns(new List<SharedContentItemModel>());
             A.CallTo(() => FakeMapper.Map<TriageToolOptionViewModel>(A<TriageToolOptionDocumentModel>.Ignored)).Returns(
@@ -146,7 +149,7 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
             }).ConfigureAwait(false);
 
             // Assert
-            A.CallTo(() => fakeTriageToolOptionDocumentService.GetAllAsync(A<string>.Ignored))
+            A.CallTo(() => FakeTriageToolOptionDocumentService.GetAllAsync(A<string>.Ignored))
                 .MustHaveHappenedOnceExactly();
             A.CallTo(() => FakeSharedContentItemDocumentService.GetAllAsync(A<string>.Ignored))
                 .MustHaveHappenedOnceExactly();
@@ -157,7 +160,7 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
 
             var model = statusResult.Model as TriageToolOptionViewModel;
 
-            Assert.True(model.SelectedFilters.Any());
+            Assert.True(model!.SelectedFilters.Any());
             Assert.Empty(model.Pages);
         }
 
@@ -166,15 +169,15 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
         {
             // Arrange
             using var controller = BuildPagesController(nameof(HtmlMediaTypes));
-            A.CallTo(() => fakeTriageToolOptionDocumentService.GetAllAsync(A<string>.Ignored))
+            A.CallTo(() => FakeTriageToolOptionDocumentService.GetAllAsync(A<string>.Ignored))
                 .Returns(new List<TriageToolOptionDocumentModel>());
             A.CallTo(() => FakeSharedContentItemDocumentService.GetAllAsync(A<string>.Ignored)).Returns(new List<SharedContentItemModel>());
 
             // Act
-
             await Assert.ThrowsAsync<FileNotFoundException>(() => controller.Post(new OptionPostViewModel())).ConfigureAwait(false);
+
             // Assert
-            A.CallTo(() => fakeTriageToolOptionDocumentService.GetAllAsync(A<string>.Ignored))
+            A.CallTo(() => FakeTriageToolOptionDocumentService.GetAllAsync(A<string>.Ignored))
                 .MustHaveHappenedOnceExactly();
             A.CallTo(() => FakeSharedContentItemDocumentService.GetAllAsync(A<string>.Ignored))
                 .MustNotHaveHappened();
@@ -185,13 +188,12 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
         {
             using var controller = BuildPagesController(nameof(HtmlMediaTypes));
 
-            A.CallTo(() => fakeTriageToolOptionDocumentService.GetAllAsync(A<string>.Ignored))
+            A.CallTo(() => FakeTriageToolOptionDocumentService.GetAllAsync(A<string>.Ignored))
                 .Returns(Getdocuments());
 
             var result = await controller.Data().ConfigureAwait(false);
 
             Assert.IsType<JsonResult>(result);
-
         }
     }
 }

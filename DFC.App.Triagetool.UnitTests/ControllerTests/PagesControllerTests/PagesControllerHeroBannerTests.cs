@@ -20,7 +20,7 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
         public async Task PagesControllerHeroBannerReturnsNoContentWhenNoData(string mediaTypeName)
         {
             // Arrange
-            A.CallTo(() => fakeTriageToolOptionDocumentService.GetAllAsync(A<string>.Ignored))
+            A.CallTo(() => FakeTriageToolOptionDocumentService.GetAllAsync(A<string>.Ignored))
                 .Returns(new List<TriageToolOptionDocumentModel>());
             using var controller = BuildPagesController(mediaTypeName);
 
@@ -37,7 +37,7 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
         public async Task PagesControllerHeroBannerReturnsViewtWhenOptionsFound(string mediaTypeName)
         {
             // Arrange
-            A.CallTo(() => fakeTriageToolOptionDocumentService.GetAllAsync(A<string>.Ignored))
+            A.CallTo(() => FakeTriageToolOptionDocumentService.GetAllAsync(A<string>.Ignored))
                 .Returns(Getdocuments());
             using var controller = BuildPagesController(mediaTypeName);
 

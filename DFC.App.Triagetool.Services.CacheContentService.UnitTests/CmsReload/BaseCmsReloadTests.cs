@@ -10,9 +10,9 @@ namespace DFC.App.Triagetool.Services.CacheContentService.UnitTests.CmsReload
     [ExcludeFromCodeCoverage]
     public abstract class BaseCmsReloadTests
     {
-        public Uri FilterId = new Uri("Http://www.Filter.com");
-        public Uri PageId = new Uri("Http://www.page.com");
-        public Uri OptionId = new Uri("Http://www.Option.com");
+        private readonly Uri filterId = new Uri("Http://www.Filter.com");
+        private readonly Uri pageId = new Uri("Http://www.page.com");
+        private readonly Uri optionId = new Uri("Http://www.Option.com");
 
         protected List<TriageToolOptionSummaryModel> GetValidCmsOptionSummary()
         {
@@ -34,7 +34,7 @@ namespace DFC.App.Triagetool.Services.CacheContentService.UnitTests.CmsReload
             {
                 new CmsApiSummaryItemModel
                 {
-                    Url = PageId,
+                    Url = pageId,
                 },
             };
         }
@@ -43,7 +43,7 @@ namespace DFC.App.Triagetool.Services.CacheContentService.UnitTests.CmsReload
         {
             return new CmsApiDataModel
             {
-                Url = PageId,
+                Url = pageId,
                 UseInTriageTool = true,
             };
         }
@@ -73,16 +73,16 @@ namespace DFC.App.Triagetool.Services.CacheContentService.UnitTests.CmsReload
                 {
                     new TriageToolFilterDocumentModel
                     {
-                        Url = FilterId,
+                        Url = filterId,
                         Title = "Test Filter",
                     },
                 },
                 FilterIds = new List<string>
                 {
-                    FilterId.ToString(),
+                    filterId.ToString(),
                 },
                 Title = "Test Page",
-                Url = uri ?? OptionId,
+                Url = uri ?? optionId,
                 Id = id ?? Guid.NewGuid(),
             };
         }
@@ -93,12 +93,11 @@ namespace DFC.App.Triagetool.Services.CacheContentService.UnitTests.CmsReload
             {
                 Filters = new List<string>
                 {
-                    FilterId.ToString(),
+                    filterId.ToString(),
                 },
                 Title = "test page",
-                Uri = PageId,
+                Uri = pageId,
             };
         }
-
     }
 }

@@ -1,4 +1,6 @@
 ﻿using DFC.App.Triagetool.Controllers;
+using DFC.App.Triagetool.Data.Models.ContentModels;
+using DFC.Compui.Cosmos.Contracts;
 using FakeItEasy;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -11,13 +13,16 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.SitemapControllerTests
         public BaseSitemapControllerTests()
         {
             FakeLogger = A.Fake<ILogger<SitemapController>>();
+            FakeTriageToolDocumentService = A.Fake<IDocumentService<TriageToolOptionDocumentModel>>();
         }
 
         protected ILogger<SitemapController> FakeLogger { get; }
 
+        protected IDocumentService<TriageToolOptionDocumentModel> FakeTriageToolDocumentService { get; }
+
         protected SitemapController BuildSitemapController()
         {
-            var controller = new SitemapController(FakeLogger)
+            var controller = new SitemapController(FakeLogger, FakeTriageToolDocumentService)
             {
                 ControllerContext = new ControllerContext()
                 {
