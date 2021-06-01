@@ -12,6 +12,7 @@ namespace DFC.App.Triagetool.Services.CacheContentService.UnitTests.CmsReload
     {
         private readonly Uri filterId = new Uri("Http://www.Filter.com");
         private readonly Uri pageId = new Uri("Http://www.page.com");
+        private readonly Uri applicationViewId = new Uri("Http://www.application-view.com");
         private readonly Uri optionId = new Uri("Http://www.Option.com");
 
         protected List<TriageToolOptionSummaryModel> GetValidCmsOptionSummary()
@@ -35,6 +36,17 @@ namespace DFC.App.Triagetool.Services.CacheContentService.UnitTests.CmsReload
                 new CmsApiSummaryItemModel
                 {
                     Url = pageId,
+                },
+            };
+        }
+
+        protected List<CmsApiSummaryItemModel> GetValidApplicationViewSummary()
+        {
+            return new List<CmsApiSummaryItemModel>
+            {
+                new CmsApiSummaryItemModel
+                {
+                    Url = applicationViewId,
                 },
             };
         }

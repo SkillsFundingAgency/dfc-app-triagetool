@@ -26,7 +26,7 @@ namespace DFC.App.Triagetool.AutoMapperProfiles
                 .ForMember(d => d.Justify, s => s.Ignore());
 
             CreateMap<CmsApiDataModel, PageDocumentModel>()
-                .ForMember(d => d.Link, s => s.MapFrom(m => m.PageLocation))
+                .ForMember(d => d.Link, s => s.MapFrom(m => m.PageLocation ?? m.FullUrl))
                 .ForMember(d => d.Summary, s => s.MapFrom(m => m.TriageToolSummary))
                 .ForMember(d => d.Uri, s => s.MapFrom(m => m.Url))
                 .ForMember(d => d.Filters, s => s.MapFrom(m => m.ContentItems.Where(x => x.ContentType == CmsContentKeyHelper.FilterTag).Select(x => x.Url)));
