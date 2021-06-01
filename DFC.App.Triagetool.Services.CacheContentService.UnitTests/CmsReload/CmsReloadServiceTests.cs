@@ -69,6 +69,9 @@ namespace DFC.App.Triagetool.Services.CacheContentService.UnitTests.CmsReload
             A.CallTo(() =>
                     fakeCmsApiService.GetSummaryAsync<CmsApiSummaryItemModel>(CmsContentKeyHelper.PageTag))
                 .Returns(GetValidPagesSummary());
+            A.CallTo(() =>
+                    fakeCmsApiService.GetSummaryAsync<CmsApiSummaryItemModel>(CmsContentKeyHelper.ApplicationViewTag))
+                .Returns(GetValidApplicationViewSummary());
             A.CallTo(() => fakeCmsApiService.GetItemAsync<TriageToolOptionItemModel>(A<string>.Ignored, A<Guid>.Ignored)).Returns(GetValidOptionItem());
             A.CallTo(() => fakeCmsApiService.GetItemAsync<CmsApiDataModel>(A<Uri>.Ignored)).Returns(GetValidPage());
             var Service = new CacheReloadService(A.Fake<ILogger<CacheReloadService>>(), fakeMapper, fakeDocumentService, fakeCmsApiService, fakeContentTypeMappingService);

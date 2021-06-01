@@ -15,6 +15,8 @@ namespace DFC.App.Triagetool.Data.Models.CmsApiModels
         public bool IsDefaultForPageLocation { get; set; }
 
         [JsonProperty("pagelocation_FullUrl")]
+        public string? FullUrl { get; set; }
+
         public string? PageLocation { get; set; }
 
         public Guid? Version { get; set; }
