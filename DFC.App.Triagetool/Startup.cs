@@ -12,6 +12,7 @@ using DFC.Content.Pkg.Netcore.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Azure.Documents.Client;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -63,8 +64,9 @@ namespace DFC.App.Triagetool
         {
             var cosmosDbConnectionSharedContent = configuration.GetSection(CosmosDbSharedContentConfigAppSettings).Get<CosmosDbConnection>();
             var cosmosDbConnectionCmsContent = configuration.GetSection(CosmosDbCmsContentConfigAppSettings).Get<CosmosDbConnection>();
-            services.AddDocumentServices<SharedContentItemModel>(cosmosDbConnectionSharedContent, env.IsDevelopment());
-            services.AddDocumentServices<TriageToolOptionDocumentModel>(cosmosDbConnectionCmsContent, env.IsDevelopment());
+            var cosmosRetryOptions = new RetryOptions { MaxRetryAttemptsOnThrottledRequests = 20, MaxRetryWaitTimeInSeconds = 60 };
+            services.AddDocumentServices<SharedContentItemModel>(cosmosDbConnectionSharedContent, env.IsDevelopment(), cosmosRetryOptions);
+            services.AddDocumentServices<TriageToolOptionDocumentModel>(cosmosDbConnectionCmsContent, env.IsDevelopment(), cosmosRetryOptions);
 
             services.AddApplicationInsightsTelemetry();
             services.AddHttpContextAccessor();
