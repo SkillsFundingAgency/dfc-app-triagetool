@@ -21,14 +21,16 @@ namespace DFC.App.Triagetool.Services.CacheContentService
         private readonly IDocumentService<TriageToolOptionDocumentModel> cmsContentDocumentService;
         private readonly ICmsApiService cmsApiService;
         private readonly IContentTypeMappingService contentTypeMappingService;
+        private readonly IApiCacheService apiCacheService;
 
-        public CacheReloadService(ILogger<CacheReloadService> logger, AutoMapper.IMapper mapper, IDocumentService<TriageToolOptionDocumentModel> cmsContentDocumentService, ICmsApiService cmsApiService, IContentTypeMappingService contentTypeMappingService)
+        public CacheReloadService(ILogger<CacheReloadService> logger, AutoMapper.IMapper mapper, IDocumentService<TriageToolOptionDocumentModel> cmsContentDocumentService, ICmsApiService cmsApiService, IContentTypeMappingService contentTypeMappingService, IApiCacheService apiCacheService)
         {
             this.logger = logger;
             this.mapper = mapper;
             this.cmsContentDocumentService = cmsContentDocumentService;
             this.cmsApiService = cmsApiService;
             this.contentTypeMappingService = contentTypeMappingService;
+            this.apiCacheService = apiCacheService;
         }
 
         public async Task Reload(CancellationToken stoppingToken)
@@ -36,6 +38,8 @@ namespace DFC.App.Triagetool.Services.CacheContentService
             try
             {
                 logger.LogInformation("Reload cache started");
+
+                apiCacheService.StartCache();
 
                 contentTypeMappingService.AddMapping(Constants.ContentTypeTriageToolFilter, typeof(CmsTriageToolFilterModel));
 
@@ -67,6 +71,10 @@ namespace DFC.App.Triagetool.Services.CacheContentService
             catch (Exception ex)
             {
                 logger.LogError(ex, "Unable to reload Triage Tool content from the CMS");
+            }
+            finally
+            {
+                apiCacheService.StopCache();
             }
         }
 
@@ -166,8 +174,8 @@ namespace DFC.App.Triagetool.Services.CacheContentService
 
             foreach (var option in options)
             {
-                var existingDocument = existingDocuments?.FirstOrDefault(tto => tto.Url == option.Url);
-                option.Id = existingDocument?.Id ?? Guid.NewGuid();
+                var existingDocument = existingDocuments?.FirstOrDefault(tto => tto.Id == option.Id);
+                option.Etag = existingDocument?.Etag;
                 logger.LogInformation("Upserting options");
                 await cmsContentDocumentService.UpsertAsync(option).ConfigureAwait(false);
             }

@@ -34,6 +34,7 @@ namespace DFC.App.Triagetool.AutoMapperProfiles
             CreateMap<CmsTriageToolFilterModel, TriageToolFilterDocumentModel>();
 
             CreateMap<TriageToolOptionItemModel, TriageToolOptionDocumentModel>()
+                .ForMember(d => d.Id, s => s.MapFrom(m => m.ItemId))
                 .ForMember(d => d.Pages, s => s.Ignore())
                 .ForMember(d => d.FilterIds, s => s.MapFrom(m => m.ContentItems.Where(w => w.ContentType == CmsContentKeyHelper.FilterTag).Select(s => s.Url)))
                 .ForMember(d => d.PageIds, s => s.Ignore())
