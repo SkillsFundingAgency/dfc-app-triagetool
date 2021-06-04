@@ -22,7 +22,7 @@ namespace DFC.App.Triagetool.Services.CacheContentService.UnitTests.CmsReload
         private readonly IDocumentService<TriageToolOptionDocumentModel> fakeDocumentService = A.Fake<IDocumentService<TriageToolOptionDocumentModel>>();
         private readonly ICmsApiService fakeCmsApiService = A.Fake<ICmsApiService>();
         private readonly IContentTypeMappingService fakeContentTypeMappingService = A.Fake<IContentTypeMappingService>();
-        private readonly IApiCacheService fakeApiCacheService = A.Fake< IApiCacheService>();
+        private readonly IApiCacheService fakeApiCacheService = A.Fake<IApiCacheService>();
 
         [Fact]
         public async Task CacheReloadServiceReloadAllCancellationRequestedCancels()
