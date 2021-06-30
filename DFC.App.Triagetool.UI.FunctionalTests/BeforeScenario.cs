@@ -45,6 +45,7 @@ namespace DFC.App.Triagetool
         public void SetApplicationUrl()
         {
             string appBaseUrl = this.Context.GetSettingsLibrary<AppSettings>().AppSettings.AppBaseUrl.ToString();
+            this.Context.GetSettingsLibrary<AppSettings>().AppSettings.AppBaseUrl = new Uri($"{appBaseUrl}home");
         }
 
         [BeforeScenario(Order = 3)]
@@ -61,7 +62,6 @@ namespace DFC.App.Triagetool
             var webDriver = new WebDriverSupport<AppSettings>(settingsLibrary).Create();
             webDriver.Manage().Window.Maximize();
             webDriver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(settingsLibrary.TestExecutionSettings.TimeoutSettings.PageNavigation);
-            webDriver.SwitchTo().Window(webDriver.CurrentWindowHandle);
             this.Context.SetWebDriver(webDriver);
         }
 
@@ -71,6 +71,5 @@ namespace DFC.App.Triagetool
             var helperLibrary = new HelperLibrary<AppSettings>(this.Context.GetWebDriver(), this.Context.GetSettingsLibrary<AppSettings>());
             this.Context.SetHelperLibrary(helperLibrary);
         }
-
     }
 }
