@@ -46,7 +46,18 @@ namespace DFC.App.Triagetool.UI.FunctionalTests
 
             if (result != option.ToLower())
             {
-                throw new NotFoundException($"Unable to perform the step: {this.Context.StepContext.StepInfo.Text}. The expected result is not placed");
+                throw new NotFoundException($"Unable to perform the step: {this.Context.StepContext.StepInfo.Text}. The expected result is not displayed");
+            }
+        }
+
+        [Then(@"I am shown a result count of (.*)")]
+        public void ThenIAmShownAResultCountOf(string count)
+        {
+            var result = this.Context.GetWebDriver().FindElement(By.Id("totalArticles")).GetAttribute("innerText").ToString();
+
+            if (!result.StartsWith(count))
+            {
+                throw new NotFoundException($"Unable to perform the step: {this.Context.StepContext.StepInfo.Text}. The expected result count is not displayed");
             }
         }
     }
