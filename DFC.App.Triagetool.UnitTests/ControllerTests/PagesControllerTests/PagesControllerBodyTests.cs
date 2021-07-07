@@ -90,13 +90,14 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
         [Fact]
         public async Task PagesControllerBodyReturnsFirstDocumentWhenCalledWithOutOption()
         {
-            var pageTitle = "page 1";
+            var documents = Getdocuments();
+            var pageTitle = documents.Select(s => s.Title).OrderBy(o => o).First();
 
             // Arrange
             using var controller = BuildPagesController(nameof(HtmlMediaTypes));
 
             A.CallTo(() => FakeTriageToolOptionDocumentService.GetAllAsync(A<string>.Ignored))
-                .Returns(Getdocuments());
+                .Returns(documents);
             A.CallTo(() => FakeSharedContentItemDocumentService.GetAllAsync(A<string>.Ignored)).Returns(new List<SharedContentItemModel>());
 
             // Act
