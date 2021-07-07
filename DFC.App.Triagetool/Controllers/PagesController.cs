@@ -91,11 +91,11 @@ namespace DFC.App.Triagetool.Controllers
         {
             var documents = await triageToolDocumentService
                 .GetAllAsync(TriageToolOptionDocumentModel.DefaultPartitionKey).ConfigureAwait(false);
+            var sortedDocuments = documents.OrderBy(o => o.Title).ToList();
             var sharedContent = await sharedContentItemDocumentService.GetAllAsync().ConfigureAwait(false);
-
             var document = !string.IsNullOrWhiteSpace(article)
-                ? documents?.FirstOrDefault(x => string.Equals(x.Title, article, StringComparison.CurrentCultureIgnoreCase)) ?? documents?.FirstOrDefault()
-                : documents?.FirstOrDefault();
+                ? sortedDocuments?.FirstOrDefault(x => string.Equals(x.Title, article, StringComparison.CurrentCultureIgnoreCase)) ?? sortedDocuments?.FirstOrDefault()
+                : sortedDocuments?.FirstOrDefault();
 
             var model = mapper.Map<TriageToolOptionViewModel>(document);
             model.SharedContent = sharedContent?.FirstOrDefault()?.Content;
@@ -116,7 +116,8 @@ namespace DFC.App.Triagetool.Controllers
                 throw new FileNotFoundException("Unable to Find any Triage Tool documents");
             }
 
-            var document = documents?.FirstOrDefault(x => string.Equals(x.Title, postData.Title, StringComparison.CurrentCultureIgnoreCase)) ?? documents?.FirstOrDefault();
+            var sortedDocuments = documents.OrderBy(o => o.Title).ToList();
+            var document = sortedDocuments?.FirstOrDefault(x => string.Equals(x.Title, postData.Title, StringComparison.CurrentCultureIgnoreCase)) ?? sortedDocuments?.FirstOrDefault();
 
             if (postData?.Filters != null && postData.Filters.Split(",").Any() && document != null)
             {
