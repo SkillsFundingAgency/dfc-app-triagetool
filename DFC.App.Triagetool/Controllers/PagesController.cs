@@ -162,7 +162,7 @@ namespace DFC.App.Triagetool.Controllers
 
             if (options != null && options.Any())
             {
-                viewModel.Options = options.Select(x => x.Title).ToList()!;
+                viewModel.Options = options.Select(x => x.Title).OrderBy(o => o).ToList()!;
             }
 
             return View(viewModel);
