@@ -82,7 +82,6 @@ stages:
 
 - stage: DeployToDevAppTriagetool
   condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/dev'))
-  #condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
   displayName: Deploy to DEV_AppTriagetool
   variables:
   - group: dfc-shared-all
@@ -260,8 +259,7 @@ stages:
       SpecificationPath: "$(Pipeline.Workspace)/${{ variables.SolutionBaseName }}.OpenApiDocs"
 
 - stage: DeployToPPAppTriagetool
-  #condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
-  condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
+  condition: and(eq(dependencies.Build.result,'Succeeded'), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
   displayName: Deploy to PP_AppTriagetool
   variables:
   - group: dfc-shared-all
@@ -305,7 +303,7 @@ stages:
       SpecificationPath: "$(Pipeline.Workspace)/${{ variables.SolutionBaseName }}.OpenApiDocs"
 
 - stage: DeployToPPDraftAppTriagetool
-  condition: succeeded()
+  condition: and(eq(dependencies.DeployToPPAppTriagetool.result,'Succeeded'), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
   displayName: Deploy to PP-DRAFT_AppTriagetool
   variables:
   - group: dfc-shared-all
