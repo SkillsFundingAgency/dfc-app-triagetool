@@ -2,7 +2,6 @@ using DFC.App.Triagetool.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
@@ -14,13 +13,13 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
         [Theory]
         [MemberData(nameof(JsonMediaTypes))]
         [MemberData(nameof(HtmlMediaTypes))]
-        public async Task PagesControllerBreadcrumbReturnsBreadCrumb(string mediaTypeName)
+        public void PagesControllerBreadcrumbReturnsBreadCrumb(string mediaTypeName)
         {
             // Arrange
             using var controller = BuildPagesController(mediaTypeName);
 
             // Act
-            var result = await controller.Breadcrumb("an-article").ConfigureAwait(false);
+            var result = controller.Breadcrumb("an-article");
 
             // Assert
             var statusResult = Assert.IsType<ViewResult>(result);

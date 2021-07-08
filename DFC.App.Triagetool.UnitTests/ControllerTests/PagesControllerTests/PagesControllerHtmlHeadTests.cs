@@ -1,7 +1,6 @@
-using FakeItEasy;
+using DFC.App.Triagetool.ViewModels;
+using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
-using System.Net;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
@@ -10,20 +9,37 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
     public class PagesControllerHtmlHeadTests : BasePagesControllerTests
     {
         [Theory]
-        [MemberData(nameof(JsonMediaTypes))]
         [MemberData(nameof(HtmlMediaTypes))]
-        public async Task PagesControllerHtmlHeadReturnsNoContentWhenNoData(string mediaTypeName)
+        public void PagesControllerHtmlHeadHtmlReturnsSuccess(string mediaTypeName)
         {
             // Arrange
             using var controller = BuildPagesController(mediaTypeName);
 
             // Act
-            var result = await controller.HtmlHead("an-article").ConfigureAwait(false);
+            var result = controller.HtmlHead("an-article");
 
             // Assert
-            var statusResult = Assert.IsType<NoContentResult>(result);
+            var viewResult = Assert.IsType<ViewResult>(result);
+            var model = Assert.IsAssignableFrom<HtmlHeadViewModel>(viewResult.ViewData.Model);
 
-            A.Equals((int)HttpStatusCode.NoContent, statusResult.StatusCode);
+            model.CanonicalUrl.Should().NotBeNull();
+        }
+
+        [Theory]
+        [MemberData(nameof(JsonMediaTypes))]
+        public void PagesControllerHtmlHeadJsonReturnsSuccess(string mediaTypeName)
+        {
+            // Arrange
+            using var controller = BuildPagesController(mediaTypeName);
+
+            // Act
+            var result = controller.HtmlHead("an-article");
+
+            // Assert
+            var jsonResult = Assert.IsType<OkObjectResult>(result);
+            var model = Assert.IsAssignableFrom<HtmlHeadViewModel>(jsonResult.Value);
+
+            model.CanonicalUrl.Should().NotBeNull();
         }
     }
 }
