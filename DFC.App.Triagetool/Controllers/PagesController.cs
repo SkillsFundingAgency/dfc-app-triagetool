@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using DFC.App.Triagetool.Data.Models.ContentModels;
+using DFC.App.Triagetool.Extensions;
 using DFC.App.Triagetool.ViewModels;
 using DFC.Compui.Cosmos.Contracts;
 using Microsoft.AspNetCore.Mvc;
@@ -40,17 +41,24 @@ namespace DFC.App.Triagetool.Controllers
         [HttpGet]
         [Route("pages/htmlhead")]
         [Route("pages/{article?}/htmlhead")]
-        public async Task<IActionResult> HtmlHead(string article)
+        public IActionResult HtmlHead(string article)
         {
-            logger.LogWarning($"{nameof(HtmlHead)} has returned no content for: {article}");
+            var viewModel = new HtmlHeadViewModel
+            {
+                Title = "Triage | National Careers Service",
+                CanonicalUrl = new Uri($"{Request.GetBaseAddress()}{RegistrationPath}", UriKind.RelativeOrAbsolute),
+                Description = "Personalised careers advice and information",
+            };
 
-            return NoContent();
+            logger.LogInformation($"{nameof(HtmlHead)} has returned content for: /{article}");
+
+            return this.NegotiateContentResult(viewModel);
         }
 
         [HttpGet]
         [Route("pages/breadcrumb")]
         [Route("pages/{article?}/breadcrumb")]
-        public async Task<IActionResult> Breadcrumb(string article)
+        public IActionResult Breadcrumb(string article)
         {
             const string slash = "/";
             var viewModel = new BreadcrumbViewModel
@@ -77,7 +85,7 @@ namespace DFC.App.Triagetool.Controllers
         [HttpGet]
         [Route("pages/bodytop")]
         [Route("pages/{article?}/bodytop")]
-        public async Task<IActionResult> BodyTop(string article)
+        public IActionResult BodyTop(string article)
         {
             logger.LogWarning($"{nameof(BodyTop)} has returned no content for: {article}");
 
@@ -145,7 +153,7 @@ namespace DFC.App.Triagetool.Controllers
         [HttpGet]
         [Route("pages/bodyfooter")]
         [Route("pages/{article?}/bodyfooter")]
-        public async Task<IActionResult> BodyFooter(string article)
+        public IActionResult BodyFooter(string article)
         {
             logger.LogWarning($"{nameof(BodyFooter)} has returned no content for: {article}");
 
@@ -163,7 +171,7 @@ namespace DFC.App.Triagetool.Controllers
 
             if (options != null && options.Any())
             {
-                viewModel.Options = options.Select(x => x.Title).OrderBy(o => o).ToList()!;
+                viewModel.Options = options.Select(x => x.Title).OrderBy(o => o).ToList() !;
             }
 
             return View(viewModel);
