@@ -1,0 +1,72 @@
+﻿
+@using Microsoft.Extensions.Configuration
+@model TriageToolOptionViewModel
+
+<div>
+    <button class="govuk-button filters-button" id="show-filters-button">Show filters</button>
+    <form method="post" novalidate="novalidate" action="/triagetool" id="TriageToolFilters">
+        <div class="govuk-grid-row">
+
+            <div class="govuk-grid-column-one-third">
+                <div class="filters" id="allSecondaryFilterAccordions">
+                    <div id="allSecondaryFilterAccordions">
+                        <div class="secondaryFilters" id="secondaryFilters1">
+                            <div id="secondaryFiltersSet1">
+                                <div class="govuk-form-group">
+                                    <fieldset class="govuk-fieldset">
+                                        <legend class="govuk-label govuk-!-font-weight-bold" id="secondaryFiltersHeading1">
+                                            Filter results
+                                        </legend>
+
+                                        <p class="govuk-body filters-count" id="secondaryFiltersSelected1">
+                                            @Model.SelectedFilters.Count() selected
+                                        </p>
+                                        <div class="govuk-checkboxes govuk-checkboxes--small govuk-radios govuk-radios--small" id="filterCheckboxes">
+                                            @foreach (var filter in Model.Filters)
+                                            {
+                                                @(await @Html.PartialAsync("TriageToolPartialViews/TriageFilterItem", filter).ConfigureAwait(false))
+                                            }
+                                        </div>
+
+                                    </fieldset>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <noscript>
+                        <button data-module="govuk-button" class="govuk-button" type="submit">Apply filters</button>
+                    </noscript>
+                    <input id="SelectedOption" name="triage-select" type="hidden" value="@Model.Title">
+                    <p class="clear-filters"><a id="clearFilters" href="/triagetool/@Model.Title">Clear filters</a></p>
+                    <div class="triage-tool-sidebar app-related-items">
+                        @Html.Raw(Model.SharedContent)
+                    </div>
+                    <select class="govuk-select ncs-triage-select" id="pocSelect" name="poc-select">
+                        <option value="union">original</option>
+                        <option value="intersection">option 3</option>
+                        <option value="filters">option 4</option>
+                        <option value="radio">option 5</option>
+                        <option value="disable">option 6</option>
+                    </select>
+                </div>
+            </div>
+            <div class="govuk-grid-column-two-thirds">
+                <p class="govuk-body">Showing <span class="fac-result-count triage-result-count" id="totalArticles">@Model.Pages.Count @(Model.Pages.Count == 1 ? "suggestion": "suggestions")</span> for "<span class="govuk-!-font-weight-bold" id="primaryFiltersSelectedValue">@Model.Title</span>"</p>
+
+
+                <hr class="govuk-section-break govuk-section-break--visible govuk-!-margin-bottom-6 govuk-!-margin-top-2">
+                <div class="triage-opt2 results" id="allArticles">
+                    <div class="results-block">
+                        <div class="inner-block">
+                            @(await Html.PartialAsync("TriageToolPartialViews/TriageToolPage", Model))
+                        </div>
+                    </div>
+                </div>
+                <div class="triage-tool-results app-related-items">
+                    @Html.Raw(Model.SharedContent)
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
