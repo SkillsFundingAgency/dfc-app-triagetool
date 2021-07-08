@@ -5,9 +5,8 @@
 <div>
     <button class="govuk-button filters-button" id="show-filters-button">Show filters</button>
     <form method="post" novalidate="novalidate" action="/triagetool" id="TriageToolFilters">
-        <div class="govuk-grid-row">
-
-            <div class="govuk-grid-column-one-third">
+        <div class="govuk-grid-row govuk-!-margin-top-2 govuk-!-padding-top-5">
+            <div class="govuk-grid-column-one-third triage-filter-hide">
                 <div class="filters" id="allSecondaryFilterAccordions">
                     <div id="allSecondaryFilterAccordions">
                         <div class="secondaryFilters" id="secondaryFilters1">
@@ -39,13 +38,13 @@
                     </noscript>
                     <input id="SelectedOption" name="triage-select" type="hidden" value="@Model.Title">
                     <p class="clear-filters"><a id="clearFilters" href="/triagetool/@Model.Title">Clear filters</a></p>
-                    <div class="triage-tool-sidebar app-related-items">
+                    <div class="triage-tool-sidebar">
                         @Html.Raw(Model.SharedContent)
                     </div>
                     <select class="govuk-select ncs-triage-select" id="pocSelect" name="poc-select">
                         <option value="union">original</option>
                         <option value="intersection">option 3</option>
-                        <option value="filters">option 4</option>
+                        <option value="filters" selected>option 4</option>
                         <option value="radio">option 5</option>
                         <option value="disable">option 6</option>
                     </select>
@@ -53,8 +52,6 @@
             </div>
             <div class="govuk-grid-column-two-thirds">
                 <p class="govuk-body">Showing <span class="fac-result-count triage-result-count" id="totalArticles">@Model.Pages.Count @(Model.Pages.Count == 1 ? "suggestion": "suggestions")</span> for "<span class="govuk-!-font-weight-bold" id="primaryFiltersSelectedValue">@Model.Title</span>"</p>
-
-
                 <hr class="govuk-section-break govuk-section-break--visible govuk-!-margin-bottom-6 govuk-!-margin-top-2">
                 <div class="triage-opt2 results" id="allArticles">
                     <div class="results-block">
@@ -64,6 +61,11 @@
                     </div>
                 </div>
                 <div class="triage-tool-results app-related-items">
+                    @Html.Raw(Model.SharedContent)
+                </div>
+            </div>
+            <div class="govuk-grid-column-one-third triage-filter-show">
+                <div class="triage-tool-sidebar app-related-items">
                     @Html.Raw(Model.SharedContent)
                 </div>
             </div>
