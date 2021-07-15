@@ -1,7 +1,6 @@
 using FakeItEasy;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
@@ -12,13 +11,13 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
         [Theory]
         [MemberData(nameof(JsonMediaTypes))]
         [MemberData(nameof(HtmlMediaTypes))]
-        public async Task PagesControllerBodyFooterReturnsNoContentWhenNoData(string mediaTypeName)
+        public void PagesControllerBodyFooterReturnsNoContentWhenNoData(string mediaTypeName)
         {
             // Arrange
             using var controller = BuildPagesController(mediaTypeName);
 
             // Act
-            var result = await controller.BodyFooter("an-article").ConfigureAwait(false);
+            var result = controller.BodyFooter("an-article");
 
             // Assert
             var statusResult = Assert.IsType<NoContentResult>(result);

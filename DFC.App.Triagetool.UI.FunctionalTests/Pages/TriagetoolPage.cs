@@ -26,7 +26,13 @@ namespace DFC.App.Triagetool.UI.FunctionalTests.Pages
 
         public TriagetoolPage NavigateToTriagetoolPage()
         {
-            this.Context.GetWebDriver().Url = this.Context.GetSettingsLibrary<AppSettings>().AppSettings.AppBaseUrl.ToString();
+            this.Context.GetWebDriver().Url = this.Context.GetSettingsLibrary<AppSettings>().AppSettings.AppBaseUrl.ToString() + "triagetool";
+            return this;
+        }
+
+        public TriagetoolPage NavigateToHomepage()
+        {
+            this.Context.GetWebDriver().Url = this.Context.GetSettingsLibrary<AppSettings>().AppSettings.AppBaseUrl.ToString() + "home";
             return this;
         }
     }

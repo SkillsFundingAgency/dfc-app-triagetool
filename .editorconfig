@@ -11,3 +11,6 @@ dotnet_diagnostic.CA1304.severity = none
 
 # CA1310: Specify StringComparison for correctness
 dotnet_diagnostic.CA1310.severity = none
+
+# SA1638: File header file name documentation should match file name
+dotnet_diagnostic.SA1638.severity = none

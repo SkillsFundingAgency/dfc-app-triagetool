@@ -23,16 +23,24 @@ namespace DFC.App.Triagetool.UI.FunctionalTests.StepDefinitions
 
         private ScenarioContext Context { get; set; }
 
+        [Then(@"I am on the (.*) page")]
         [Given(@"I am on the (.*) page")]
         public void GivenIAmOnThePage(string pageName)
         {
+            var pageHeadingLocator = By.ClassName("govuk-heading-xl");
+
             switch (pageName.ToLower(CultureInfo.CurrentCulture))
             {
                 case "home":
                     var homePage = new TriagetoolPage(this.Context);
-                    homePage.NavigateToTriagetoolPage();
-                    var pageHeadingLocator = By.ClassName("govuk-heading-xl");
+                    homePage.NavigateToHomepage();
                     this.Context.GetHelperLibrary<AppSettings>().WebDriverWaitHelper.WaitForElementToContainText(pageHeadingLocator, "National Careers Service");
+                    break;
+
+                case "triagetool":
+                    var triagetoolPage = new TriagetoolPage(this.Context);
+                    triagetoolPage.NavigateToTriagetoolPage();
+                    this.Context.GetHelperLibrary<AppSettings>().WebDriverWaitHelper.WaitForElementToContainText(pageHeadingLocator, "Personalised careers advice and information");
                     break;
 
                 default:
