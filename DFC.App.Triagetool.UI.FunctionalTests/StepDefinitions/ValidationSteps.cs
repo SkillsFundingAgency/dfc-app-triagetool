@@ -43,7 +43,7 @@ namespace DFC.App.Triagetool.UI.FunctionalTests
         [Then(@"I am shown the results for (.*)")]
         public void ThenIAmShownTheResultsForTheOption(string option)
         {
-            var result = this.Context.GetWebDriver().FindElement(By.Id("primaryFiltersSelectedValue")).GetAttribute("innerText").ToString();
+            var result = this.Context.GetWebDriver().FindElement(By.Id("primaryFiltersSelectedValue")).GetAttribute("innerText").ToString().ToLower();
 
             if (result != option.ToLower())
             {
