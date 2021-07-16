@@ -373,7 +373,7 @@ stages:
       UIFunctionalTestCategory: Triagetool
 
 - stage: DeployToPPDraftAppTriagetool
-  condition: and(eq(dependencies.DeployToPPAppTriagetool.result,'Succeeded'), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+  condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
   displayName: Deploy to PP-DRAFT_AppTriagetool
   variables:
   - group: dfc-shared-all
@@ -430,7 +430,7 @@ stages:
       UIFunctionalTestCategory: Triagetool
 
 - stage: DeployToPRDAppTriagetool
-  condition: and(eq(dependencies.DeployToPPDraftAppTriagetool.result,'Succeeded'), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+  condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
   displayName: Deploy to PRD_AppTriagetool
   variables:
   - group: dfc-shared-all
@@ -486,7 +486,7 @@ stages:
       UIFunctionalTestCategory: Triagetool
 
 - stage: DeployToPRDDraftAppTriagetool
-  condition: and(eq(dependencies.DeployToPRDAppTriagetool.result,'Succeeded'), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+  condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
   displayName: Deploy to PRD-DRAFT_AppTriagetool
   variables:
   - group: dfc-shared-all
