@@ -441,6 +441,9 @@
             "apiVersion": "2017-05-10",
             "name": "[parameters('triagetoolDbCollectionName')]",
             "type": "Microsoft.Resources/deployments",
+            "dependsOn": [
+                "[variables('CosmosDbDatabaseName')]"
+            ],
             "resourceGroup": "[parameters('CosmosDbResourceGroup')]",
             "properties": {
                 "mode": "Incremental",
