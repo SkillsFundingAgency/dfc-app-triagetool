@@ -116,38 +116,7 @@ namespace DFC.App.Triagetool.Controllers
         [Route("pages/{article}/body")]
         public async Task<IActionResult> Post(OptionPostViewModel postData)
         {
-            var documents = (await triageToolDocumentService
-                .GetAllAsync(TriageToolOptionDocumentModel.DefaultPartitionKey).ConfigureAwait(false))?.ToList();
-
-            if (documents == null || !documents.Any())
-            {
-                throw new FileNotFoundException("Unable to Find any Triage Tool documents");
-            }
-
-            var sortedDocuments = documents.OrderBy(o => o.Title).ToList();
-            var document = sortedDocuments?.FirstOrDefault(x => string.Equals(x.Title, postData.Title, StringComparison.CurrentCultureIgnoreCase)) ?? sortedDocuments?.FirstOrDefault();
-
-            if (postData?.Filters != null && postData.Filters.Split(",").Any() && document != null)
-            {
-                document.Pages = document.Pages.Where(p => postData.Filters.Split(",").Any(pdf => p.Filters.Contains(pdf))).ToList();
-            }
-
-            var model = mapper.Map<TriageToolOptionViewModel>(document);
-
-            if (postData?.Filters != null && postData.Filters.Any())
-            {
-                foreach (var filter in model.Filters)
-                {
-                    filter.Selected = postData.Filters.Split(",").Any(pdf => string.Equals(pdf, filter?.Url?.ToString(), StringComparison.CurrentCultureIgnoreCase));
-                }
-
-                model.SelectedFilters = postData.Filters.Split(",").ToList();
-            }
-
-            var sharedContent = await sharedContentItemDocumentService.GetAllAsync().ConfigureAwait(false);
-            model.SharedContent = sharedContent?.FirstOrDefault()?.Content;
-
-            return View("Body", model);
+            return Redirect($"/{RegistrationPath}/{postData?.Title}");
         }
 
         [HttpGet]
@@ -167,7 +136,10 @@ namespace DFC.App.Triagetool.Controllers
         {
             var options = await triageToolDocumentService.GetAllAsync(TriageToolOptionDocumentModel.DefaultPartitionKey).ConfigureAwait(false);
 
-            var viewModel = new HeroBannerViewModel();
+            var viewModel = new HeroBannerViewModel
+            {
+                Selected = article,
+            };
 
             if (options != null && options.Any())
             {

@@ -11,10 +11,17 @@
                             <div class="govuk-form-group govuk-!-margin-bottom-3">
                                 <label class="govuk-label triage-select-label" for="triageSelect"> Showing advice for </label>
                                 <select class="govuk-select triage-select" id="triageSelect" name="triage-select">
-                                    @for (int i=0; i< Model.Options.Count; i++)
+                                    @for (int i = 0; i < Model.Options.Count; i++)
                                     {
                                         var id = $"option{i}";
-                                        <option value="@Model.Options[i]" id="@id">@Model.Options[i]</option>
+                                        if (Model.Selected != null && Model.Selected.Equals(@Model.Options[i], StringComparison.OrdinalIgnoreCase))
+                                        {
+                                            <option value="@Model.Options[i]" id="@id" selected>@Model.Options[i]</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@Model.Options[i]" id="@id">@Model.Options[i]</option>
+                                        }
                                     }
                                 </select>
                                 <button draggable="false" class="govuk-button triage-start-btn app-button--inverted govuk-!-margin-bottom-0" data-module="govuk-button"> See suggestions</button>
