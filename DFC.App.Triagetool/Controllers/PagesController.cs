@@ -41,7 +41,7 @@ namespace DFC.App.Triagetool.Controllers
         [HttpGet]
         [Route("pages/htmlhead")]
         [Route("pages/{article?}/htmlhead")]
-        public IActionResult HtmlHead(string article)
+        public IActionResult HtmlHead([ModelBinder(Name = "triage-select")] string article)
         {
             var viewModel = new HtmlHeadViewModel
             {
@@ -58,7 +58,7 @@ namespace DFC.App.Triagetool.Controllers
         [HttpGet]
         [Route("pages/breadcrumb")]
         [Route("pages/{article?}/breadcrumb")]
-        public IActionResult Breadcrumb(string article)
+        public IActionResult Breadcrumb([ModelBinder(Name = "triage-select")] string article)
         {
             const string slash = "/";
             var viewModel = new BreadcrumbViewModel
@@ -85,7 +85,7 @@ namespace DFC.App.Triagetool.Controllers
         [HttpGet]
         [Route("pages/bodytop")]
         [Route("pages/{article?}/bodytop")]
-        public IActionResult BodyTop(string article)
+        public IActionResult BodyTop([ModelBinder(Name = "triage-select")] string article)
         {
             logger.LogWarning($"{nameof(BodyTop)} has returned no content for: {article}");
 
@@ -95,7 +95,7 @@ namespace DFC.App.Triagetool.Controllers
         [HttpGet]
         [Route("pages/body")]
         [Route("pages/{article?}/body")]
-        public async Task<IActionResult> Body(string article)
+        public async Task<IActionResult> Body([ModelBinder(Name = "triage-select")] string article)
         {
             var documents = await triageToolDocumentService
                 .GetAllAsync(TriageToolOptionDocumentModel.DefaultPartitionKey).ConfigureAwait(false);
@@ -111,18 +111,10 @@ namespace DFC.App.Triagetool.Controllers
             return View(model);
         }
 
-        [HttpPost]
-        [Route("pages/body")]
-        [Route("pages/{article}/body")]
-        public async Task<IActionResult> Post(OptionPostViewModel postData)
-        {
-            return Redirect($"/{RegistrationPath}/{postData?.Title}");
-        }
-
         [HttpGet]
         [Route("pages/bodyfooter")]
         [Route("pages/{article?}/bodyfooter")]
-        public IActionResult BodyFooter(string article)
+        public IActionResult BodyFooter([ModelBinder(Name = "triage-select")] string article)
         {
             logger.LogWarning($"{nameof(BodyFooter)} has returned no content for: {article}");
 
@@ -132,7 +124,7 @@ namespace DFC.App.Triagetool.Controllers
         [HttpGet]
         [Route("pages/herobanner")]
         [Route("pages/{article?}/herobanner")]
-        public async Task<IActionResult> HeroBanner(string article)
+        public async Task<IActionResult> HeroBanner([ModelBinder(Name = "triage-select")] string article)
         {
             var options = await triageToolDocumentService.GetAllAsync(TriageToolOptionDocumentModel.DefaultPartitionKey).ConfigureAwait(false);
 
