@@ -12,5 +12,7 @@ namespace DFC.App.Triagetool.ViewModels
         }
 
         public List<string> Options { get; set; }
+
+        public string? Selected { get; set; }
     }
 }
