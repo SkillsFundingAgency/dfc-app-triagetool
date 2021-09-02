@@ -157,7 +157,7 @@ namespace DFC.App.Triagetool.Services.CacheContentService
                 {
                     optionDocument.FilterIds = optionDocument.FilterIds.Intersect(pagesForOption.SelectMany(s => s.Filters)).ToList();
                     optionDocument.Filters = optionDocument.Filters.Where(w => w.Url != null && optionDocument.FilterIds.Contains(w.Url.ToString())).OrderBy(o => o.Ordinal).ToList();
-                    optionDocument.Pages = pagesForOption.OrderByDescending(o => o.Published).ToList();
+                    optionDocument.Pages = pagesForOption.OrderBy(o => o.Title).ToList();
                     optionDocument.PageIds = pagesForOption.Select(s => s.Uri!.ToString()).ToList();
                 }
             }
