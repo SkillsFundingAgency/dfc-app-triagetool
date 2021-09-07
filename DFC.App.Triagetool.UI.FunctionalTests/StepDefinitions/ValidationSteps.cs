@@ -58,8 +58,7 @@ namespace DFC.App.Triagetool.UI.FunctionalTests
 
             // This condition is proving to be unreliable in different environments - number of results is differing and frequently changing across environments as CMS users
             // update the filtering
-            //if (!result.StartsWith(count))
-
+            // if (!result.StartsWith(count))
             if (!result.Any(char.IsDigit))
             {
                 throw new NotFoundException($"Unable to perform the step: {this.Context.StepContext.StepInfo.Text}. The expected result count is not displayed");
