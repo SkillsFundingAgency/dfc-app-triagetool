@@ -40,7 +40,7 @@ namespace DFC.App.Triagetool.Controllers
 
         [HttpGet]
         [Route("pages/htmlhead")]
-        [Route("pages/{article?}/htmlhead")]
+        [Route("pages/{triage-select?}/htmlhead")]
         public IActionResult HtmlHead([ModelBinder(Name = "triage-select")] string article)
         {
             var viewModel = new HtmlHeadViewModel
@@ -57,7 +57,7 @@ namespace DFC.App.Triagetool.Controllers
 
         [HttpGet]
         [Route("pages/breadcrumb")]
-        [Route("pages/{article?}/breadcrumb")]
+        [Route("pages/{triage-select?}/breadcrumb")]
         public IActionResult Breadcrumb([ModelBinder(Name = "triage-select")] string article)
         {
             const string slash = "/";
@@ -84,7 +84,7 @@ namespace DFC.App.Triagetool.Controllers
 
         [HttpGet]
         [Route("pages/bodytop")]
-        [Route("pages/{article?}/bodytop")]
+        [Route("pages/{triage-select?}/bodytop")]
         public IActionResult BodyTop([ModelBinder(Name = "triage-select")] string article)
         {
             logger.LogWarning($"{nameof(BodyTop)} has returned no content for: {article}");
@@ -94,7 +94,7 @@ namespace DFC.App.Triagetool.Controllers
 
         [HttpGet]
         [Route("pages/body")]
-        [Route("pages/{article?}/body")]
+        [Route("pages/{triage-select?}/body")]
         public async Task<IActionResult> Body([ModelBinder(Name = "triage-select")] string article)
         {
             var documents = await triageToolDocumentService
@@ -113,7 +113,7 @@ namespace DFC.App.Triagetool.Controllers
 
         [HttpGet]
         [Route("pages/bodyfooter")]
-        [Route("pages/{article?}/bodyfooter")]
+        [Route("pages/{triage-select?}/bodyfooter")]
         public IActionResult BodyFooter([ModelBinder(Name = "triage-select")] string article)
         {
             logger.LogWarning($"{nameof(BodyFooter)} has returned no content for: {article}");
@@ -123,7 +123,7 @@ namespace DFC.App.Triagetool.Controllers
 
         [HttpGet]
         [Route("pages/herobanner")]
-        [Route("pages/{article?}/herobanner")]
+        [Route("pages/{triage-select?}/herobanner")]
         public async Task<IActionResult> HeroBanner([ModelBinder(Name = "triage-select")] string article)
         {
             var options = await triageToolDocumentService.GetAllAsync(TriageToolOptionDocumentModel.DefaultPartitionKey).ConfigureAwait(false);
