@@ -11,8 +11,13 @@ Scenario Outline: Select Triage options
 	And I am shown a result count of <results>
 
 	Examples: 
-	| option                           | results |
-	| Identifying your skills          | 7       |
-	| Identifying career opportunities | 7       |
-	| Making career decisions          | 7       |
-	| Finding and applying for jobs    | 15      |
+	| option                                        | results |
+	| Changing your career                          | 13      |
+	| Identifying and building your skills          | 12      |
+	| Moving up in your career                      | 10      |
+	| Planning or starting your career              | 17      |
+	| Returning to work                             | 15      |
+	| Understanding the recruitment process         | 14      |
+	| Understanding your options                    | 11      |
+	| Working with a health condition or disability | 2       |
+
