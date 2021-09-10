@@ -130,51 +130,99 @@ this.ScenarioInitialize(scenarioInfo);
             this.ScenarioCleanup();
         }
         
-        [Xunit.SkippableFactAttribute(DisplayName="Select Triage options: Identifying your skills")]
+        [Xunit.SkippableFactAttribute(DisplayName="Select Triage options: Changing your career")]
         [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
-        [Xunit.TraitAttribute("Description", "Select Triage options: Identifying your skills")]
+        [Xunit.TraitAttribute("Description", "Select Triage options: Changing your career")]
         [Xunit.TraitAttribute("Category", "Triagetool")]
         [Xunit.TraitAttribute("Category", "Smoke")]
-        public virtual void SelectTriageOptions_IdentifyingYourSkills()
+        public virtual void SelectTriageOptions_ChangingYourCareer()
         {
 #line 5
-this.SelectTriageOptions("Identifying your skills", "7", ((string[])(null)));
+this.SelectTriageOptions("Changing your career", "13", ((string[])(null)));
 #line hidden
         }
         
-        [Xunit.SkippableFactAttribute(DisplayName="Select Triage options: Identifying career opportunities")]
+        [Xunit.SkippableFactAttribute(DisplayName="Select Triage options: Identifying and building your skills")]
         [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
-        [Xunit.TraitAttribute("Description", "Select Triage options: Identifying career opportunities")]
+        [Xunit.TraitAttribute("Description", "Select Triage options: Identifying and building your skills")]
         [Xunit.TraitAttribute("Category", "Triagetool")]
         [Xunit.TraitAttribute("Category", "Smoke")]
-        public virtual void SelectTriageOptions_IdentifyingCareerOpportunities()
+        public virtual void SelectTriageOptions_IdentifyingAndBuildingYourSkills()
         {
 #line 5
-this.SelectTriageOptions("Identifying career opportunities", "7", ((string[])(null)));
+this.SelectTriageOptions("Identifying and building your skills", "12", ((string[])(null)));
 #line hidden
         }
         
-        [Xunit.SkippableFactAttribute(DisplayName="Select Triage options: Making career decisions")]
+        [Xunit.SkippableFactAttribute(DisplayName="Select Triage options: Moving up in your career")]
         [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
-        [Xunit.TraitAttribute("Description", "Select Triage options: Making career decisions")]
+        [Xunit.TraitAttribute("Description", "Select Triage options: Moving up in your career")]
         [Xunit.TraitAttribute("Category", "Triagetool")]
         [Xunit.TraitAttribute("Category", "Smoke")]
-        public virtual void SelectTriageOptions_MakingCareerDecisions()
+        public virtual void SelectTriageOptions_MovingUpInYourCareer()
         {
 #line 5
-this.SelectTriageOptions("Making career decisions", "7", ((string[])(null)));
+this.SelectTriageOptions("Moving up in your career", "10", ((string[])(null)));
 #line hidden
         }
         
-        [Xunit.SkippableFactAttribute(DisplayName="Select Triage options: Finding and applying for jobs")]
+        [Xunit.SkippableFactAttribute(DisplayName="Select Triage options: Planning or starting your career")]
         [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
-        [Xunit.TraitAttribute("Description", "Select Triage options: Finding and applying for jobs")]
+        [Xunit.TraitAttribute("Description", "Select Triage options: Planning or starting your career")]
         [Xunit.TraitAttribute("Category", "Triagetool")]
         [Xunit.TraitAttribute("Category", "Smoke")]
-        public virtual void SelectTriageOptions_FindingAndApplyingForJobs()
+        public virtual void SelectTriageOptions_PlanningOrStartingYourCareer()
         {
 #line 5
-this.SelectTriageOptions("Finding and applying for jobs", "15", ((string[])(null)));
+this.SelectTriageOptions("Planning or starting your career", "17", ((string[])(null)));
+#line hidden
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Select Triage options: Returning to work")]
+        [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
+        [Xunit.TraitAttribute("Description", "Select Triage options: Returning to work")]
+        [Xunit.TraitAttribute("Category", "Triagetool")]
+        [Xunit.TraitAttribute("Category", "Smoke")]
+        public virtual void SelectTriageOptions_ReturningToWork()
+        {
+#line 5
+this.SelectTriageOptions("Returning to work", "15", ((string[])(null)));
+#line hidden
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Select Triage options: Understanding the recruitment process")]
+        [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
+        [Xunit.TraitAttribute("Description", "Select Triage options: Understanding the recruitment process")]
+        [Xunit.TraitAttribute("Category", "Triagetool")]
+        [Xunit.TraitAttribute("Category", "Smoke")]
+        public virtual void SelectTriageOptions_UnderstandingTheRecruitmentProcess()
+        {
+#line 5
+this.SelectTriageOptions("Understanding the recruitment process", "14", ((string[])(null)));
+#line hidden
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Select Triage options: Understanding your options")]
+        [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
+        [Xunit.TraitAttribute("Description", "Select Triage options: Understanding your options")]
+        [Xunit.TraitAttribute("Category", "Triagetool")]
+        [Xunit.TraitAttribute("Category", "Smoke")]
+        public virtual void SelectTriageOptions_UnderstandingYourOptions()
+        {
+#line 5
+this.SelectTriageOptions("Understanding your options", "11", ((string[])(null)));
+#line hidden
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Select Triage options: Working with a health condition or disability")]
+        [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
+        [Xunit.TraitAttribute("Description", "Select Triage options: Working with a health condition or disability")]
+        [Xunit.TraitAttribute("Category", "Triagetool")]
+        [Xunit.TraitAttribute("Category", "Smoke")]
+        public virtual void SelectTriageOptions_WorkingWithAHealthConditionOrDisability()
+        {
+#line 5
+this.SelectTriageOptions("Working with a health condition or disability", "2", ((string[])(null)));
 #line hidden
         }
         
