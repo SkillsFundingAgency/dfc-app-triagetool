@@ -16,7 +16,7 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.HomeControllerTests
 
             // Act
             var result = controller.Error();
-
+            var test = "Remove";
             // Assert
             var viewResult = Assert.IsType<ViewResult>(result);
             _ = Assert.IsAssignableFrom<ErrorViewModel>(viewResult.ViewData.Model);
