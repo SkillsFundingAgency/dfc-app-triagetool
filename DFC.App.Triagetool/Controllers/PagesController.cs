@@ -39,18 +39,18 @@ namespace DFC.App.Triagetool.Controllers
         }
 
         [HttpGet]
-        [Route("pages/htmlhead")]
-        [Route("pages/{triage-select?}/htmlhead")]
-        public IActionResult HtmlHead([ModelBinder(Name = "triage-select")] string article)
+        [Route("pages/head")]
+        [Route("pages/{triage-select?}/head")]
+        public IActionResult Head([ModelBinder(Name = "triage-select")] string article)
         {
-            var viewModel = new HtmlHeadViewModel
+            var viewModel = new HeadViewModel
             {
                 Title = "Triage | National Careers Service",
                 CanonicalUrl = new Uri($"{Request.GetBaseAddress()}{RegistrationPath}", UriKind.RelativeOrAbsolute),
                 Description = "Personalised careers advice and information",
             };
 
-            logger.LogInformation($"{nameof(HtmlHead)} has returned content for: /{article}");
+            logger.LogInformation($"{nameof(Head)} has returned content for: /{article}");
 
             return this.NegotiateContentResult(viewModel);
         }

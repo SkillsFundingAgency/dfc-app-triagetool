@@ -5,39 +5,39 @@ using Xunit;
 
 namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
 {
-    [Trait("Category", "Pages Controller - HtmlHead Unit Tests")]
-    public class PagesControllerHtmlHeadTests : BasePagesControllerTests
+    [Trait("Category", "Pages Controller - Head Unit Tests")]
+    public class PagesControllerHeadTests : BasePagesControllerTests
     {
         [Theory]
         [MemberData(nameof(HtmlMediaTypes))]
-        public void PagesControllerHtmlHeadHtmlReturnsSuccess(string mediaTypeName)
+        public void PagesControllerHeadHtmlReturnsSuccess(string mediaTypeName)
         {
             // Arrange
             using var controller = BuildPagesController(mediaTypeName);
 
             // Act
-            var result = controller.HtmlHead("an-article");
+            var result = controller.Head("an-article");
 
             // Assert
             var viewResult = Assert.IsType<ViewResult>(result);
-            var model = Assert.IsAssignableFrom<HtmlHeadViewModel>(viewResult.ViewData.Model);
+            var model = Assert.IsAssignableFrom<HeadViewModel>(viewResult.ViewData.Model);
 
             model.CanonicalUrl.Should().NotBeNull();
         }
 
         [Theory]
         [MemberData(nameof(JsonMediaTypes))]
-        public void PagesControllerHtmlHeadJsonReturnsSuccess(string mediaTypeName)
+        public void PagesControllerHeadJsonReturnsSuccess(string mediaTypeName)
         {
             // Arrange
             using var controller = BuildPagesController(mediaTypeName);
 
             // Act
-            var result = controller.HtmlHead("an-article");
+            var result = controller.Head("an-article");
 
             // Assert
             var jsonResult = Assert.IsType<OkObjectResult>(result);
-            var model = Assert.IsAssignableFrom<HtmlHeadViewModel>(jsonResult.Value);
+            var model = Assert.IsAssignableFrom<HeadViewModel>(jsonResult.Value);
 
             model.CanonicalUrl.Should().NotBeNull();
         }
