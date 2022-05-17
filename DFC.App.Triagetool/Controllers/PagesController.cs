@@ -146,13 +146,7 @@ namespace DFC.App.Triagetool.Controllers
         public async Task<IActionResult> Data()
         {
             var documents = await triageToolDocumentService.GetAllAsync().ConfigureAwait(false);
-
-            IList<TriageToolOptionViewModel>? models = null;
-
-            if (documents != null)
-            {
-                models = mapper.Map<IList<TriageToolOptionViewModel>>(documents.OrderBy(o => o.Title));
-            }
+            var models = mapper.Map<IList<TriageToolOptionViewModel>>(documents.OrderBy(o => o.Title));
             return Json(models);
         }
     }
