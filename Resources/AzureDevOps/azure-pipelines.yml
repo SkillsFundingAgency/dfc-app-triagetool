@@ -76,7 +76,6 @@ stages:
         SolutionBaseName: $(SolutionBaseName)
         BuildPlatform: $(BuildPlatform)
         BuildConfiguration: $(BuildConfiguration)
-        DotNetCoreVersion: '3.1.100'
         PublishWebApp: true
         TestSuffix: UnitTests
 
@@ -88,7 +87,6 @@ stages:
         SolutionBaseName: $(SolutionBaseName).UI.FunctionalTests
         BuildPlatform: $(BuildPlatform)
         BuildConfiguration: $(BuildConfiguration)
-        DotNetCoreVersion: '3.1.100'
 
 - stage: DeployToDevAppTriagetool
   condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/dev'))
