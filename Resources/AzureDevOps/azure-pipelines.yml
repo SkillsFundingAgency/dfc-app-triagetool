@@ -89,7 +89,7 @@ stages:
         BuildConfiguration: $(BuildConfiguration)
 
 - stage: DeployToDevAppTriagetool
-  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/dev'))
+  condition: and(succeeded(), eq(variables['Build.SourceBranch']))
   displayName: Deploy to DEV_AppTriagetool
   variables:
   - group: dfc-shared-all
