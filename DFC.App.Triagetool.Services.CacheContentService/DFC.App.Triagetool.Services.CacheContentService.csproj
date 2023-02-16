@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <CodeAnalysisRuleSet>../DFC.Digital.CodeAnalysis.ruleset</CodeAnalysisRuleSet>
     <ProjectGuid>{9e93016b-c3ab-44a7-a627-119cc71caff5}</ProjectGuid>
     <Nullable>enable</Nullable>
