@@ -76,7 +76,6 @@ stages:
         SolutionBaseName: $(SolutionBaseName)
         BuildPlatform: $(BuildPlatform)
         BuildConfiguration: $(BuildConfiguration)
-        DotNetCoreVersion: '3.1.100'
         PublishWebApp: true
         TestSuffix: UnitTests
 
@@ -88,10 +87,9 @@ stages:
         SolutionBaseName: $(SolutionBaseName).UI.FunctionalTests
         BuildPlatform: $(BuildPlatform)
         BuildConfiguration: $(BuildConfiguration)
-        DotNetCoreVersion: '3.1.100'
 
 - stage: DeployToDevAppTriagetool
-  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/dev'))
+  condition: succeeded()
   displayName: Deploy to DEV_AppTriagetool
   variables:
   - group: dfc-shared-all
@@ -317,7 +315,7 @@ stages:
       UIFunctionalTestCategory: Triagetool
 
 - stage: DeployToPPAppTriagetool
-  condition: and(eq(dependencies.Build.result,'Succeeded'), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+  condition: succeeded()
   displayName: Deploy to PP_AppTriagetool
   variables:
   - group: dfc-shared-all
@@ -373,7 +371,7 @@ stages:
       UIFunctionalTestCategory: Triagetool
 
 - stage: DeployToPPDraftAppTriagetool
-  condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
+  condition: succeeded()
   displayName: Deploy to PP-DRAFT_AppTriagetool
   variables:
   - group: dfc-shared-all
@@ -430,7 +428,7 @@ stages:
       UIFunctionalTestCategory: Triagetool
 
 - stage: DeployToPRDAppTriagetool
-  condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
+  condition: succeeded()
   displayName: Deploy to PRD_AppTriagetool
   variables:
   - group: dfc-shared-all
@@ -486,8 +484,8 @@ stages:
       UIFunctionalTestCategory: Triagetool
 
 - stage: DeployToPRDDraftAppTriagetool
-  condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
-  displayName: Deploy to PRD-DRAFT_AppTriagetool
+  condition: succeeded()
+  displayName: Deploy to PRD_Draft_AppTriagetool
   variables:
   - group: dfc-shared-all
   - group: dfc-shared-prd
@@ -518,7 +516,7 @@ stages:
       DfCDevopsPath: '$(Agent.BuildDirectory)/s/dfc-devops'
       PackageFile:  "$(Pipeline.Workspace)/${{ variables.SolutionBaseName }}.DeploymentPackages/${{ variables.SolutionBaseName }}.zip"
       ArmTemplateFolder: "$(Pipeline.Workspace)/${{ variables.SolutionBaseName }}.Resources.ArmTemplates/"
-      EnvironmentName: PRD-DRAFT_AppTriagetool
+      EnvironmentName: PRD_Draft_AppTriagetool
       AppSharedResourceGroup: $(AppSharedResourceGroup)
       appSharedCosmosDBName: $(appSharedCosmosDBName)
       PageRegistrationPath: "$(Pipeline.Workspace)/${{ variables.SolutionBaseName }}.PageRegistrations/"
