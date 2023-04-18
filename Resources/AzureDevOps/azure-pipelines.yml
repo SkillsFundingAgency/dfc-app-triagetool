@@ -598,9 +598,9 @@ stages:
       UIFunctionalTestProjectFolder: "$(Pipeline.Workspace)/${{ variables.SolutionBaseName }}.UI.FunctionalTests"
       UIFunctionalTestCategory: Triagetool
 
-- stage: DeployToPRDDraftAppTriagetool2
+- stage: DeployToPRDDraftAppTriagetool
   condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
-  displayName: Deploy to PRD-DRAFT_AppTriagetool2
+  displayName: Deploy to PRD_Draft_AppTriagetool
   variables:
   - group: dfc-shared-all
   - group: dfc-shared-prd
@@ -631,7 +631,7 @@ stages:
       DfCDevopsPath: '$(Agent.BuildDirectory)/s/dfc-devops'
       PackageFile:  "$(Pipeline.Workspace)/${{ variables.SolutionBaseName }}.DeploymentPackages/${{ variables.SolutionBaseName }}.zip"
       ArmTemplateFolder: "$(Pipeline.Workspace)/${{ variables.SolutionBaseName }}.Resources.ArmTemplates/"
-      EnvironmentName: PRD-DRAFT_AppTriagetool2
+      EnvironmentName: PRD_Draft_AppTriagetool
       AppSharedResourceGroup: $(AppSharedResourceGroup)
       appSharedCosmosDBName: $(appSharedCosmosDBName)
       PageRegistrationPath: "$(Pipeline.Workspace)/${{ variables.SolutionBaseName }}.PageRegistrations/"
