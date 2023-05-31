@@ -44,9 +44,6 @@
         "appDatabaseThroughput": {
             "value": 2
         },
-        "enableAlerts": {
-            "value": false
-        },
         "SubscriptionSettingsEndpoint": {
             "value": "http://www.food.co.uk"
         },
@@ -98,14 +95,8 @@
         "ApiName": {
             "value": "triagetool"
         },
-        "ExceptionCountThreshold": {
-            "value": "0"
-        },
-        "MemoryPercentageThreshold": {
-            "value": "0"
-        },
-        "CPUPercentageThreshold": {
-            "value": "0"
+        "appInsightsInstrumentationKey": {
+            "value": "instrumentationkey"
         }
     }
 }
