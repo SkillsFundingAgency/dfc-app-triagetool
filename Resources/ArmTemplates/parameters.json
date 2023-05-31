@@ -21,7 +21,7 @@
             "value": __aspInstances__
         },
         "clientAffinity": {
-            "value": "__clientAffinity__"
+            "value": __clientAffinity__
         },
         "aspTier": {
             "value": "__aspTier__"
@@ -51,10 +51,10 @@
             "value": "__triagetoolDbCollectionName__"
         },
         "appDatabaseNeedsCreation": {
-            "value": "__CosmosDbDatabaseDoesntExist__"
+            "value": __CosmosDbDatabaseDoesntExist__
         },
         "appDatabaseThroughput": {
-            "value": "__appDatabaseThroughput__"
+            "value": __appDatabaseThroughput__
         },
         "SubscriptionSettingsEndpoint": {
             "value": "__SubscriptionSettingsEndpoint__"
