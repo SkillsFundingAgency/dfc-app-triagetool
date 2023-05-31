@@ -27,7 +27,7 @@
             "value": "__aspTier__"
         },
         "aspSize": {
-            "value": __aspSize__
+            "value": "__aspSize__"
         },
         "cosmosDBName": {
             "value": "__appSharedCosmosDBName__"
