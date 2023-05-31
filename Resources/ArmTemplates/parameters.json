@@ -18,7 +18,7 @@
             "value": "__aseResourceGroup__"
         },
         "aspInstances": {
-            "value": "__aspInstances__"
+            "value": __aspInstances__
         },
         "clientAffinity": {
             "value": "__clientAffinity__"
@@ -27,7 +27,7 @@
             "value": "__aspTier__"
         },
         "aspSize": {
-            "value": "__aspSize__"
+            "value": __aspSize__
         },
         "cosmosDBName": {
             "value": "__appSharedCosmosDBName__"
