@@ -43,6 +43,8 @@ namespace DFC.App.Triagetool.Controllers
         [Route("pages/{triage-select?}/head")]
         public IActionResult Head([ModelBinder(Name = "triage-select")] string article)
         {
+            logger.LogInformation($"{nameof(Head)} has been called");
+
             var viewModel = new HeadViewModel
             {
                 Title = "Triage | National Careers Service",
@@ -60,6 +62,8 @@ namespace DFC.App.Triagetool.Controllers
         [Route("pages/{triage-select?}/breadcrumb")]
         public IActionResult Breadcrumb([ModelBinder(Name = "triage-select")] string article)
         {
+            logger.LogInformation($"{nameof(Breadcrumb)} has been called");
+
             const string slash = "/";
             var viewModel = new BreadcrumbViewModel
             {
@@ -77,7 +81,7 @@ namespace DFC.App.Triagetool.Controllers
                     },
                 },
             };
-            logger.LogWarning($"{nameof(Breadcrumb)} has returned no content for: {article}");
+            logger.LogInformation($"{nameof(Breadcrumb)} has returned content ");
 
             return View(viewModel);
         }

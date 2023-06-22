@@ -57,6 +57,8 @@ namespace DFC.App.Triagetool.Controllers
 
             if (!sitemap.Locations.Any())
             {
+                logger.LogWarning("No Sitemap locations found");
+
                 return NoContent();
             }
 
