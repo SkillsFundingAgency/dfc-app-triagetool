@@ -204,7 +204,6 @@
             "name": "[variables('WebAppName')]",
             "type": "Microsoft.Resources/deployments",
             "dependsOn": [
-                "[variables('webAppInsightsName')]",
                 "[variables('appServicePlanName')]"
             ],
             "properties": {
