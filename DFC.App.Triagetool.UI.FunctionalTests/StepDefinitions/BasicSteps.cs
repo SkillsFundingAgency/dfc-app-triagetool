@@ -43,7 +43,7 @@ namespace DFC.App.Triagetool.UI.FunctionalTests.StepDefinitions
         [When(@"I select (.*) in the options filter")]
         public void WhenISelectSortFilter(string options)
         {
-            var optionsFilter = this.Context.GetWebDriver().FindElement(By.Id("triageSelect"));
+            var optionsFilter = this.Context.GetWebDriver().FindElement(By.Id("triageSelect")).Click();
 
             if (!optionsFilter.Displayed)
             {
