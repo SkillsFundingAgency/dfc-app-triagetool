@@ -21,7 +21,7 @@
                                             @Model.SelectedFilters.Count() selected
                                         </p>
                                         <div class="govuk-checkboxes govuk-checkboxes--small govuk-radios govuk-radios--small" id="filterCheckboxes">
-                                            @foreach (var filter in Model.Filters)
+                                            @foreach (var filter in Model.SelectedFilters)
                                             {
                                                 @(await @Html.PartialAsync("TriageToolPartialViews/TriageFilterItem", filter).ConfigureAwait(false))
                                             }
