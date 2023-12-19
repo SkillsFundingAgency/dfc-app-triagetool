@@ -89,7 +89,7 @@ stages:
         BuildConfiguration: $(BuildConfiguration)
 
 - stage: DeployToLabAppTriagetool
-  condition: eq(dependencies.Build.result,'Succeeded')
+  condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
   displayName: Deploy to LAB_AppTriagetool
   variables:
   - group: dfc-shared-all
@@ -145,7 +145,7 @@ stages:
       UIFunctionalTestCategory: Triagetool
 
 - stage: DeployToLabDraftAppTriagetool
-  condition: succeeded()
+  condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
   displayName: Deploy to LAB-DRAFT_AppTriagetool
   variables:
   - group: dfc-shared-all
@@ -202,7 +202,7 @@ stages:
       UIFunctionalTestCategory: Triagetool
       
 - stage: DeployToDevAppTriagetool
-  condition: succeeded()
+  condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
   displayName: Deploy to DEV_AppTriagetool
   variables:
   - group: dfc-shared-all
@@ -258,7 +258,7 @@ stages:
       UIFunctionalTestCategory: Triagetool
 
 - stage: DeployToDevDraftAppTriagetool
-  condition: succeeded()
+  condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
   displayName: Deploy to DEV-DRAFT_AppTriagetool
   variables:
   - group: dfc-shared-all
@@ -315,7 +315,7 @@ stages:
       UIFunctionalTestCategory: Triagetool
 
 - stage: DeployToSitAppTriagetool
-  condition: succeeded()
+  condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
   displayName: Deploy to SIT_AppTriagetool
   variables:
   - group: dfc-shared-all
@@ -371,7 +371,7 @@ stages:
       UIFunctionalTestCategory: Triagetool
 
 - stage: DeployToSitDraftAppTriagetool
-  condition: succeeded()
+  condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
   displayName: Deploy to SIT-DRAFT_AppTriagetool
   variables:
   - group: dfc-shared-all
@@ -428,7 +428,7 @@ stages:
       UIFunctionalTestCategory: Triagetool
 
 - stage: DeployToPPAppTriagetool
-  condition: succeeded()
+  condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
   displayName: Deploy to PP_AppTriagetool
   variables:
   - group: dfc-shared-all
@@ -484,7 +484,7 @@ stages:
       UIFunctionalTestCategory: Triagetool
 
 - stage: DeployToPPDraftAppTriagetool
-  condition: succeeded()
+  condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
   displayName: Deploy to PP-DRAFT_AppTriagetool
   variables:
   - group: dfc-shared-all
@@ -541,7 +541,7 @@ stages:
       UIFunctionalTestCategory: Triagetool
 
 - stage: DeployToPRDAppTriagetool
-  condition: succeeded()
+  condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
   displayName: Deploy to PRD_AppTriagetool
   variables:
   - group: dfc-shared-all
@@ -597,7 +597,7 @@ stages:
       UIFunctionalTestCategory: Triagetool
 
 - stage: DeployToPRDDraftAppTriagetool
-  condition: succeeded()
+  condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
   displayName: Deploy to PRD_Draft_AppTriagetool
   variables:
   - group: dfc-shared-all
