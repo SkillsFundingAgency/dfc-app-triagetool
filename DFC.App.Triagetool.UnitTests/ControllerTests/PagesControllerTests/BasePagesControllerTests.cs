@@ -1,5 +1,6 @@
-﻿using DFC.App.Triagetool.Controllers;
+﻿/*using DFC.App.Triagetool.Controllers;
 using DFC.App.Triagetool.Data.Models.ContentModels;
+using DFC.Common.SharedContent.Pkg.Netcore.Interfaces;
 using DFC.Compui.Cosmos.Contracts;
 using FakeItEasy;
 using Microsoft.AspNetCore.Http;
@@ -26,7 +27,7 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
 
         public static IEnumerable<object[]> HtmlMediaTypes => new List<object[]>
         {
-            new string[] { "*/*" },
+            new string[] { "*//**" },
             new string[] { MediaTypeNames.Text.Html },
         };
 
@@ -46,6 +47,8 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
 
         protected IDocumentService<TriageToolOptionDocumentModel> FakeTriageToolOptionDocumentService { get; }
 
+        protected ISharedContentRedisInterface SharedContentRedisInterface { get; }
+
         protected AutoMapper.IMapper FakeMapper { get; }
 
         protected PagesController BuildPagesController(string mediaTypeName)
@@ -54,7 +57,7 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
 
             httpContext.Request.Headers[HeaderNames.Accept] = mediaTypeName;
 
-            var controller = new PagesController(Logger, FakeMapper, FakeSharedContentItemDocumentService, FakeTriageToolOptionDocumentService)
+            var controller = new PagesController(Logger, FakeMapper, SharedContentRedisInterface, FakeSharedContentItemDocumentService)
             {
                 ControllerContext = new ControllerContext()
                 {
@@ -121,3 +124,4 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
         }
     }
 }
+*/

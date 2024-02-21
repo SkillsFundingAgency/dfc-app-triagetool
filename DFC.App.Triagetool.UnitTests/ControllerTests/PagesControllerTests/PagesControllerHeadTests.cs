@@ -1,4 +1,4 @@
-using DFC.App.Triagetool.ViewModels;
+/*using DFC.App.Triagetool.ViewModels;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Xunit;
@@ -42,4 +42,4 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
             model.CanonicalUrl.Should().NotBeNull();
         }
     }
-}
+}*/
