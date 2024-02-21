@@ -1,5 +1,6 @@
 ﻿using DFC.App.Triagetool.Controllers;
 using DFC.App.Triagetool.Data.Models.ContentModels;
+using DFC.Common.SharedContent.Pkg.Netcore.Interfaces;
 using DFC.Compui.Cosmos.Contracts;
 using FakeItEasy;
 using Microsoft.AspNetCore.Http;
@@ -13,16 +14,16 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.SitemapControllerTests
         public BaseSitemapControllerTests()
         {
             FakeLogger = A.Fake<ILogger<SitemapController>>();
-            FakeTriageToolDocumentService = A.Fake<IDocumentService<TriageToolOptionDocumentModel>>();
+            FakeSharedContentRedisInterface = A.Fake<ISharedContentRedisInterface>();
         }
 
         protected ILogger<SitemapController> FakeLogger { get; }
-
+        public ISharedContentRedisInterface FakeSharedContentRedisInterface { get; }
         protected IDocumentService<TriageToolOptionDocumentModel> FakeTriageToolDocumentService { get; }
 
         protected SitemapController BuildSitemapController()
         {
-            var controller = new SitemapController(FakeLogger, FakeTriageToolDocumentService)
+            var controller = new SitemapController(FakeLogger, FakeSharedContentRedisInterface)
             {
                 ControllerContext = new ControllerContext()
                 {
