@@ -2,10 +2,8 @@
 using DFC.App.Triagetool.Data.Models.ContentModels;
 using DFC.App.Triagetool.Extensions;
 using DFC.App.Triagetool.ViewModels;
-using DFC.Common.SharedContent.Pkg.Netcore.Infrastructure.Strategy;
 using DFC.Common.SharedContent.Pkg.Netcore.Interfaces;
 using DFC.Common.SharedContent.Pkg.Netcore.Model.ContentItems;
-using DFC.Common.SharedContent.Pkg.Netcore.Model.ContentItems.PageBanner;
 using DFC.Common.SharedContent.Pkg.Netcore.Model.ContentItems.SharedHtml;
 using DFC.Common.SharedContent.Pkg.Netcore.Model.Response;
 using DFC.Compui.Cosmos.Contracts;
@@ -13,7 +11,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -31,7 +28,7 @@ namespace DFC.App.Triagetool.Controllers
         private readonly ILogger<PagesController> logger;
         private readonly AutoMapper.IMapper mapper;
         //private readonly IDocumentService<SharedContentItemModel> sharedContentItemDocumentService;
-        private readonly IDocumentService<TriageToolOptionDocumentModel> triageToolDocumentService;
+         private readonly IDocumentService<TriageToolOptionDocumentModel> triageToolDocumentService;
         private readonly ISharedContentRedisInterface sharedContentRedis;
         public PagesController(
             ILogger<PagesController> logger,
@@ -108,32 +105,28 @@ namespace DFC.App.Triagetool.Controllers
         [Route("pages/{triage-select?}/body")]
         public async Task<IActionResult> Body([ModelBinder(Name = "triage-select")] string article)
         {
-            var documents = await triageToolDocumentService.GetAllAsync(TriageToolOptionDocumentModel.DefaultPartitionKey).ConfigureAwait(false);
+            //var documents = await triageToolDocumentService.GetAllAsync(TriageToolOptionDocumentModel.DefaultPartitionKey).ConfigureAwait(false);
 
-            var triagetooldocuments = await sharedContentRedis.GetDataAsync<TriagePageResponse>("TriageToolPages");
-
-            var sortedDocuments = documents.OrderBy(o => o.Title).ToList();
+            //var sortedDocuments = documents.OrderBy(o => o.Title).ToList();
 
             //var sharedContent = await sharedContentItemDocumentService.GetAllAsync().ConfigureAwait(false); need to change
 
-            var document = !string.IsNullOrWhiteSpace(article)
-                ? sortedDocuments?.FirstOrDefault(x => string.Equals(x.Title, article, StringComparison.CurrentCultureIgnoreCase)) ?? sortedDocuments?.FirstOrDefault()
-                : sortedDocuments?.FirstOrDefault();
+            //var document = !string.IsNullOrWhiteSpace(article)
+            //    ? sortedDocuments?.FirstOrDefault(x => string.Equals(x.Title, article, StringComparison.CurrentCultureIgnoreCase)) ?? sortedDocuments?.FirstOrDefault()
+            //    : sortedDocuments?.FirstOrDefault();
 
-         
-            //Filter the relevant pages
-             var filteredDocuments1 = triagetooldocuments.Page;
+            var triagetooldocuments = await sharedContentRedis.GetDataAsync<TriagePageResponse>("TriageToolPages");
+     
+            var pages = triagetooldocuments.Page;
 
             List<TriagePage> subList = new List<TriagePage>();
 
-            foreach (var doc in filteredDocuments1)
+            foreach (var doc in pages)
             {
-              
                 foreach (var contentItem in doc.TriageToolFilters.ContentItems)
                 {
                     if (contentItem.ToString().Contains(article)) 
-                    // Assuming contentItem is of type TriagePage
-                    subList.Add(doc);
+                      subList.Add(doc);
                 }
             }
 
@@ -142,12 +135,20 @@ namespace DFC.App.Triagetool.Controllers
             {
                 Title = article,
                 Pages = subList,
-
             };
 
-             var model = mapper.Map<TriageToolOptionViewModel>(document);
+            //var model = mapper.Map<TriageToolOptionViewModel>(document);
             //model.SharedContent = sharedContent?.FirstOrDefault()?.Content;
 
+            try
+            {
+                var sharedhtml = await sharedContentRedis.GetDataAsync<SharedHtml>("sharedContent/" + speakToanAdviserStaxId);
+                triageToolModel.SharedContent = sharedhtml.Html;
+            }
+            catch
+            {
+                triageToolModel.SharedContent = "";
+            }
             return View(triageToolModel);
         }
 
