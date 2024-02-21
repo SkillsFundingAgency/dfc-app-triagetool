@@ -32,8 +32,8 @@ namespace DFC.App.Triagetool.Controllers
         [Route("health")]
         public async Task<IActionResult> Health()
         {
-            logger.LogInformation("Generating Health report");
 
+            logger.LogInformation("Generating Health report");
             const string message = "Document store is available";
             logger.LogInformation($"{nameof(Health)} responded with: {resourceName} - {message}");
 
