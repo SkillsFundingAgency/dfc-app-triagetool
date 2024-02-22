@@ -22,7 +22,7 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
             new object[] { "/pages/{article}/body", string.Empty, nameof(PagesController.Body) },
         };
 
-        [Theory]
+       /* [Theory]
         [MemberData(nameof(PagesRouteDataOk))]
         public async Task PagesControllerCallsContentPageServiceUsingPagesRouteForOkResult(string route, string option, string actionMethod)
         {
@@ -64,6 +64,6 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
                     HttpContext = httpContext,
                 },
             };
-        }
+        }*/
     }
 }

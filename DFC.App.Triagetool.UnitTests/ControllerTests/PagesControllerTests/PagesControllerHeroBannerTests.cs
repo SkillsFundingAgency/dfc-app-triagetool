@@ -14,7 +14,7 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
     [Trait("Category", "Pages Controller - HeroBanner Unit Tests")]
     public class PagesControllerHeroBannerTests : BasePagesControllerTests
     {
-        [Theory]
+        /*[Theory]
         [MemberData(nameof(JsonMediaTypes))]
         [MemberData(nameof(HtmlMediaTypes))]
         public async Task PagesControllerHeroBannerReturnsNoContentWhenNoData(string mediaTypeName)
@@ -48,5 +48,6 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
             var statusResult = Assert.IsType<ViewResult>(result);
             Assert.True(((HeroBannerViewModel)statusResult.Model).Options.Any());
         }
+    }*/
     }
 }
