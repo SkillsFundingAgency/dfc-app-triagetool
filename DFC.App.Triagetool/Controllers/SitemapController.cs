@@ -17,7 +17,6 @@ namespace DFC.App.Triagetool.Controllers
     {
         public const string SitemapViewCanonicalName = "sitemap";
         private readonly ILogger<SitemapController> logger;
-        private readonly IDocumentService<TriageToolOptionDocumentModel> triageToolDocumentService;
         private readonly ISharedContentRedisInterface sharedContentRedis;
 
         public SitemapController(ILogger<SitemapController> logger, ISharedContentRedisInterface sharedContentRedis)
@@ -43,10 +42,7 @@ namespace DFC.App.Triagetool.Controllers
 
             var sitemapUrlPrefix = $"{Request.GetBaseAddress()}{PagesController.RegistrationPath}";
             var sitemap = new Sitemap();
-            //var triageToolOptionModels = await triageToolDocumentService.GetAllAsync().ConfigureAwait(false);
             var triagetooldocuments = await sharedContentRedis.GetDataAsync<TriageToolFilterResponse>("TraigeToolFilters/All");
-
-          //  if (triageToolOptionModels != null && triageToolOptionModels.Any())
                 if (triagetooldocuments != null )
                 {
                 for (int i = 0; i < triagetooldocuments.TriageToolFilter.Count; i++)

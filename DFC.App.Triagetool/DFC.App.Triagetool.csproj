@@ -59,4 +59,10 @@
 
 
 
+  <ItemGroup>
+    <Folder Include="OpenAPIDocs\" />
+  </ItemGroup>
+
+
+
 </Project>
