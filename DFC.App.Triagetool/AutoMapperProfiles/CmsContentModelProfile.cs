@@ -7,6 +7,8 @@ using DFC.App.Triagetool.ViewModels;
 using DFC.Content.Pkg.Netcore.Data.Models;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using DFC.Common.SharedContent.Pkg.Netcore.Model.ContentItems;
+using DFC.Common.SharedContent.Pkg.Netcore.Model.Response;
 
 namespace DFC.App.Triagetool.AutoMapperProfiles
 {
@@ -34,24 +36,40 @@ namespace DFC.App.Triagetool.AutoMapperProfiles
 
             CreateMap<CmsTriageToolFilterModel, TriageToolFilterDocumentModel>();
 
-            CreateMap<TriageToolOptionItemModel, TriageToolOptionDocumentModel>()
-                .ForMember(d => d.Id, s => s.MapFrom(m => m.ItemId))
-                .ForMember(d => d.Pages, s => s.Ignore())
-                .ForMember(d => d.FilterIds, s => s.MapFrom(m => m.ContentItems.Where(w => w.ContentType != null && w.ContentType.Equals(CmsContentKeyHelper.FilterTag, StringComparison.InvariantCultureIgnoreCase)).Select(s => s.Url)))
-                .ForMember(d => d.PageIds, s => s.Ignore())
-                .ForMember(d => d.Filters, s => s.MapFrom(m => m.ContentItems.Where(w => w.ContentType != null && w.ContentType.Equals(CmsContentKeyHelper.FilterTag, StringComparison.InvariantCultureIgnoreCase)).Select(s => s as CmsTriageToolFilterModel)))
-                .ForMember(d => d.Url, s => s.MapFrom(m => m.Url))
-                .ForMember(d => d.Title, s => s.MapFrom(m => m.Title))
-                .ForAllOtherMembers(d => d.Ignore());
+            //CreateMap<TriageToolOptionItemModel, TriageToolOptionDocumentModel>()
+            //    .ForMember(d => d.Id, s => s.MapFrom(m => m.ItemId))
+            //    .ForMember(d => d.Pages, s => s.Ignore())
+            //    .ForMember(d => d.FilterIds, s => s.MapFrom(m => m.ContentItems.Where(w => w.ContentType != null && w.ContentType.Equals(CmsContentKeyHelper.FilterTag, StringComparison.InvariantCultureIgnoreCase)).Select(s => s.Url)))
+            //    .ForMember(d => d.PageIds, s => s.Ignore())
+            //    .ForMember(d => d.Filters, s => s.MapFrom(m => m.ContentItems.Where(w => w.ContentType != null && w.ContentType.Equals(CmsContentKeyHelper.FilterTag, StringComparison.InvariantCultureIgnoreCase)).Select(s => s as CmsTriageToolFilterModel)))
+            //    .ForMember(d => d.Url, s => s.MapFrom(m => m.Url))
+            //    .ForMember(d => d.Title, s => s.MapFrom(m => m.Title))
+            //    .ForAllOtherMembers(d => d.Ignore());
 
             CreateMap<TriageToolOptionDocumentModel, TriageToolOptionViewModel>()
                 .ForMember(d => d.SelectedFilters, s => s.Ignore())
-                .ForMember(d => d.SharedContent, s => s.Ignore());
+                .ForMember(d => d.SharedContent, s => s.Ignore())
+             .ForAllOtherMembers(d => d.Ignore());
+
+            CreateMap<TriagePageResponse, TriageToolOptionViewModel>()
+                  .ForAllOtherMembers(d => d.Ignore());
 
             CreateMap<PageDocumentModel, TriageToolPageViewModel>();
 
             CreateMap<TriageToolFilterDocumentModel, TriageToolFilterViewModel>()
                 .ForMember(d => d.Selected, s => s.Ignore());
+
+            CreateMap<TriagePage, PageDocumentModel>()
+            .ForMember(d => d.Link, s => s.MapFrom(m => m.PageLocation.FullUrl))
+            .ForMember(d => d.Summary, s => s.MapFrom(m => m.TriageToolSummary))
+            .ForMember(d => d.Uri, s => s.MapFrom(m => m.PageLocation.FullUrl))
+            .ForMember(d => d.Title, s => s.MapFrom(m => m.DisplayText))
+            .ForMember(d => d.Filters, s => s.MapFrom(m => m.TriageToolFilters.ContentItems))
+            .ForAllOtherMembers(d => d.Ignore());
+
+
+
+
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using DFC.Common.SharedContent.Pkg.Netcore.Model.ContentItems;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
 namespace DFC.App.Triagetool.ViewModels
@@ -9,7 +10,7 @@ namespace DFC.App.Triagetool.ViewModels
         public TriageToolOptionViewModel()
         {
             Filters = new List<TriageToolFilterViewModel>();
-            Pages = new List<TriageToolPageViewModel>();
+            Pages = new List<TriagePage>();
             SelectedFilters = new List<string>();
         }
 
@@ -17,7 +18,7 @@ namespace DFC.App.Triagetool.ViewModels
 
         public List<TriageToolFilterViewModel> Filters { get; set; }
 
-        public List<TriageToolPageViewModel> Pages { get; set; }
+        public List<TriagePage> Pages { get; set; }
 
         public List<string> SelectedFilters { get; set; }
 

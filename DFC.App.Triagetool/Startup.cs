@@ -17,6 +17,20 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Diagnostics.CodeAnalysis;
+using DFC.Common.SharedContent.Pkg.Netcore;
+using DFC.Common.SharedContent.Pkg.Netcore.Infrastructure;
+using DFC.Common.SharedContent.Pkg.Netcore.Infrastructure.Strategy;
+using DFC.Common.SharedContent.Pkg.Netcore.Interfaces;
+using DFC.Common.SharedContent.Pkg.Netcore.Model.ContentItems.SharedHtml;
+using DFC.Common.SharedContent.Pkg.Netcore.RequestHandler;
+using GraphQL.Client.Abstractions;
+using GraphQL.Client.Http;
+using GraphQL.Client.Serializer.Newtonsoft;
+using System.Net.Http;
+using System;
+using Microsoft.AspNetCore.Http;
+using DFC.Common.SharedContent.Pkg.Netcore.Model.ContentItems;
+using DFC.Common.SharedContent.Pkg.Netcore.Model.Response;
 
 namespace DFC.App.Triagetool
 {
@@ -25,6 +39,9 @@ namespace DFC.App.Triagetool
     {
         private const string CosmosDbSharedContentConfigAppSettings = "Configuration:CosmosDbConnections:SharedContent";
         private const string CosmosDbCmsContentConfigAppSettings = "Configuration:CosmosDbConnections:TriageTool";
+
+        private const string RedisCacheConnectionStringAppSettings = "Cms:RedisCacheConnectionString";
+        private const string GraphApiUrlAppSettings = "Cms:GraphApiUrl";
 
         private readonly IConfiguration configuration;
         private readonly IWebHostEnvironment env;
@@ -68,12 +85,34 @@ namespace DFC.App.Triagetool
             services.AddDocumentServices<SharedContentItemModel>(cosmosDbConnectionSharedContent, env.IsDevelopment(), cosmosRetryOptions);
             services.AddDocumentServices<TriageToolOptionDocumentModel>(cosmosDbConnectionCmsContent, env.IsDevelopment(), cosmosRetryOptions);
 
+            services.AddStackExchangeRedisCache(options => { options.Configuration = configuration.GetSection(RedisCacheConnectionStringAppSettings).Get<string>(); });
+
+            services.AddHttpClient();
+            services.AddSingleton<IGraphQLClient>(s =>
+            {
+                var option = new GraphQLHttpClientOptions()
+                {
+                    EndPoint = new Uri(configuration.GetSection(GraphApiUrlAppSettings).Get<string>()),
+                    HttpMessageHandler = new CmsRequestHandler(s.GetService<IHttpClientFactory>(), s.GetService<IConfiguration>(), s.GetService<IHttpContextAccessor>()),
+                };
+                var client = new GraphQLHttpClient(option, new NewtonsoftJsonSerializer());
+                return client;
+            });
+
+            services.AddSingleton<ISharedContentRedisInterfaceStrategy<SharedHtml>, SharedHtmlQueryStrategy>();
+
+            services.AddSingleton<ISharedContentRedisInterfaceStrategy<TriageToolFilterResponse>, TriageToolAllQueryStrategy>();
+
+            services.AddSingleton<ISharedContentRedisInterfaceStrategy<TriagePageResponse>, PagesByTriageToolFilterStrategy>();
+            services.AddSingleton<ISharedContentRedisInterfaceStrategyFactory, SharedContentRedisStrategyFactory>();
+            services.AddScoped<ISharedContentRedisInterface, SharedContentRedis>();
+
             services.AddApplicationInsightsTelemetry();
             services.AddHttpContextAccessor();
             services.AddTransient<ISharedContentCacheReloadService, SharedContentCacheReloadService>();
             services.AddTransient<IWebhooksService, WebhooksService>();
             services.AddTransient<ICacheReloadService, CacheReloadService>();
-            services.AddTransient<IEventHandler, SharedContentEventHandler>();
+            //services.AddTransient<IEventHandler, SharedContentEventHandler>();
             services.AddTransient<IEventHandler, CmsEventHandler>();
 
             services.AddAutoMapper(typeof(Startup).Assembly);
