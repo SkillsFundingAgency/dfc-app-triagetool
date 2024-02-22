@@ -115,7 +115,7 @@ namespace DFC.App.Triagetool.Controllers
             //    ? sortedDocuments?.FirstOrDefault(x => string.Equals(x.Title, article, StringComparison.CurrentCultureIgnoreCase)) ?? sortedDocuments?.FirstOrDefault()
             //    : sortedDocuments?.FirstOrDefault();
 
-            var triagetooldocuments = await sharedContentRedis.GetDataAsync<TriagePageResponse>("TriageToolPages");
+            var triagetooldocuments = await this.sharedContentRedis.GetDataAsync<TriagePageResponse>("TriageToolPages");
      
             var pages = triagetooldocuments.Page;
 
@@ -142,7 +142,7 @@ namespace DFC.App.Triagetool.Controllers
 
             try
             {
-                var sharedhtml = await sharedContentRedis.GetDataAsync<SharedHtml>("sharedContent/" + speakToanAdviserStaxId);
+                var sharedhtml = await this.sharedContentRedis.GetDataAsync<SharedHtml>("sharedContent/" + speakToanAdviserStaxId);
                 triageToolModel.SharedContent = sharedhtml.Html;
             }
             catch
@@ -169,7 +169,7 @@ namespace DFC.App.Triagetool.Controllers
         {
             //var options = await triageToolDocumentService.GetAllAsync(TriageToolOptionDocumentModel.DefaultPartitionKey).ConfigureAwait(false);
             
-            var triagetooldocuments = await sharedContentRedis.GetDataAsync<TriageToolFilterResponse>("TraigeToolFilters/All");
+            var triagetooldocuments = await this.sharedContentRedis.GetDataAsync<TriageToolFilterResponse>("TriageToolFilters/All");
             var viewModel = new HeroBannerViewModel
             {
                 Selected = article,
