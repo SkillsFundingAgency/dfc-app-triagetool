@@ -118,10 +118,10 @@ namespace DFC.App.Triagetool.Controllers
             //    ? sortedDocuments?.FirstOrDefault(x => string.Equals(x.Title, article, StringComparison.CurrentCultureIgnoreCase)) ?? sortedDocuments?.FirstOrDefault()
             //    : sortedDocuments?.FirstOrDefault();
 
-            if (article == null)
+           /* if (article == null)
             {
                 article = "Changing your career.";
-            }
+            }*/
             //var displayText = "";
 
             var triagetooldocuments = await sharedContentRedis.GetDataAsync<TriagePageResponse>("TriageToolPages");
@@ -202,10 +202,10 @@ namespace DFC.App.Triagetool.Controllers
         public async Task<IActionResult> HeroBanner([ModelBinder(Name = "triage-select")] string article)
         {
             //var options = await triageToolDocumentService.GetAllAsync(TriageToolOptionDocumentModel.DefaultPartitionKey).ConfigureAwait(false);
-            if (article == null)
+         /*   if (article == null)
             {
                 article = "Changing your career.";
-            }
+            }*/
             //var displayText = "";
             var triageFilters = await sharedContentRedis.GetDataAsync<TriageToolFilterResponse>("TriageToolFilters/All").ConfigureAwait(false);
             //var filters = triageFilters.TriageToolFilter.OrderBy(o => o.DisplayText).ToList();
@@ -228,7 +228,7 @@ namespace DFC.App.Triagetool.Controllers
                 Selected = article,
             };
 
-            viewModel.Options = triageFilters.TriageToolFilter.Select(x => x.DisplayText).ToList();
+            viewModel.Options = triageFilters.TriageToolFilter.Select(x => x.DisplayText).ToList()!;
             return View(viewModel);
         }
 
@@ -240,7 +240,7 @@ namespace DFC.App.Triagetool.Controllers
             var triagetooldocuments = await sharedContentRedis.GetDataAsync<TriagePageResponse>("TriageToolPages");
 
             //var models = mapper.Map<IList<TriageToolOptionViewModel>>(documents.OrderBy(o => o.Title));
-            var models1 = mapper.Map<IList<PageDocumentModel>>(triagetooldocuments.Page);
+            var models1 = mapper.Map<IList<TriageToolOptionViewModel>>(triagetooldocuments.Page.OrderBy(o => o.DisplayText));
             return Json(models1);
         }
     }
