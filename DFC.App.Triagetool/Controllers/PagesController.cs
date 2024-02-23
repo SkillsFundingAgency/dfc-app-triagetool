@@ -118,22 +118,23 @@ namespace DFC.App.Triagetool.Controllers
             //    ? sortedDocuments?.FirstOrDefault(x => string.Equals(x.Title, article, StringComparison.CurrentCultureIgnoreCase)) ?? sortedDocuments?.FirstOrDefault()
             //    : sortedDocuments?.FirstOrDefault();
 
-         /*   if (article == null)
+            if (article == null)
             {
-                article = "ad2b0358-f062-4b19-9076-c390eba74dcb";
-            }*/
-            var displayText = "";
+                article = "Changing your career.";
+            }
+            //var displayText = "";
 
             var triagetooldocuments = await sharedContentRedis.GetDataAsync<TriagePageResponse>("TriageToolPages");
 
-            var sortedDocuments = triagetooldocuments.Page?.OrderBy(o => o.DisplayText).ToList();
+            var sortedDocuments = triagetooldocuments.Page;
 
-            var triageFilters = await sharedContentRedis.GetDataAsync<TriageToolFilterResponse>("TriageToolFilters/All").ConfigureAwait(false);
-            var filters = triageFilters.TriageToolFilter.OrderBy(o => o.DisplayText).ToList();
-
+            //var triageFilters = await sharedContentRedis.GetDataAsync<TriageToolFilterResponse>("TriageToolFilters/All").ConfigureAwait(false);
+            //var filters = triageFilters.TriageToolFilter.OrderBy(o => o.DisplayText).ToList();
+/*
             foreach (var filter in filters)
             {
                 var content = JsonConvert.SerializeObject(filter.GraphSync);
+
                 var root = JToken.Parse(content);
                 var items = (string?)root.SelectToken("..nodeId");
                 var filterNodeId = items.Substring(items.LastIndexOf('/') + 1);
@@ -142,24 +143,7 @@ namespace DFC.App.Triagetool.Controllers
                 {
                      displayText = filter.DisplayText;
                 }
-            }
-
-           // object value = triageFilters.TriageToolFilter.Where(x = x => x. == article).FirstOrDefault();
-
-           /* foreach (var filter in triageFilters)
-            {
-
             }*/
-
-
-            /*  var document = !string.IsNullOrWhiteSpace(article)
-                  ? sortedDocuments?.FirstOrDefault(x => string.Equals(x.DisplayText, article, StringComparison.CurrentCultureIgnoreCase)) ?? sortedDocuments?.FirstOrDefault()
-                  : sortedDocuments?.FirstOrDefault();*/
-
-            //var pages = triagetooldocuments.Page;
-
-
-
             List<TriagePage> subList = new List<TriagePage>();
 
             foreach (var doc in sortedDocuments)
@@ -168,7 +152,8 @@ namespace DFC.App.Triagetool.Controllers
                 {
                     var content = JsonConvert.SerializeObject(doc.TriageToolFilters.ContentItems);
                     var root = JToken.Parse(content);
-                    IList<JToken> items = root.SelectTokens("..graphSync.nodeId", false).ToList();
+                    IList<JToken> items = root.SelectTokens("..displayText", false).ToList();
+
                     for (int i = 0; i < items.Count; i++)
                     {
                         string item = items[i].ToString();
@@ -183,7 +168,7 @@ namespace DFC.App.Triagetool.Controllers
 
             var triageToolModel = new TriageToolOptionViewModel
             {
-                Title = displayText,
+                Title = article,
                 Pages = subList,
             };
 
@@ -217,15 +202,15 @@ namespace DFC.App.Triagetool.Controllers
         public async Task<IActionResult> HeroBanner([ModelBinder(Name = "triage-select")] string article)
         {
             //var options = await triageToolDocumentService.GetAllAsync(TriageToolOptionDocumentModel.DefaultPartitionKey).ConfigureAwait(false);
-           /* if (article == null)
+            if (article == null)
             {
-                article = "ad2b0358-f062-4b19-9076-c390eba74dcb";
-            }*/
-            var displayText = "";
+                article = "Changing your career.";
+            }
+            //var displayText = "";
             var triageFilters = await sharedContentRedis.GetDataAsync<TriageToolFilterResponse>("TriageToolFilters/All").ConfigureAwait(false);
-            var filters = triageFilters.TriageToolFilter.OrderBy(o => o.DisplayText).ToList();
+            //var filters = triageFilters.TriageToolFilter.OrderBy(o => o.DisplayText).ToList();
 
-            foreach (var filter in filters)
+           /* foreach (var filter in filters)
             {
                 var content = JsonConvert.SerializeObject(filter.GraphSync);
                 var root = JToken.Parse(content);
@@ -236,14 +221,14 @@ namespace DFC.App.Triagetool.Controllers
                 {
                     displayText = filter.DisplayText;
                 }
-            }
+            }*/
 
             var viewModel = new HeroBannerViewModel
             {
-                Selected = displayText,
+                Selected = article,
             };
 
-            viewModel.Options = triageFilters.TriageToolFilter.Select(x => x.DisplayText).OrderBy(o => o).ToList();
+            viewModel.Options = triageFilters.TriageToolFilter.Select(x => x.DisplayText).ToList();
             return View(viewModel);
         }
 
@@ -255,7 +240,7 @@ namespace DFC.App.Triagetool.Controllers
             var triagetooldocuments = await sharedContentRedis.GetDataAsync<TriagePageResponse>("TriageToolPages");
 
             //var models = mapper.Map<IList<TriageToolOptionViewModel>>(documents.OrderBy(o => o.Title));
-            var models1 = mapper.Map<IList<PageDocumentModel>>(triagetooldocuments.Page.OrderBy(o => o.DisplayText));
+            var models1 = mapper.Map<IList<PageDocumentModel>>(triagetooldocuments.Page);
             return Json(models1);
         }
     }
