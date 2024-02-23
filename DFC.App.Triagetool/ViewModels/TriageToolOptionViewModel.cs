@@ -16,6 +16,8 @@ namespace DFC.App.Triagetool.ViewModels
 
         public string? Title { get; set; }
 
+        public string? DisplayText { get; set; }
+
         public List<TriageToolFilterViewModel> Filters { get; set; }
 
         public List<TriagePage> Pages { get; set; }
