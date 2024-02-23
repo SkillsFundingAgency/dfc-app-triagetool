@@ -118,10 +118,10 @@ namespace DFC.App.Triagetool.Controllers
             //    ? sortedDocuments?.FirstOrDefault(x => string.Equals(x.Title, article, StringComparison.CurrentCultureIgnoreCase)) ?? sortedDocuments?.FirstOrDefault()
             //    : sortedDocuments?.FirstOrDefault();
 
-            if (article == null)
+         /*   if (article == null)
             {
                 article = "ad2b0358-f062-4b19-9076-c390eba74dcb";
-            }
+            }*/
             var displayText = "";
 
             var triagetooldocuments = await sharedContentRedis.GetDataAsync<TriagePageResponse>("TriageToolPages");
@@ -217,10 +217,10 @@ namespace DFC.App.Triagetool.Controllers
         public async Task<IActionResult> HeroBanner([ModelBinder(Name = "triage-select")] string article)
         {
             //var options = await triageToolDocumentService.GetAllAsync(TriageToolOptionDocumentModel.DefaultPartitionKey).ConfigureAwait(false);
-            if (article == null)
+           /* if (article == null)
             {
                 article = "ad2b0358-f062-4b19-9076-c390eba74dcb";
-            }
+            }*/
             var displayText = "";
             var triageFilters = await sharedContentRedis.GetDataAsync<TriageToolFilterResponse>("TriageToolFilters/All").ConfigureAwait(false);
             var filters = triageFilters.TriageToolFilter.OrderBy(o => o.DisplayText).ToList();
