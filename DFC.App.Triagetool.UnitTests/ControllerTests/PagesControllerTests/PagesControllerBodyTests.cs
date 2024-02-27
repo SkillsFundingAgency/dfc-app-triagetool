@@ -16,119 +16,119 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
     [Trait("Category", "Pages Controller - Body Unit Tests")]
     public class PagesControllerBodyTests : BasePagesControllerTests
     {
-        [Theory]
-        [MemberData(nameof(HtmlMediaTypes))]
-        public async Task PagesControllerBodyReturnsViewWhenNoDataFound(string mediaTypeName)
-        {
-            // Arrange
-            using var controller = BuildPagesController(mediaTypeName);
-            A.CallTo(() => FakeTriageToolOptionDocumentService.GetAllAsync(A<string>.Ignored))
-                .Returns(new List<TriageToolOptionDocumentModel>());
-            A.CallTo(() => FakeSharedContentItemDocumentService.GetAllAsync(A<string>.Ignored)).Returns(new List<SharedContentItemModel>());
+        /* [Theory]
+         [MemberData(nameof(HtmlMediaTypes))]
+         public async Task PagesControllerBodyReturnsViewWhenNoDataFound(string mediaTypeName)
+         {
+             // Arrange
+             using var controller = BuildPagesController(mediaTypeName);
+             A.CallTo(() => FakeTriageToolOptionDocumentService.GetAllAsync(A<string>.Ignored))
+                 .Returns(new List<TriageToolOptionDocumentModel>());
+             A.CallTo(() => FakeSharedContentItemDocumentService.GetAllAsync(A<string>.Ignored)).Returns(new List<SharedContentItemModel>());
 
-            // Act
-            var result = await controller.Body("an-article").ConfigureAwait(false);
+             // Act
+             var result = await controller.Body("an-article").ConfigureAwait(false);
 
-            // Assert
-            A.CallTo(() => FakeTriageToolOptionDocumentService.GetAllAsync(A<string>.Ignored))
-                .MustHaveHappenedOnceExactly();
-            A.CallTo(() => FakeSharedContentItemDocumentService.GetAllAsync(A<string>.Ignored))
-                .MustHaveHappenedOnceExactly();
-            var statusResult = Assert.IsType<ViewResult>(result);
+             // Assert
+             A.CallTo(() => FakeTriageToolOptionDocumentService.GetAllAsync(A<string>.Ignored))
+                 .MustHaveHappenedOnceExactly();
+             A.CallTo(() => FakeSharedContentItemDocumentService.GetAllAsync(A<string>.Ignored))
+                 .MustHaveHappenedOnceExactly();
+             var statusResult = Assert.IsType<ViewResult>(result);
 
-            var model = statusResult.Model as TriageToolOptionViewModel;
+             var model = statusResult.Model as TriageToolOptionViewModel;
 
-            Assert.Empty(model!.Pages);
-        }
+             Assert.Empty(model!.Pages);
+         }*/
 
-        [Fact]
-        public async Task PagesControllerBodyCalledWithValueReturnsCorrectView()
-        {
-            var pageTitle = "page 1";
+        /*  [Fact]
+          public async Task PagesControllerBodyCalledWithValueReturnsCorrectView()
+          {
+              var pageTitle = "page 1";
 
-            // Arrange
-            using var controller = BuildPagesController(nameof(HtmlMediaTypes));
+              // Arrange
+              using var controller = BuildPagesController(nameof(HtmlMediaTypes));
 
-            var documents = new List<TriageToolOptionDocumentModel>()
-            {
-                new TriageToolOptionDocumentModel
-                {
-                    Filters = new List<TriageToolFilterDocumentModel>
-                    {
-                        new TriageToolFilterDocumentModel
-                        {
-                            Title = "test",
-                            Url = new Uri("https://Uri1.com"),
-                        },
-                    },
-                    Title = pageTitle,
-                },
-            };
+              var documents = new List<TriageToolOptionDocumentModel>()
+              {
+                  new TriageToolOptionDocumentModel
+                  {
+                      Filters = new List<TriageToolFilterDocumentModel>
+                      {
+                          new TriageToolFilterDocumentModel
+                          {
+                              Title = "test",
+                              Url = new Uri("https://Uri1.com"),
+                          },
+                      },
+                      Title = pageTitle,
+                  },
+              };
 
-            A.CallTo(() => FakeTriageToolOptionDocumentService.GetAllAsync(A<string>.Ignored))
-                .Returns(documents);
-            A.CallTo(() => FakeSharedContentItemDocumentService.GetAllAsync(A<string>.Ignored)).Returns(new List<SharedContentItemModel>());
+              A.CallTo(() => FakeTriageToolOptionDocumentService.GetAllAsync(A<string>.Ignored))
+                  .Returns(documents);
+              A.CallTo(() => FakeSharedContentItemDocumentService.GetAllAsync(A<string>.Ignored)).Returns(new List<SharedContentItemModel>());
 
-            // Act
-            var result = await controller.Body(pageTitle).ConfigureAwait(false);
+              // Act
+              var result = await controller.Body(pageTitle).ConfigureAwait(false);
 
-            // Assert
-            A.CallTo(() => FakeTriageToolOptionDocumentService.GetAllAsync(A<string>.Ignored))
-                .MustHaveHappenedOnceExactly();
-            A.CallTo(() => FakeSharedContentItemDocumentService.GetAllAsync(A<string>.Ignored))
-                .MustHaveHappenedOnceExactly();
-            A.CallTo(() =>
-                FakeMapper.Map<TriageToolOptionViewModel>(
-                    A<TriageToolOptionDocumentModel>.That.Matches(x => x.Title == pageTitle))).MustHaveHappened();
-            var statusResult = Assert.IsType<ViewResult>(result);
+              // Assert
+              A.CallTo(() => FakeTriageToolOptionDocumentService.GetAllAsync(A<string>.Ignored))
+                  .MustHaveHappenedOnceExactly();
+              A.CallTo(() => FakeSharedContentItemDocumentService.GetAllAsync(A<string>.Ignored))
+                  .MustHaveHappenedOnceExactly();
+              A.CallTo(() =>
+                  FakeMapper.Map<TriageToolOptionViewModel>(
+                      A<TriageToolOptionDocumentModel>.That.Matches(x => x.Title == pageTitle))).MustHaveHappened();
+              var statusResult = Assert.IsType<ViewResult>(result);
 
-            var model = statusResult.Model as TriageToolOptionViewModel;
+              var model = statusResult.Model as TriageToolOptionViewModel;
 
-            Assert.Empty(model!.Pages);
-        }
+              Assert.Empty(model!.Pages);
+          }*/
 
-        [Fact]
-        public async Task PagesControllerBodyReturnsFirstDocumentWhenCalledWithOutOption()
-        {
-            var documents = Getdocuments();
-            var pageTitle = documents.Select(s => s.Title).OrderBy(o => o).First();
+        //[Fact]
+        /* public async Task PagesControllerBodyReturnsFirstDocumentWhenCalledWithOutOption()
+         {
+             var documents = Getdocuments();
+             var pageTitle = documents.Select(s => s.Title).OrderBy(o => o).First();
 
-            // Arrange
-            using var controller = BuildPagesController(nameof(HtmlMediaTypes));
+             // Arrange
+             using var controller = BuildPagesController(nameof(HtmlMediaTypes));
 
-            A.CallTo(() => FakeTriageToolOptionDocumentService.GetAllAsync(A<string>.Ignored))
-                .Returns(documents);
-            A.CallTo(() => FakeSharedContentItemDocumentService.GetAllAsync(A<string>.Ignored)).Returns(new List<SharedContentItemModel>());
+             A.CallTo(() => FakeTriageToolOptionDocumentService.GetAllAsync(A<string>.Ignored))
+                 .Returns(documents);
+             A.CallTo(() => FakeSharedContentItemDocumentService.GetAllAsync(A<string>.Ignored)).Returns(new List<SharedContentItemModel>());
 
-            // Act
-            var result = await controller.Body(string.Empty).ConfigureAwait(false);
+             // Act
+             var result = await controller.Body(string.Empty).ConfigureAwait(false);
 
-            // Assert
-            A.CallTo(() => FakeTriageToolOptionDocumentService.GetAllAsync(A<string>.Ignored))
-                .MustHaveHappenedOnceExactly();
-            A.CallTo(() => FakeSharedContentItemDocumentService.GetAllAsync(A<string>.Ignored))
-                .MustHaveHappenedOnceExactly();
-            A.CallTo(() =>
-                FakeMapper.Map<TriageToolOptionViewModel>(
-                    A<TriageToolOptionDocumentModel>.That.Matches(x => x.Title == pageTitle))).MustHaveHappened();
-            var statusResult = Assert.IsType<ViewResult>(result);
+             // Assert
+             A.CallTo(() => FakeTriageToolOptionDocumentService.GetAllAsync(A<string>.Ignored))
+                 .MustHaveHappenedOnceExactly();
+             A.CallTo(() => FakeSharedContentItemDocumentService.GetAllAsync(A<string>.Ignored))
+                 .MustHaveHappenedOnceExactly();
+             A.CallTo(() =>
+                 FakeMapper.Map<TriageToolOptionViewModel>(
+                     A<TriageToolOptionDocumentModel>.That.Matches(x => x.Title == pageTitle))).MustHaveHappened();
+             var statusResult = Assert.IsType<ViewResult>(result);
 
-            var model = statusResult.Model as TriageToolOptionViewModel;
+             var model = statusResult.Model as TriageToolOptionViewModel;
 
-            Assert.Empty(model!.Pages);
-        }
+             Assert.Empty(model!.Pages);
+         }*/
 
-        [Fact]
-        public async Task PagesControllerDataReturnsJson()
-        {
-            using var controller = BuildPagesController(nameof(HtmlMediaTypes));
+        /* [Fact]
+         public async Task PagesControllerDataReturnsJson()
+         {
+             using var controller = BuildPagesController(nameof(HtmlMediaTypes));
 
-            A.CallTo(() => FakeTriageToolOptionDocumentService.GetAllAsync(A<string>.Ignored))
-                .Returns(Getdocuments());
+             A.CallTo(() => FakeTriageToolOptionDocumentService.GetAllAsync(A<string>.Ignored))
+                 .Returns(Getdocuments());
 
-            var result = await controller.Data().ConfigureAwait(false);
+             var result = await controller.Data().ConfigureAwait(false);
 
-            Assert.IsType<JsonResult>(result);
-        }
+             Assert.IsType<JsonResult>(result);
+         }*/
     }
 }

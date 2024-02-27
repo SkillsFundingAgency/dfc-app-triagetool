@@ -1,26 +1,29 @@
 ﻿using DFC.App.Triagetool.Data.Models.ContentModels;
 using DFC.App.Triagetool.Extensions;
 using DFC.App.Triagetool.Models;
+using DFC.Common.SharedContent.Pkg.Netcore.Model.Response;
+using DFC.Common.SharedContent.Pkg.Netcore;
 using DFC.Compui.Cosmos.Contracts;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Linq;
 using System.Net.Mime;
 using System.Threading.Tasks;
+using DFC.Common.SharedContent.Pkg.Netcore.Interfaces;
 
 namespace DFC.App.Triagetool.Controllers
 {
     public class SitemapController : Controller
     {
         public const string SitemapViewCanonicalName = "sitemap";
-
         private readonly ILogger<SitemapController> logger;
         private readonly IDocumentService<TriageToolOptionDocumentModel> triageToolDocumentService;
+        private readonly ISharedContentRedisInterface sharedContentRedis;
 
-        public SitemapController(ILogger<SitemapController> logger, IDocumentService<TriageToolOptionDocumentModel> triageToolDocumentService)
+        public SitemapController(ILogger<SitemapController> logger, ISharedContentRedisInterface sharedContentRedis)
         {
             this.logger = logger;
-            this.triageToolDocumentService = triageToolDocumentService;
+            this.sharedContentRedis = sharedContentRedis;
         }
 
         [HttpGet]
@@ -40,15 +43,16 @@ namespace DFC.App.Triagetool.Controllers
 
             var sitemapUrlPrefix = $"{Request.GetBaseAddress()}{PagesController.RegistrationPath}";
             var sitemap = new Sitemap();
-            var triageToolOptionModels = await triageToolDocumentService.GetAllAsync().ConfigureAwait(false);
+            var triagetooldocuments = await sharedContentRedis.GetDataAsync<TriageToolFilterResponse>("TriageToolFilters/All");
 
-            if (triageToolOptionModels != null && triageToolOptionModels.Any())
-            {
-                foreach (var contentPageModel in triageToolOptionModels)
+                if (triagetooldocuments != null )
                 {
+                for (int i = 0; i < triagetooldocuments.TriageToolFilter.Count; i++)
+                {
+                    Common.SharedContent.Pkg.Netcore.Model.ContentItems.TriageToolFilters? contentPageModel = triagetooldocuments.TriageToolFilter[i];
                     sitemap.Add(new SitemapLocation
                     {
-                        Url = $"{sitemapUrlPrefix}/{contentPageModel.Title}",
+                        Url = $"{sitemapUrlPrefix}/{contentPageModel.DisplayText}",
                         Priority = 0.5,
                         ChangeFrequency = SitemapLocation.ChangeFrequencies.Monthly,
                     });

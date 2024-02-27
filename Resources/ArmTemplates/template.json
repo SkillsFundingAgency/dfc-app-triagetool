@@ -28,6 +28,24 @@
         "clientAffinity": {
             "type": "bool"
         },
+        "TokenEndPointURL": {
+            "type": "string"
+        },
+        "GraphApiUrl": {
+            "type": "string"
+        },
+        "SqlApiUrl": {
+            "type": "string"
+        },
+        "ClientId": {
+            "type": "string"
+        },
+        "ClientSecret": {
+            "type": "securestring"
+        },
+        "RedisCacheConnectionString": {
+            "type": "securestring"
+        },
         "CosmosDbResourceGroup": {
             "type": "string"
         },
@@ -316,6 +334,30 @@
                             {
                                 "name": "Configuration__CosmosDbConnections__TriageTool__PartitionKey",
                                 "value": "[variables('TriageToolDbCollectionPartitionKey')]"
+                            },
+                            {
+                                "name": "Cms__TokenEndPointURL",
+                                "value": "[parameters('TokenEndPointURL')]"
+                            },
+                            {
+                                "name": "Cms__GraphApiUrl",
+                                "value": "[parameters('GraphApiUrl')]"
+                            },
+                            {
+                                "name": "Cms__SqlApiUrl",
+                                "value": "[parameters('SqlApiUrl')]"
+                            },
+                            {
+                                "name": "Cms__ClientId",
+                                "value": "[parameters('ClientId')]"
+                            },
+                            {
+                                "name": "Cms__ClientSecret",
+                                "value": "[parameters('ClientSecret')]"
+                            },
+                            {
+                                "name": "Cms__RedisCacheConnectionString",
+                                "value": "[parameters('RedisCacheConnectionString')]"
                             },
                             {
                                 "name": "CmsApiClientOptions__BaseAddress",

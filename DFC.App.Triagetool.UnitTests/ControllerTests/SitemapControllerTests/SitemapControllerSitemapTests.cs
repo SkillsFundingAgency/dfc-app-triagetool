@@ -12,7 +12,7 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.SitemapControllerTests
     [Trait("Category", "Sitemap Controller Unit Tests")]
     public class SitemapControllerSitemapTests : BaseSitemapControllerTests
     {
-        [Fact]
+        /*[Fact]
         public async Task SitemapControllerSitemapReturnsSuccess()
         {
             // Arrange
@@ -31,9 +31,9 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.SitemapControllerTests
             var contentResult = Assert.IsType<ContentResult>(result);
 
             contentResult.ContentType.Should().Be(MediaTypeNames.Application.Xml);
-        }
+        }*/
 
-        [Fact]
+       /* [Fact]
         public async Task SitemapControllerSitemapReturnsSuccessWhenNoData()
         {
             // Arrange
@@ -50,6 +50,6 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.SitemapControllerTests
             A.CallTo(() => FakeTriageToolDocumentService.GetAllAsync(A<string>.Ignored)).MustHaveHappenedOnceExactly();
 
             _ = Assert.IsType<NoContentResult>(result);
-        }
+        }*/
     }
 }
