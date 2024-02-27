@@ -114,21 +114,27 @@ namespace DFC.App.Triagetool.Controllers
 
             if (article == null)
             {
-                article = "Changing your career.";
+                article = "Planning or starting your career";
             }
-            var triagetooldocuments = await sharedContentRedis.GetDataAsync<TriagePageResponse>("TriageToolPages");
+            var triagetooldocuments = await sharedContentRedis.GetDataAsync<TriagePageResponse>("TriageToolPages").ConfigureAwait(false);
 
             var sortedDocuments = triagetooldocuments?.Page;
+            var triageContent = sortedDocuments.Select(x => x.TriageToolFilters.ContentItems.ToList());
+            var test = triageContent.ToList();
+            IList<TriageToolFilters> triagePages2 = new List<TriageToolFilters>();
+
             List<TriagePage> subList = new List<TriagePage>();
             foreach (var doc in sortedDocuments)
             {
-                IList<TriageToolFilters> triagePages = doc.TriageToolFilters.ContentItems.ToList();
-                for (int i = 0; i < triagePages.Count; i++)
+                //IList<TriageToolFilters> triagePages = doc.TriageToolFilters.ContentItems.ToList();
+                triagePages2 = doc.TriageToolFilters.ContentItems.ToList();
+                for (int i = 0; i < triagePages2.Count; i++)
                 {
 
-                    if (triagePages[i].DisplayText == article)
+                    if (triagePages2[i].DisplayText == article)
                     {
                         subList.Add(doc);
+                        break;
                     }
                 }
             }
@@ -141,7 +147,7 @@ namespace DFC.App.Triagetool.Controllers
 
             try
             {
-                var sharedhtml = await this.sharedContentRedis.GetDataAsync<SharedHtml>("SharedContent/" + speakToanAdviserStaxId);
+                var sharedhtml = await this.sharedContentRedis.GetDataAsync<SharedHtml>("SharedContent/" + speakToanAdviserStaxId).ConfigureAwait(false);
                 triageToolModel.SharedContent = sharedhtml?.Html;
             }
             catch
