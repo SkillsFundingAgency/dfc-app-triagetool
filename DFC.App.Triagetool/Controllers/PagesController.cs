@@ -116,22 +116,22 @@ namespace DFC.App.Triagetool.Controllers
             {
                 article = "Planning or starting your career";
             }
-            var triagetooldocuments = await sharedContentRedis.GetDataAsync<TriagePageResponse>("TriageToolPages").ConfigureAwait(false);
+            var triagetooldocuments = await sharedContentRedis.GetDataAsync<TriagePageResponse>("TriageToolPages");
 
             var sortedDocuments = triagetooldocuments?.Page;
-            var triageContent = sortedDocuments.Select(x => x.TriageToolFilters.ContentItems.ToList());
-            var test = triageContent.ToList();
-            IList<TriageToolFilters> triagePages2 = new List<TriageToolFilters>();
+            //var triageContent = sortedDocuments.Select(x => x.TriageToolFilters.ContentItems.ToList());
+            //var test = triageContent.ToList();
+            //IList<TriageToolFilters> triagePages2 = new List<TriageToolFilters>();
 
             List<TriagePage> subList = new List<TriagePage>();
             foreach (var doc in sortedDocuments)
             {
-                //IList<TriageToolFilters> triagePages = doc.TriageToolFilters.ContentItems.ToList();
-                triagePages2 = doc.TriageToolFilters.ContentItems.ToList();
-                for (int i = 0; i < triagePages2.Count; i++)
+                IList<TriageToolFilters> triagePages = doc.TriageToolFilters.ContentItems.ToList();
+                //triagePages2 = doc.TriageToolFilters.ContentItems.ToList();
+                for (int i = 0; i < triagePages.Count; i++)
                 {
 
-                    if (triagePages2[i].DisplayText == article)
+                    if (triagePages[i].DisplayText == article)
                     {
                         subList.Add(doc);
                         break;
@@ -147,7 +147,7 @@ namespace DFC.App.Triagetool.Controllers
 
             try
             {
-                var sharedhtml = await this.sharedContentRedis.GetDataAsync<SharedHtml>("SharedContent/" + speakToanAdviserStaxId).ConfigureAwait(false);
+                var sharedhtml = await this.sharedContentRedis.GetDataAsync<SharedHtml>("SharedContent/" + speakToanAdviserStaxId);
                 triageToolModel.SharedContent = sharedhtml?.Html;
             }
             catch
@@ -173,14 +173,14 @@ namespace DFC.App.Triagetool.Controllers
         [Route("pages/{triage-select?}/herobanner")]
         public async Task<IActionResult> HeroBanner([ModelBinder(Name = "triage-select")] string article)
         {
-            var triageFilters = await sharedContentRedis.GetDataAsync<TriageToolFilterResponse>("TriageToolFilters/All").ConfigureAwait(false);
+            var triageFilters = await sharedContentRedis.GetDataAsync<TriageToolFilterResponse>("TriageToolFilters/All");
 
             var viewModel = new HeroBannerViewModel
             {
                 Selected = article,
             };
 
-            viewModel.Options = triageFilters.TriageToolFilter.Select(x => x.DisplayText).ToList()!;
+            viewModel.Options = triageFilters.TriageToolFilter.Select(x => x.DisplayText).OrderBy(o => o).ToList()!;
             return View(viewModel);
         }
 
