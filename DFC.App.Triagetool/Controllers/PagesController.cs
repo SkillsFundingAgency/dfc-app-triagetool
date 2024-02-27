@@ -188,8 +188,8 @@ namespace DFC.App.Triagetool.Controllers
                 var subList = triagetooldocuments.Page.Where(doc => doc.TriageToolFilters.ContentItems.Any(tp => tp.DisplayText == filter.DisplayText)).ToList();
                 var pages = mapper.Map<List<TriagePages>>(subList);
                 var filters = mapper.Map<TriageModelClass>(filter);
-                filters.TriagePages = pages;
-                filters.TriageFilters = new List<TriageFilters>()
+                filters.pages = pages;
+                filters.filters = new List<TriageFilters>()
                 {
                     new TriageFilters()
                     {
