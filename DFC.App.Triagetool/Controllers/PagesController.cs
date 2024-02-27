@@ -111,33 +111,7 @@ namespace DFC.App.Triagetool.Controllers
         [Route("pages/{triage-select?}/body")]
         public async Task<IActionResult> Body([ModelBinder(Name = "triage-select")] string article)
         {
-
-            if (article == null)
-            {
-                article = "Planning or starting your career";
-            }
             var triagetooldocuments = await sharedContentRedis.GetDataAsync<TriagePageResponse>("TriageToolPages");
-
-/*            var sortedDocuments = triagetooldocuments?.Page;
-            //var triageContent = sortedDocuments.Select(x => x.TriageToolFilters.ContentItems.ToList());
-            //var test = triageContent.ToList();
-            //IList<TriageToolFilters> triagePages2 = new List<TriageToolFilters>();
-
-            List<TriagePage> subList = new List<TriagePage>();
-            foreach (var doc in sortedDocuments)
-            {
-                IList<TriageToolFilters> triagePages = doc.TriageToolFilters.ContentItems.ToList();
-                //triagePages2 = doc.TriageToolFilters.ContentItems.ToList();
-                for (int i = 0; i < triagePages.Count; i++)
-                {
-
-                    if (triagePages[i].DisplayText == article)
-                    {
-                        subList.Add(doc);
-                        break;
-                    }
-                }
-            }*/
 
             var subList = triagetooldocuments.Page.Where(doc => doc.TriageToolFilters.ContentItems.Any(tp => tp.DisplayText == article)).ToList();
 
