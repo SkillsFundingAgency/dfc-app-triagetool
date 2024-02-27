@@ -118,7 +118,7 @@ namespace DFC.App.Triagetool.Controllers
             }
             var triagetooldocuments = await sharedContentRedis.GetDataAsync<TriagePageResponse>("TriageToolPages");
 
-            var sortedDocuments = triagetooldocuments?.Page;
+/*            var sortedDocuments = triagetooldocuments?.Page;
             //var triageContent = sortedDocuments.Select(x => x.TriageToolFilters.ContentItems.ToList());
             //var test = triageContent.ToList();
             //IList<TriageToolFilters> triagePages2 = new List<TriageToolFilters>();
@@ -137,7 +137,9 @@ namespace DFC.App.Triagetool.Controllers
                         break;
                     }
                 }
-            }
+            }*/
+
+            var subList = triagetooldocuments.Page.Where(doc => doc.TriageToolFilters.ContentItems.Any(tp => tp.DisplayText == article)).ToList();
 
             var triageToolModel = new TriageToolOptionViewModel
             {
