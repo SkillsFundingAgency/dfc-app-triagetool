@@ -165,23 +165,9 @@ namespace DFC.App.Triagetool.Controllers
         public async Task<IActionResult> Data()
         {
             var triagetooldocuments = await sharedContentRedis.GetDataAsync<TriagePageResponse>("TriageToolPages");
-            var sortedDocuments = triagetooldocuments.Page;
-            var triageFilters = await sharedContentRedis.GetDataAsync<TriageToolFilterResponse>("TriageToolFilters/All");
-            var sortedFilters = triageFilters.TriageToolFilter;
 
-            TriageClass triageClass1 = new TriageClass
-            {
-                triagePage = sortedDocuments,
-                triageToolFilters = sortedFilters,
-            };
-
-            IList<TriageClass> triageClass = new List<TriageClass>
-            {
-                triageClass1,
-            };
-
-            //var models1 = mapper.Map<IList<TriageToolOptionViewModel>>(triagetooldocuments.Page.OrderBy(o => o.DisplayText));
-            return Json(triageClass);
+            var models1 = mapper.Map<IList<TriageToolOptionViewModel>>(triagetooldocuments.Page.OrderBy(o => o.DisplayText));
+            return Json(models1);
         }
     }
 }
