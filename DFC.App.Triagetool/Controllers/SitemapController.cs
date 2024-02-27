@@ -43,15 +43,13 @@ namespace DFC.App.Triagetool.Controllers
 
             var sitemapUrlPrefix = $"{Request.GetBaseAddress()}{PagesController.RegistrationPath}";
             var sitemap = new Sitemap();
-            //var triageToolOptionModels = await triageToolDocumentService.GetAllAsync().ConfigureAwait(false);
-            var triagetooldocuments = await sharedContentRedis.GetDataAsync<TriageToolFilterResponse>("TraigeToolFilters/All");
+            var triagetooldocuments = await sharedContentRedis.GetDataAsync<TriageToolFilterResponse>("TriageToolFilters/All");
 
-          //  if (triageToolOptionModels != null && triageToolOptionModels.Any())
                 if (triagetooldocuments != null )
                 {
                 for (int i = 0; i < triagetooldocuments.TriageToolFilter.Count; i++)
                 {
-                    Common.SharedContent.Pkg.Netcore.Model.ContentItems.TriageToolFilter? contentPageModel = triagetooldocuments.TriageToolFilter[i];
+                    Common.SharedContent.Pkg.Netcore.Model.ContentItems.TriageToolFilters? contentPageModel = triagetooldocuments.TriageToolFilter[i];
                     sitemap.Add(new SitemapLocation
                     {
                         Url = $"{sitemapUrlPrefix}/{contentPageModel.DisplayText}",
