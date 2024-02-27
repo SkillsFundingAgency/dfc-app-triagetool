@@ -9,6 +9,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using DFC.Common.SharedContent.Pkg.Netcore.Model.ContentItems;
 using DFC.Common.SharedContent.Pkg.Netcore.Model.Response;
+using DFC.App.Triagetool.Models;
 
 namespace DFC.App.Triagetool.AutoMapperProfiles
 {
@@ -49,6 +50,17 @@ namespace DFC.App.Triagetool.AutoMapperProfiles
             CreateMap<TriageToolOptionDocumentModel, TriageToolOptionViewModel>()
                 .ForMember(d => d.SelectedFilters, s => s.Ignore())
                 .ForMember(d => d.SharedContent, s => s.Ignore())
+             .ForAllOtherMembers(d => d.Ignore());
+
+            CreateMap<TriageToolFilters, TriageModelClass>()
+                .ForMember(d => d.title, s => s.MapFrom(w => w.DisplayText))
+                .ForAllOtherMembers(d => d.Ignore());
+
+            CreateMap<TriagePage, TriagePages>()
+             //.ForMember(d => d.Filters, s => s.MapFrom(w => w.TriageToolFilters.ContentItems))
+             .ForMember(d => d.link, s => s.MapFrom(w => w.PageLocation.FullUrl))
+             .ForMember(d => d.title, s => s.MapFrom(w => w.DisplayText))
+             .ForMember(d => d.summary, s => s.MapFrom(w => w.TriageToolSummary.Html))
              .ForAllOtherMembers(d => d.Ignore());
 
             CreateMap<TriagePageResponse, TriageToolOptionViewModel>()
