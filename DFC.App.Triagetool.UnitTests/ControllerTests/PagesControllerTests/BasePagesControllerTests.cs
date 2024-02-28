@@ -57,7 +57,7 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
 
             httpContext.Request.Headers[HeaderNames.Accept] = mediaTypeName;
 
-            var controller = new PagesController(Logger, FakeMapper, FakeSharedContentRedisInterface, FakeTriageToolOptionDocumentService)
+            var controller = new PagesController(Logger, FakeMapper, FakeSharedContentRedisInterface)
             {
                 ControllerContext = new ControllerContext()
                 {
@@ -74,9 +74,9 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
             {
                 new TriageToolOptionDocumentModel
                 {
-                    Filters = new List<TriageToolFilterDocumentModel>
+                    Filters = new List<TriageTooltOptionsDocumentModel>
                     {
-                        new TriageToolFilterDocumentModel
+                        new TriageTooltOptionsDocumentModel
                         {
                             Title = "test",
                             Url = new Uri("https://Uri1.com/"),
@@ -86,14 +86,14 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
                 },
                 new TriageToolOptionDocumentModel
                 {
-                    Filters = new List<TriageToolFilterDocumentModel>
+                    Filters = new List<TriageTooltOptionsDocumentModel>
                     {
-                        new TriageToolFilterDocumentModel
+                        new TriageTooltOptionsDocumentModel
                         {
                             Title = "test",
                             Url = new Uri("https://Uri1.com"),
                         },
-                        new TriageToolFilterDocumentModel
+                        new TriageTooltOptionsDocumentModel
                         {
                             Title = "test 2",
                             Url = new Uri("https://Uri2.com"),

@@ -39,13 +39,14 @@ namespace DFC.App.Triagetool.Controllers
         public PagesController(
             ILogger<PagesController> logger,
             IMapper mapper,
-            ISharedContentRedisInterface sharedContentRedis,
-            IDocumentService<TriageToolOptionDocumentModel> triageToolDocumentService)
+            ISharedContentRedisInterface sharedContentRedis)
+
+            //IDocumentService<TriageToolOptionDocumentModel> triageToolDocumentService)
         {
             this.logger = logger;
             this.mapper = mapper;
             this.sharedContentRedis = sharedContentRedis;
-            this.triageToolDocumentService = triageToolDocumentService;
+            //this.triageToolDocumentService = triageToolDocumentService;
         }
 
         [HttpGet]
@@ -155,8 +156,13 @@ namespace DFC.App.Triagetool.Controllers
             {
                 Selected = article,
             };
+            if (triageFilters == null || triageFilters.TriageToolFilter == null || triageFilters.TriageToolFilter.Count == 0)
+            {
+                return NoContent();
+            }
 
             viewModel.Options = triageFilters.TriageToolFilter.Select(x => x.DisplayText).OrderBy(o => o).ToList()!;
+
             return View(viewModel);
         }
 
