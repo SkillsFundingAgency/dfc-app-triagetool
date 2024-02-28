@@ -19,15 +19,15 @@ pool:
   - msbuild
   - visualstudio
 
-trigger: 
+trigger:
   branches:
-    include: 
+    include:
     - dev
     - master
 
 pr:
   branches:
-    include: 
+    include:
     - dev
     - master
 
@@ -107,8 +107,9 @@ stages:
   - group: dfc-app-uiautomation-testexecution-retry-all
   - group: dfc-browserstack
   - group: dfc-app-uiautomation-lab
+  - group: 'KeyVault - dfc-lab-shared-kv'
   - template: VariableTemplates\LabEnvironmentVariables.yml
-  
+
   jobs:
   - template: JobTemplates/deploy-environment.yml
     parameters:
@@ -164,8 +165,9 @@ stages:
   - group: dfc-app-uiautomation-testexecution-retry-all
   - group: dfc-browserstack
   - group: dfc-app-uiautomation-lab
+  - group: 'KeyVault - dfc-lab-shared-kv'
   - template: VariableTemplates\LabDraftEnvironmentVariables.yml
-  
+
   jobs:
   - template: JobTemplates/deploy-environment.yml
     parameters:
@@ -200,7 +202,7 @@ stages:
       UIFunctionalTestPackage: "$(Pipeline.Workspace)/${{ variables.SolutionBaseName }}.UI.FunctionalTests.DeploymentPackages/DFC.App.Triagetool.zip"
       UIFunctionalTestProjectFolder: "$(Pipeline.Workspace)/${{ variables.SolutionBaseName }}.UI.FunctionalTests"
       UIFunctionalTestCategory: Triagetool
-      
+
 - stage: DeployToDevAppTriagetool
   condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
   displayName: Deploy to DEV_AppTriagetool
@@ -220,8 +222,9 @@ stages:
   - group: dfc-app-uiautomation-testexecution-retry-all
   - group: dfc-browserstack
   - group: dfc-app-uiautomation-dev
+  - group: 'KeyVault - dfc-dev-shared-kv'
   - template: VariableTemplates\DevEnvironmentVariables.yml
-  
+
   jobs:
   - template: JobTemplates/deploy-environment.yml
     parameters:
@@ -277,8 +280,9 @@ stages:
   - group: dfc-app-uiautomation-testexecution-retry-all
   - group: dfc-browserstack
   - group: dfc-app-uiautomation-dev
+  - group: 'KeyVault - dfc-dev-shared-kv'
   - template: VariableTemplates\DevDraftEnvironmentVariables.yml
-  
+
   jobs:
   - template: JobTemplates/deploy-environment.yml
     parameters:
@@ -333,8 +337,9 @@ stages:
   - group: dfc-app-uiautomation-testexecution-retry-all
   - group: dfc-browserstack
   - group: dfc-app-uiautomation-sit
+  - group: 'KeyVault - dfc-sit-shared-kv'
   - template: VariableTemplates\SitEnvironmentVariables.yml
-  
+
   jobs:
   - template: JobTemplates/deploy-environment.yml
     parameters:
@@ -390,8 +395,9 @@ stages:
   - group: dfc-app-uiautomation-testexecution-retry-all
   - group: dfc-browserstack
   - group: dfc-app-uiautomation-sit
+  - group: 'KeyVault - dfc-sit-shared-kv'
   - template: VariableTemplates\SitDraftEnvironmentVariables.yml
-  
+
   jobs:
   - template: JobTemplates/deploy-environment.yml
     parameters:
@@ -446,8 +452,9 @@ stages:
   - group: dfc-app-uiautomation-testexecution-retry-all
   - group: dfc-browserstack
   - group: dfc-app-uiautomation-pp
+  - group: 'KeyVault - dfc-pp-shared-kv'
   - template: VariableTemplates\PPEnvironmentVariables.yml
-  
+
   jobs:
   - template: JobTemplates/deploy-environment.yml
     parameters:
@@ -503,8 +510,9 @@ stages:
   - group: dfc-app-uiautomation-testexecution-retry-all
   - group: dfc-browserstack
   - group: dfc-app-uiautomation-pp
+  - group: 'KeyVault - dfc-pp-shared-kv'
   - template: VariableTemplates\PPDraftEnvironmentVariables.yml
-  
+
   jobs:
   - template: JobTemplates/deploy-environment.yml
     parameters:
@@ -559,6 +567,7 @@ stages:
   - group: dfc-app-uiautomation-testexecution-retry-all
   - group: dfc-browserstack
   - group: dfc-app-uiautomation-prd
+  - group: 'KeyVault - dfc-prd-shared-kv'
   - template: VariableTemplates\PRDEnvironmentVariables.yml
 
   jobs:
@@ -616,6 +625,7 @@ stages:
   - group: dfc-app-uiautomation-testexecution-retry-all
   - group: dfc-browserstack
   - group: dfc-app-uiautomation-prd
+  - group: 'KeyVault - dfc-prd-shared-kv'
   - template: VariableTemplates\PRDDraftEnvironmentVariables.yml
 
   jobs:
