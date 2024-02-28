@@ -48,17 +48,6 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
         [MemberData(nameof(HtmlMediaTypes))]
         public async Task PagesControllerHeroBannerReturnsViewtWhenOptionsFound(string mediaTypeName)
         {
-            //// Arrange
-            //A.CallTo(() => FakeTriageToolOptionDocumentService.GetAllAsync(A<string>.Ignored))
-            //    .Returns(Getdocuments());
-            //using var controller = BuildPagesController(mediaTypeName);
-
-            //// Act
-            //var result = await controller.HeroBanner("an-article").ConfigureAwait(false);
-
-            //// Assert
-            //var statusResult = Assert.IsType<ViewResult>(result);
-            //Assert.True(((HeroBannerViewModel)statusResult.Model).Options.Any());
             var redisMock = new Mock<ISharedContentRedisInterface>();
             var mapperMock = new Mock<IMapper>();
             var loggerMock = new Mock<ILogger<PagesController>>();
