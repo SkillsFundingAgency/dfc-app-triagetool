@@ -10,6 +10,9 @@ using System.Linq;
 using System.Net.Mime;
 using System.Threading.Tasks;
 using DFC.Common.SharedContent.Pkg.Netcore.Interfaces;
+using Microsoft.VisualBasic;
+using AppConstants = DFC.Common.SharedContent.Pkg.Netcore.Constant.ApplicationKeys;
+
 
 namespace DFC.App.Triagetool.Controllers
 {
@@ -43,7 +46,7 @@ namespace DFC.App.Triagetool.Controllers
 
             var sitemapUrlPrefix = $"{Request.GetBaseAddress()}{PagesController.RegistrationPath}";
             var sitemap = new Sitemap();
-            var triagetooldocuments = await sharedContentRedis.GetDataAsync<TriageToolFilterResponse>("TriageToolFilters/All");
+            var triagetooldocuments = await sharedContentRedis.GetDataAsync<TriageToolFilterResponse>(AppConstants.TriageToolFilters, "PUBLISHED");
 
                 if (triagetooldocuments != null )
                 {
