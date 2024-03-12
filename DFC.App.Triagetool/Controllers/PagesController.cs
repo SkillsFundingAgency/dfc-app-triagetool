@@ -18,6 +18,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using Constants = DFC.Common.SharedContent.Pkg.Netcore.Constant.ApplicationKeys;
+
 
 namespace DFC.App.Triagetool.Controllers
 {
@@ -111,7 +113,7 @@ namespace DFC.App.Triagetool.Controllers
         [Route("pages/{triage-select?}/body")]
         public async Task<IActionResult> Body([ModelBinder(Name = "triage-select")] string article)
         {
-            var triagetooldocuments = await sharedContentRedis.GetDataAsync<TriagePageResponse>("TriageToolPages");
+            var triagetooldocuments = await sharedContentRedis.GetDataAsync<TriagePageResponse>(Constants.TriagePages, "PUBLISHED");
 
             var subList = triagetooldocuments.Page.Where(doc => doc.TriageToolFilters.ContentItems.Any(tp => tp.DisplayText == article)).ToList();
 
@@ -123,7 +125,7 @@ namespace DFC.App.Triagetool.Controllers
 
             try
             {
-                var sharedhtml = await this.sharedContentRedis.GetDataAsync<SharedHtml>("SharedContent/" + speakToanAdviserStaxId);
+                var sharedhtml = await this.sharedContentRedis.GetDataAsync<SharedHtml>(Constants.SpeakToAnAdviserSharedContent, "PUBLISHED");
                 triageToolModel.SharedContent = sharedhtml?.Html;
             }
             catch
@@ -149,7 +151,7 @@ namespace DFC.App.Triagetool.Controllers
         [Route("pages/{triage-select?}/herobanner")]
         public async Task<IActionResult> HeroBanner([ModelBinder(Name = "triage-select")] string article)
         {
-            var triageFilters = await sharedContentRedis.GetDataAsync<TriageToolFilterResponse>("TriageToolFilters/All");
+            var triageFilters = await sharedContentRedis.GetDataAsync<TriageToolFilterResponse>(Constants.TriageToolFilters, "PUBLISHED");
 
             var viewModel = new HeroBannerViewModel
             {
@@ -164,9 +166,9 @@ namespace DFC.App.Triagetool.Controllers
         [Route("api/TriageToolOption/GetOptions/ajax")]
         public async Task<IActionResult> Data()
         {
-            var triagetooldocuments = await sharedContentRedis.GetDataAsync<TriagePageResponse>("TriageToolPages");
+            var triagetooldocuments = await sharedContentRedis.GetDataAsync<TriagePageResponse>(Constants.TriagePages, "PUBLISHED");
             var sortedDocuments = triagetooldocuments.Page;
-            var triageFilters = await sharedContentRedis.GetDataAsync<TriageToolFilterResponse>("TriageToolFilters/All");
+            var triageFilters = await sharedContentRedis.GetDataAsync<TriageToolFilterResponse>(Constants.TriageToolFilters, "PUBLISHED");
             var sortedFilters = triageFilters.TriageToolFilter;
 
 
