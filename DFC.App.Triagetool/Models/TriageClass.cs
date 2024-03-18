@@ -1,7 +1,6 @@
-﻿using DFC.App.Triagetool.ViewModels;
-using System.Collections.Generic;
+﻿using DFC.Common.SharedContent.Pkg.Netcore.Model.Common;
 using DFC.Common.SharedContent.Pkg.Netcore.Model.ContentItems;
-using DFC.Common.SharedContent.Pkg.Netcore.Model.Response;
+using System.Collections.Generic;
 
 namespace DFC.App.Triagetool.Models
 {
@@ -14,8 +13,7 @@ namespace DFC.App.Triagetool.Models
         }
 
         public List<TriageToolFilters> triageToolFilters { get; set; }
-        public List<TriagePage> triagePage { get; set; }
 
-      
+        public List<TriagePage> triagePage { get; set; }
     }
 }
