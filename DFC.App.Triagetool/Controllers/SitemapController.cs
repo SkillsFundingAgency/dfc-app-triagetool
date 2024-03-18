@@ -1,16 +1,15 @@
 ﻿using DFC.App.Triagetool.Data.Models.ContentModels;
 using DFC.App.Triagetool.Extensions;
 using DFC.App.Triagetool.Models;
+using DFC.Common.SharedContent.Pkg.Netcore.Interfaces;
+using DFC.Common.SharedContent.Pkg.Netcore.Model.Common;
 using DFC.Common.SharedContent.Pkg.Netcore.Model.Response;
-using DFC.Common.SharedContent.Pkg.Netcore;
 using DFC.Compui.Cosmos.Contracts;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Linq;
 using System.Net.Mime;
 using System.Threading.Tasks;
-using DFC.Common.SharedContent.Pkg.Netcore.Interfaces;
-using Microsoft.VisualBasic;
 using AppConstants = DFC.Common.SharedContent.Pkg.Netcore.Constant.ApplicationKeys;
 
 
@@ -48,11 +47,11 @@ namespace DFC.App.Triagetool.Controllers
             var sitemap = new Sitemap();
             var triagetooldocuments = await sharedContentRedis.GetDataAsync<TriageToolFilterResponse>(AppConstants.TriageToolFilters, "PUBLISHED");
 
-                if (triagetooldocuments != null )
-                {
+            if (triagetooldocuments != null)
+            {
                 for (int i = 0; i < triagetooldocuments.TriageToolFilter.Count; i++)
                 {
-                    Common.SharedContent.Pkg.Netcore.Model.ContentItems.TriageToolFilters? contentPageModel = triagetooldocuments.TriageToolFilter[i];
+                    TriageToolFilters? contentPageModel = triagetooldocuments.TriageToolFilter[i];
                     sitemap.Add(new SitemapLocation
                     {
                         Url = $"{sitemapUrlPrefix}/{contentPageModel.DisplayText}",

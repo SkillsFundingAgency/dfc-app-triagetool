@@ -1,15 +1,16 @@
-﻿using System;
-using AutoMapper;
+﻿using AutoMapper;
 using DFC.App.Triagetool.Data.Helpers;
 using DFC.App.Triagetool.Data.Models.CmsApiModels;
 using DFC.App.Triagetool.Data.Models.ContentModels;
+using DFC.App.Triagetool.Models;
 using DFC.App.Triagetool.ViewModels;
-using DFC.Content.Pkg.Netcore.Data.Models;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
+using DFC.Common.SharedContent.Pkg.Netcore.Model.Common;
 using DFC.Common.SharedContent.Pkg.Netcore.Model.ContentItems;
 using DFC.Common.SharedContent.Pkg.Netcore.Model.Response;
-using DFC.App.Triagetool.Models;
+using DFC.Content.Pkg.Netcore.Data.Models;
+using System;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 namespace DFC.App.Triagetool.AutoMapperProfiles
 {
