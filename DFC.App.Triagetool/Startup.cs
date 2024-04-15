@@ -1,35 +1,29 @@
 ﻿using AutoMapper;
-using DFC.App.Triagetool.Data.Models.ContentModels;
-using DFC.Compui.Cosmos;
-using DFC.Compui.Cosmos.Contracts;
-using DFC.Compui.Subscriptions.Pkg.Netstandard.Extensions;
-using DFC.Compui.Telemetry;
-using DFC.Content.Pkg.Netcore.Data.Models.ClientOptions;
-using DFC.Content.Pkg.Netcore.Extensions;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Azure.Documents.Client;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using System.Diagnostics.CodeAnalysis;
 using DFC.Common.SharedContent.Pkg.Netcore;
 using DFC.Common.SharedContent.Pkg.Netcore.Infrastructure;
 using DFC.Common.SharedContent.Pkg.Netcore.Infrastructure.Strategy;
 using DFC.Common.SharedContent.Pkg.Netcore.Interfaces;
 using DFC.Common.SharedContent.Pkg.Netcore.Model.ContentItems.SharedHtml;
+using DFC.Common.SharedContent.Pkg.Netcore.Model.Response;
 using DFC.Common.SharedContent.Pkg.Netcore.RequestHandler;
+using DFC.Compui.Telemetry;
+using DFC.Content.Pkg.Netcore.Data.Models.ClientOptions;
+using DFC.Content.Pkg.Netcore.Extensions;
 using GraphQL.Client.Abstractions;
 using GraphQL.Client.Http;
 using GraphQL.Client.Serializer.Newtonsoft;
-using System.Net.Http;
-using System;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using DFC.Common.SharedContent.Pkg.Netcore.Model.ContentItems;
-using DFC.Common.SharedContent.Pkg.Netcore.Model.Response;
-using StackExchange.Redis;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using StackExchange.Redis;
+using System;
+using System.Diagnostics.CodeAnalysis;
+using System.Net.Http;
 using System.Threading;
 
 namespace DFC.App.Triagetool
@@ -42,8 +36,6 @@ namespace DFC.App.Triagetool
         private const string WorkerThreadsConfigAppSettings = "ThreadSettings:WorkerThreads";
         private const string IocpThreadsConfigAppSettings = "ThreadSettings:IocpThreads";
         private readonly ILogger<Startup> logger;
-
-
         private readonly IConfiguration configuration;
         private readonly IWebHostEnvironment env;
 
@@ -111,9 +103,7 @@ namespace DFC.App.Triagetool
             });
 
             services.AddSingleton<ISharedContentRedisInterfaceStrategy<SharedHtml>, SharedHtmlQueryStrategy>();
-
             services.AddSingleton<ISharedContentRedisInterfaceStrategy<TriageToolFilterResponse>, TriageToolAllQueryStrategy>();
-
             services.AddSingleton<ISharedContentRedisInterfaceStrategy<TriagePageResponse>, PagesByTriageToolFilterStrategy>();
             services.AddSingleton<ISharedContentRedisInterfaceStrategyFactory, SharedContentRedisStrategyFactory>();
             services.AddScoped<ISharedContentRedisInterface, SharedContentRedis>();
