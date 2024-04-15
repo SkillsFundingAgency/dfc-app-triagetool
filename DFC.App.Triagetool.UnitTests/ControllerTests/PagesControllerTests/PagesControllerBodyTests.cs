@@ -9,6 +9,15 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
+using Moq;
+using DFC.App.Triagetool.Controllers;
+using DFC.Common.SharedContent.Pkg.Netcore.Model.Response;
+using DFC.Common.SharedContent.Pkg.Netcore;
+using AutoMapper;
+using DFC.Common.SharedContent.Pkg.Netcore.Interfaces;
+using DFC.Common.SharedContent.Pkg.Netcore.Model.ContentItems;
+using Microsoft.Extensions.Logging;
+using DFC.Common.SharedContent.Pkg.Netcore.Model.Common;
 
 namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
 {
@@ -16,119 +25,94 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
     [Trait("Category", "Pages Controller - Body Unit Tests")]
     public class PagesControllerBodyTests : BasePagesControllerTests
     {
-        /* [Theory]
-         [MemberData(nameof(HtmlMediaTypes))]
-         public async Task PagesControllerBodyReturnsViewWhenNoDataFound(string mediaTypeName)
-         {
-             // Arrange
-             using var controller = BuildPagesController(mediaTypeName);
-             A.CallTo(() => FakeTriageToolOptionDocumentService.GetAllAsync(A<string>.Ignored))
-                 .Returns(new List<TriageToolOptionDocumentModel>());
-             A.CallTo(() => FakeSharedContentItemDocumentService.GetAllAsync(A<string>.Ignored)).Returns(new List<SharedContentItemModel>());
+        [Theory]
+        [MemberData(nameof(HtmlMediaTypes))]
+        public async Task PagesControllerBodyReturnsViewWhenNoDataFound(string mediaTypeName)
+        {
+            var redisMock = new Mock<ISharedContentRedisInterface>();
 
-             // Act
-             var result = await controller.Body("an-article").ConfigureAwait(false);
 
-             // Assert
-             A.CallTo(() => FakeTriageToolOptionDocumentService.GetAllAsync(A<string>.Ignored))
-                 .MustHaveHappenedOnceExactly();
-             A.CallTo(() => FakeSharedContentItemDocumentService.GetAllAsync(A<string>.Ignored))
-                 .MustHaveHappenedOnceExactly();
-             var statusResult = Assert.IsType<ViewResult>(result);
+            var mapperMock = new Mock<IMapper>();
+            var loggerMock = new Mock<ILogger<PagesController>>();
 
-             var model = statusResult.Model as TriageToolOptionViewModel;
+            redisMock.Setup(r => r.GetDataAsync<TriageToolFilterResponse>("TriageToolFilters/All", "PUBLISHED"))
+                     .ReturnsAsync((TriageToolFilterResponse) null);
 
-             Assert.Empty(model!.Pages);
-         }*/
+            var controller = new PagesController(loggerMock.Object, mapperMock.Object, redisMock.Object);
 
-        /*  [Fact]
-          public async Task PagesControllerBodyCalledWithValueReturnsCorrectView()
-          {
-              var pageTitle = "page 1";
+            // Act
+            var result = await controller.Body("YourArticleId") as ViewResult;
 
-              // Arrange
-              using var controller = BuildPagesController(nameof(HtmlMediaTypes));
+            // Assert
+            Assert.Equal(null, result.ContentType);
 
-              var documents = new List<TriageToolOptionDocumentModel>()
-              {
-                  new TriageToolOptionDocumentModel
-                  {
-                      Filters = new List<TriageToolFilterDocumentModel>
-                      {
-                          new TriageToolFilterDocumentModel
-                          {
-                              Title = "test",
-                              Url = new Uri("https://Uri1.com"),
-                          },
-                      },
-                      Title = pageTitle,
-                  },
-              };
+        }
 
-              A.CallTo(() => FakeTriageToolOptionDocumentService.GetAllAsync(A<string>.Ignored))
-                  .Returns(documents);
-              A.CallTo(() => FakeSharedContentItemDocumentService.GetAllAsync(A<string>.Ignored)).Returns(new List<SharedContentItemModel>());
+        [Fact]
+        public async Task PagesControllerBodyCalledWithValueReturnsCorrectView()
+        {
+            var redisMock = new Mock<ISharedContentRedisInterface>();
+            var mapperMock = new Mock<IMapper>();
+            var loggerMock = new Mock<ILogger<PagesController>>();
+            var triageToolFilterResponse = new TriageToolFilterResponse
+            {
+                TriageToolFilter = new List<TriageToolFilters>
+            {
+                new () { DisplayText = "Option1" },
+                new () { DisplayText = "Option2" },
+            },
+            };
+            redisMock.Setup(r => r.GetDataAsync<TriageToolFilterResponse>("TriageToolFilters/All", "PUBLISHED"))
+                     .ReturnsAsync(triageToolFilterResponse);
 
-              // Act
-              var result = await controller.Body(pageTitle).ConfigureAwait(false);
+            var controller = new PagesController(loggerMock.Object, mapperMock.Object, redisMock.Object);
 
-              // Assert
-              A.CallTo(() => FakeTriageToolOptionDocumentService.GetAllAsync(A<string>.Ignored))
-                  .MustHaveHappenedOnceExactly();
-              A.CallTo(() => FakeSharedContentItemDocumentService.GetAllAsync(A<string>.Ignored))
-                  .MustHaveHappenedOnceExactly();
-              A.CallTo(() =>
-                  FakeMapper.Map<TriageToolOptionViewModel>(
-                      A<TriageToolOptionDocumentModel>.That.Matches(x => x.Title == pageTitle))).MustHaveHappened();
-              var statusResult = Assert.IsType<ViewResult>(result);
+            var mockSharedContentRedis = new Mock<ISharedContentRedisInterface>();
+            var triagePageResponse = new TriagePageResponse();
+            mockSharedContentRedis.Setup(x => x.GetDataAsync<TriagePageResponse>("TriageToolPages", "PUBLISHED")).ReturnsAsync(triagePageResponse);
 
-              var model = statusResult.Model as TriageToolOptionViewModel;
+            // Act
+            var result = await controller.Body("Article");
 
-              Assert.Empty(model!.Pages);
-          }*/
+            // Assert
+            Assert.IsType<ViewResult>(result);
+            var viewResult = result as ViewResult;
+            //Assert.IsInstanceOf<TriageToolOptionViewModel>(viewResult.Model);
+            var model = viewResult.Model as TriageToolOptionViewModel;
+            Assert.Equal("Article", model.Title);
 
-        //[Fact]
-        /* public async Task PagesControllerBodyReturnsFirstDocumentWhenCalledWithOutOption()
-         {
-             var documents = Getdocuments();
-             var pageTitle = documents.Select(s => s.Title).OrderBy(o => o).First();
+        }
 
-             // Arrange
-             using var controller = BuildPagesController(nameof(HtmlMediaTypes));
+        [Fact]
+        public async Task PagesControllerBodyReturnsFirstDocumentWhenCalledWithOutOption()
+        {
+            var redisMock = new Mock<ISharedContentRedisInterface>();
+            var mapperMock = new Mock<IMapper>();
+            var loggerMock = new Mock<ILogger<PagesController>>();
+            var triageToolFilterResponse = new TriageToolFilterResponse
+            {
+                TriageToolFilter = new List<TriageToolFilters>
+            {
+                new () { DisplayText = "Option1" },
+                new () { DisplayText = "Option2" },
+            },
+            };
+            redisMock.Setup(r => r.GetDataAsync<TriageToolFilterResponse>("TriageToolFilters/All", "PUBLISHED"))
+                     .ReturnsAsync(triageToolFilterResponse);
 
-             A.CallTo(() => FakeTriageToolOptionDocumentService.GetAllAsync(A<string>.Ignored))
-                 .Returns(documents);
-             A.CallTo(() => FakeSharedContentItemDocumentService.GetAllAsync(A<string>.Ignored)).Returns(new List<SharedContentItemModel>());
+            var controller = new PagesController(loggerMock.Object, mapperMock.Object, redisMock.Object);
 
-             // Act
-             var result = await controller.Body(string.Empty).ConfigureAwait(false);
+            // Mocking sharedContentRedis.GetDataAsync<TriagePageResponse>
+            var mockSharedContentRedis = new Mock<ISharedContentRedisInterface>();
+            var triagePageResponse = new TriagePageResponse();
+            mockSharedContentRedis.Setup(x => x.GetDataAsync<TriagePageResponse>("TriageToolPages", "PUBLISHED")).ReturnsAsync(triagePageResponse);
 
-             // Assert
-             A.CallTo(() => FakeTriageToolOptionDocumentService.GetAllAsync(A<string>.Ignored))
-                 .MustHaveHappenedOnceExactly();
-             A.CallTo(() => FakeSharedContentItemDocumentService.GetAllAsync(A<string>.Ignored))
-                 .MustHaveHappenedOnceExactly();
-             A.CallTo(() =>
-                 FakeMapper.Map<TriageToolOptionViewModel>(
-                     A<TriageToolOptionDocumentModel>.That.Matches(x => x.Title == pageTitle))).MustHaveHappened();
-             var statusResult = Assert.IsType<ViewResult>(result);
+            // Act
+            var result = await controller.Body("Article");
 
-             var model = statusResult.Model as TriageToolOptionViewModel;
+            // Assert
+            Assert.IsType<ViewResult>(result);
+        }
 
-             Assert.Empty(model!.Pages);
-         }*/
-
-        /* [Fact]
-         public async Task PagesControllerDataReturnsJson()
-         {
-             using var controller = BuildPagesController(nameof(HtmlMediaTypes));
-
-             A.CallTo(() => FakeTriageToolOptionDocumentService.GetAllAsync(A<string>.Ignored))
-                 .Returns(Getdocuments());
-
-             var result = await controller.Data().ConfigureAwait(false);
-
-             Assert.IsType<JsonResult>(result);
-         }*/
     }
 }

@@ -1,27 +1,24 @@
 ﻿using DFC.App.Triagetool.Controllers;
-using DFC.App.Triagetool.Data.Models.ContentModels;
-using DFC.Common.SharedContent.Pkg.Netcore.Interfaces;
-using DFC.Compui.Cosmos.Contracts;
 using FakeItEasy;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Net.Http.Headers;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Net.Mime;
+using System.Threading.Tasks;
 
-namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
+
+namespace DFC.App.Triagetool.UnitTests.ControllerTests.HealthControllerTests
 {
-    [ExcludeFromCodeCoverage]
-    public abstract class BasePagesControllerTests
+    public class BaseHealthControllerTests
     {
-        protected BasePagesControllerTests()
+        public BaseHealthControllerTests()
         {
-            Logger = A.Fake<ILogger<PagesController>>();
-            FakeSharedContentRedisInterface = A.Fake<ISharedContentRedisInterface>();
-            FakeMapper = A.Fake<AutoMapper.IMapper>();
+            FakeLogger = A.Fake<ILogger<HealthController>>();
         }
 
         public static IEnumerable<object[]> HtmlMediaTypes => new List<object[]>
@@ -40,23 +37,27 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
             new string[] { MediaTypeNames.Application.Json },
         };
 
-        protected ILogger<PagesController> Logger { get; }
+        protected ILogger<HealthController> FakeLogger { get; }
 
-        public ISharedContentRedisInterface FakeSharedContentRedisInterface { get; }
+        protected HealthCheckService CreateHealthChecksService(Action<IHealthChecksBuilder> configure)
+        {
+            var services = new ServiceCollection();
+            services.AddLogging();
+            services.AddOptions();
 
-        protected IDocumentService<SharedContentItemModel> FakeSharedContentItemDocumentService { get; }
+            var builder = services.AddHealthChecks();
+            configure?.Invoke(builder);
 
-        protected IDocumentService<TriageToolOptionDocumentModel> FakeTriageToolOptionDocumentService { get; }
+            return services.BuildServiceProvider(validateScopes: true).GetRequiredService<HealthCheckService>();
+        }
 
-        protected AutoMapper.IMapper FakeMapper { get; }
-
-        protected PagesController BuildPagesController(string mediaTypeName)
+        protected HealthController BuildHealthController(string mediaTypeName, HealthCheckService healthCheckService)
         {
             var httpContext = new DefaultHttpContext();
 
             httpContext.Request.Headers[HeaderNames.Accept] = mediaTypeName;
 
-            var controller = new PagesController(Logger, FakeMapper, FakeSharedContentRedisInterface)
+            var controller = new HealthController(FakeLogger, healthCheckService)
             {
                 ControllerContext = new ControllerContext()
                 {
