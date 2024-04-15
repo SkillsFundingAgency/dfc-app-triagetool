@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using DFC.Common.SharedContent.Pkg.Netcore.Interfaces;
 using Microsoft.VisualBasic;
 using AppConstants = DFC.Common.SharedContent.Pkg.Netcore.Constant.ApplicationKeys;
+using DFC.Common.SharedContent.Pkg.Netcore.Model.Common;
 
 
 namespace DFC.App.Triagetool.Controllers
@@ -52,7 +53,7 @@ namespace DFC.App.Triagetool.Controllers
                 {
                 for (int i = 0; i < triagetooldocuments.TriageToolFilter.Count; i++)
                 {
-                    Common.SharedContent.Pkg.Netcore.Model.ContentItems.TriageToolFilters? contentPageModel = triagetooldocuments.TriageToolFilter[i];
+                    TriageToolFilters? contentPageModel = triagetooldocuments.TriageToolFilter[i];
                     sitemap.Add(new SitemapLocation
                     {
                         Url = $"{sitemapUrlPrefix}/{contentPageModel.DisplayText}",

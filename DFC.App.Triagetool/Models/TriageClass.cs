@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using DFC.Common.SharedContent.Pkg.Netcore.Model.ContentItems;
 using DFC.Common.SharedContent.Pkg.Netcore.Model.Response;
+using DFC.Common.SharedContent.Pkg.Netcore.Model.Common;
 
 namespace DFC.App.Triagetool.Models
 {
