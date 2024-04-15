@@ -130,6 +130,12 @@
         },
         "workspaceResourceGroup": {
             "value": "aResourceGroup"
+        },
+        "WorkerThreads": {
+            "value": "200"
+        },
+        "IocpThreads": {
+            "value": "200"
         }
     }
 }
