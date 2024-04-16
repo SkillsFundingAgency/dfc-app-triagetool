@@ -102,6 +102,10 @@ namespace DFC.App.Triagetool.Controllers
         public async Task<IActionResult> Body([ModelBinder(Name = "triage-select")] string article)
         {
             var triagetooldocuments = await sharedContentRedis.GetDataAsync<TriagePageResponse>(Constants.TriagePages, "PUBLISHED");
+            if (article != null)
+            {
+                article = string.Concat(article[0].ToString().ToUpper(), article.AsSpan(1));
+            }
 
             var subList = triagetooldocuments?.Page?.Where(doc => doc.TriageToolFilters.ContentItems.Any(tp => tp.DisplayText == article)).ToList();
 
@@ -166,7 +170,7 @@ namespace DFC.App.Triagetool.Controllers
 
             foreach (var filter in sortedFilters)
             {
-                var subList = triagetooldocuments?.Page?.Where(doc => doc.TriageToolFilters.ContentItems.Any(tp => tp.DisplayText == filter.DisplayText)).ToList();
+                var subList = triagetooldocuments?.Page?.Where(doc => doc.TriageToolFilters.ContentItems.Any(tp => tp.DisplayText.Equals(filter.DisplayText, StringComparison.OrdinalIgnoreCase))).ToList();
                 var pages = mapper.Map<List<TriagePages>>(subList);
                 var filters = mapper.Map<TriageModelClass>(filter);
                 filters.pages = pages;
