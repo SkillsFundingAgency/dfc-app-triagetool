@@ -136,6 +136,9 @@
         },
         "IocpThreads": {
             "value": "200"
+        },
+        "contentMode":{
+            "value": "PUBLISHED"
         }
     }
 }

@@ -4,6 +4,7 @@ using DFC.Common.SharedContent.Pkg.Netcore.Interfaces;
 using DFC.Common.SharedContent.Pkg.Netcore.Model.Common;
 using DFC.Common.SharedContent.Pkg.Netcore.Model.Response;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System.Linq;
 using System.Net.Mime;
@@ -17,11 +18,14 @@ namespace DFC.App.Triagetool.Controllers
         public const string SitemapViewCanonicalName = "sitemap";
         private readonly ILogger<SitemapController> logger;
         private readonly ISharedContentRedisInterface sharedContentRedis;
+        private readonly IConfiguration configuration;
+        private string status;
 
-        public SitemapController(ILogger<SitemapController> logger, ISharedContentRedisInterface sharedContentRedis)
+        public SitemapController(ILogger<SitemapController> logger, ISharedContentRedisInterface sharedContentRedis, IConfiguration configuration)
         {
             this.logger = logger;
             this.sharedContentRedis = sharedContentRedis;
+            status = configuration.GetSection("contentMode:contentMode").Get<string>();
         }
 
         [HttpGet]
@@ -37,11 +41,16 @@ namespace DFC.App.Triagetool.Controllers
         [Route("/sitemap.xml")]
         public async Task<IActionResult> Sitemap()
         {
+            if (string.IsNullOrEmpty(status))
+            {
+                status = "PUBLISHED";
+            }
+
             logger.LogInformation("Generating Sitemap");
 
             var sitemapUrlPrefix = $"{Request.GetBaseAddress()}{PagesController.RegistrationPath}";
             var sitemap = new Sitemap();
-            var triagetooldocuments = await sharedContentRedis.GetDataAsync<TriageToolFilterResponse>(AppConstants.TriageToolFilters, "PUBLISHED");
+            var triagetooldocuments = await sharedContentRedis.GetDataAsync<TriageToolFilterResponse>(AppConstants.TriageToolFilters, status);
 
                 if (triagetooldocuments != null )
                 {

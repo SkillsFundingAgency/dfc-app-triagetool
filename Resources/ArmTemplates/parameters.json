@@ -145,6 +145,9 @@
         },
         "IocpThreads":{
             "value": "__IocpThreads__"
+        },
+        "contentMode":{
+            "value": "__contentMode__"
         }
     }
 }
