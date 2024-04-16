@@ -1,55 +1,49 @@
 ﻿using AutoMapper;
-using DFC.App.Triagetool.Data.Contracts;
-using DFC.App.Triagetool.Data.Models.ContentModels;
-using DFC.App.Triagetool.HostedServices;
-using DFC.App.Triagetool.Services.CacheContentService;
-using DFC.Compui.Cosmos;
-using DFC.Compui.Cosmos.Contracts;
-using DFC.Compui.Subscriptions.Pkg.Netstandard.Extensions;
-using DFC.Compui.Telemetry;
-using DFC.Content.Pkg.Netcore.Data.Models.ClientOptions;
-using DFC.Content.Pkg.Netcore.Extensions;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Azure.Documents.Client;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using System.Diagnostics.CodeAnalysis;
 using DFC.Common.SharedContent.Pkg.Netcore;
 using DFC.Common.SharedContent.Pkg.Netcore.Infrastructure;
 using DFC.Common.SharedContent.Pkg.Netcore.Infrastructure.Strategy;
 using DFC.Common.SharedContent.Pkg.Netcore.Interfaces;
 using DFC.Common.SharedContent.Pkg.Netcore.Model.ContentItems.SharedHtml;
+using DFC.Common.SharedContent.Pkg.Netcore.Model.Response;
 using DFC.Common.SharedContent.Pkg.Netcore.RequestHandler;
+using DFC.Compui.Telemetry;
+using DFC.Content.Pkg.Netcore.Data.Models.ClientOptions;
+using DFC.Content.Pkg.Netcore.Extensions;
 using GraphQL.Client.Abstractions;
 using GraphQL.Client.Http;
 using GraphQL.Client.Serializer.Newtonsoft;
-using System.Net.Http;
-using System;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using DFC.Common.SharedContent.Pkg.Netcore.Model.ContentItems;
-using DFC.Common.SharedContent.Pkg.Netcore.Model.Response;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using StackExchange.Redis;
+using System;
+using System.Diagnostics.CodeAnalysis;
+using System.Net.Http;
+using System.Threading;
 
 namespace DFC.App.Triagetool
 {
     [ExcludeFromCodeCoverage]
     public class Startup
     {
-        private const string CosmosDbSharedContentConfigAppSettings = "Configuration:CosmosDbConnections:SharedContent";
-        private const string CosmosDbCmsContentConfigAppSettings = "Configuration:CosmosDbConnections:TriageTool";
-
         private const string RedisCacheConnectionStringAppSettings = "Cms:RedisCacheConnectionString";
         private const string GraphApiUrlAppSettings = "Cms:GraphApiUrl";
-
+        private const string WorkerThreadsConfigAppSettings = "ThreadSettings:WorkerThreads";
+        private const string IocpThreadsConfigAppSettings = "ThreadSettings:IocpThreads";
+        private readonly ILogger<Startup> logger;
         private readonly IConfiguration configuration;
         private readonly IWebHostEnvironment env;
 
-        public Startup(IConfiguration configuration, IWebHostEnvironment env)
+        public Startup(IConfiguration configuration, IWebHostEnvironment env, ILogger<Startup> logger)
         {
             this.configuration = configuration;
             this.env = env;
+            this.logger = logger;
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IMapper mapper)
@@ -79,15 +73,24 @@ namespace DFC.App.Triagetool
 
         public void ConfigureServices(IServiceCollection services)
         {
-            var cosmosDbConnectionSharedContent = configuration.GetSection(CosmosDbSharedContentConfigAppSettings).Get<CosmosDbConnection>();
-            var cosmosDbConnectionCmsContent = configuration.GetSection(CosmosDbCmsContentConfigAppSettings).Get<CosmosDbConnection>();
-            var cosmosRetryOptions = new RetryOptions { MaxRetryAttemptsOnThrottledRequests = 20, MaxRetryWaitTimeInSeconds = 60 };
-            services.AddDocumentServices<SharedContentItemModel>(cosmosDbConnectionSharedContent, env.IsDevelopment(), cosmosRetryOptions);
-            services.AddDocumentServices<TriageToolOptionDocumentModel>(cosmosDbConnectionCmsContent, env.IsDevelopment(), cosmosRetryOptions);
-
+            ConfigureMinimumThreads();
             services.AddStackExchangeRedisCache(options => { options.Configuration = configuration.GetSection(RedisCacheConnectionStringAppSettings).Get<string>(); });
 
             services.AddHttpClient();
+            var redisCacheConnectionString = ConfigurationOptions.Parse(configuration.GetSection(RedisCacheConnectionStringAppSettings).Get<string>() ??
+               throw new ArgumentNullException($"{nameof(RedisCacheConnectionStringAppSettings)} is missing or has an invalid value."));
+
+            services.AddStackExchangeRedisCache(options => { options.Configuration = configuration.GetSection(RedisCacheConnectionStringAppSettings).Get<string>(); });
+            services.AddSingleton<IConnectionMultiplexer>(option =>
+            ConnectionMultiplexer.Connect(new ConfigurationOptions
+            {
+                EndPoints = { redisCacheConnectionString.EndPoints[0] },
+                AbortOnConnectFail = false,
+                Ssl = true,
+                Password = redisCacheConnectionString.Password,
+            }));
+            services.AddHealthChecks().AddCheck<HealthCheck>("GraphQlRedisConnectionCheck");
+
             services.AddSingleton<IGraphQLClient>(s =>
             {
                 var option = new GraphQLHttpClientOptions()
@@ -100,27 +103,17 @@ namespace DFC.App.Triagetool
             });
 
             services.AddSingleton<ISharedContentRedisInterfaceStrategy<SharedHtml>, SharedHtmlQueryStrategy>();
-
             services.AddSingleton<ISharedContentRedisInterfaceStrategy<TriageToolFilterResponse>, TriageToolAllQueryStrategy>();
-
             services.AddSingleton<ISharedContentRedisInterfaceStrategy<TriagePageResponse>, PagesByTriageToolFilterStrategy>();
             services.AddSingleton<ISharedContentRedisInterfaceStrategyFactory, SharedContentRedisStrategyFactory>();
             services.AddScoped<ISharedContentRedisInterface, SharedContentRedis>();
 
             services.AddApplicationInsightsTelemetry();
             services.AddHttpContextAccessor();
-            services.AddTransient<ISharedContentCacheReloadService, SharedContentCacheReloadService>();
-            services.AddTransient<IWebhooksService, WebhooksService>();
-            services.AddTransient<ICacheReloadService, CacheReloadService>();
-            //services.AddTransient<IEventHandler, SharedContentEventHandler>();
-            services.AddTransient<IEventHandler, CmsEventHandler>();
 
             services.AddAutoMapper(typeof(Startup).Assembly);
             services.AddSingleton(configuration.GetSection(nameof(CmsApiClientOptions)).Get<CmsApiClientOptions>() ?? new CmsApiClientOptions());
             services.AddHostedServiceTelemetryWrapper();
-            services.AddHostedService<SharedContentCacheReloadBackgroundService>();
-            services.AddHostedService<ContentCacheReloadBackgroundService>();
-            services.AddSubscriptionBackgroundService(configuration);
 
             var policyRegistry = services.AddPolicyRegistry();
 
@@ -132,6 +125,25 @@ namespace DFC.App.Triagetool
                 })
                 .AddNewtonsoftJson()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+        }
+
+        private void ConfigureMinimumThreads()
+        {
+            var workerThreads = Convert.ToInt32(configuration[WorkerThreadsConfigAppSettings]);
+
+            var iocpThreads = Convert.ToInt32(configuration[IocpThreadsConfigAppSettings]);
+
+            if (ThreadPool.SetMinThreads(workerThreads, iocpThreads))
+            {
+                logger.LogInformation(
+                    "ConfigureMinimumThreads: Minimum configuration value set. IOCP = {0} and WORKER threads = {1}",
+                    iocpThreads,
+                    workerThreads);
+            }
+            else
+            {
+                logger.LogWarning("ConfigureMinimumThreads: The minimum number of threads was not changed");
+            }
         }
     }
 }

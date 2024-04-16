@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using NHibernate.Mapping;
 
 namespace DFC.App.Triagetool.Models
 {

@@ -139,6 +139,15 @@
         },
         "workspaceResourceGroup": {
             "value": "__sharedLogAnalyticsResourceGroup__"
+        },
+        "WorkerThreads":{
+            "value": "__WorkerThreads__"
+        },
+        "IocpThreads":{
+            "value": "__IocpThreads__"
+        },
+        "contentMode":{
+            "value": "__contentMode__"
         }
     }
 }

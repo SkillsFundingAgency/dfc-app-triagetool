@@ -5,6 +5,7 @@ using DFC.Compui.Cosmos.Contracts;
 using FakeItEasy;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Net.Http.Headers;
 using System;
@@ -20,10 +21,9 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
         protected BasePagesControllerTests()
         {
             Logger = A.Fake<ILogger<PagesController>>();
-            //FakeSharedContentItemDocumentService = A.Fake<IDocumentService<SharedContentItemModel>>();
             FakeSharedContentRedisInterface = A.Fake<ISharedContentRedisInterface>();
-            FakeTriageToolOptionDocumentService = A.Fake<IDocumentService<TriageToolOptionDocumentModel>>();
             FakeMapper = A.Fake<AutoMapper.IMapper>();
+            FakeConfiguration = A.Fake<IConfiguration>();
         }
 
         public static IEnumerable<object[]> HtmlMediaTypes => new List<object[]>
@@ -43,11 +43,14 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
         };
 
         protected ILogger<PagesController> Logger { get; }
+
         public ISharedContentRedisInterface FakeSharedContentRedisInterface { get; }
+
+        public IConfiguration FakeConfiguration { get; }
+
         protected IDocumentService<SharedContentItemModel> FakeSharedContentItemDocumentService { get; }
 
         protected IDocumentService<TriageToolOptionDocumentModel> FakeTriageToolOptionDocumentService { get; }
-       
 
         protected AutoMapper.IMapper FakeMapper { get; }
 
@@ -57,7 +60,7 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
 
             httpContext.Request.Headers[HeaderNames.Accept] = mediaTypeName;
 
-            var controller = new PagesController(Logger, FakeMapper, FakeSharedContentRedisInterface, FakeTriageToolOptionDocumentService)
+            var controller = new PagesController(Logger, FakeMapper, FakeSharedContentRedisInterface, FakeConfiguration)
             {
                 ControllerContext = new ControllerContext()
                 {
@@ -66,61 +69,6 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
             };
 
             return controller;
-        }
-
-        protected List<TriageToolOptionDocumentModel> Getdocuments()
-        {
-            return new List<TriageToolOptionDocumentModel>()
-            {
-                new TriageToolOptionDocumentModel
-                {
-                    Filters = new List<TriageToolFilterDocumentModel>
-                    {
-                        new TriageToolFilterDocumentModel
-                        {
-                            Title = "test",
-                            Url = new Uri("https://Uri1.com/"),
-                        },
-                    },
-                    Title = "page 1",
-                },
-                new TriageToolOptionDocumentModel
-                {
-                    Filters = new List<TriageToolFilterDocumentModel>
-                    {
-                        new TriageToolFilterDocumentModel
-                        {
-                            Title = "test",
-                            Url = new Uri("https://Uri1.com"),
-                        },
-                        new TriageToolFilterDocumentModel
-                        {
-                            Title = "test 2",
-                            Url = new Uri("https://Uri2.com"),
-                        },
-                    },
-                    Pages = new List<PageDocumentModel>
-                    {
-                        new PageDocumentModel
-                        {
-                            Filters = new List<string>
-                            {
-                                "https://Uri2.com",
-                            },
-                            Uri = new Uri("https://Page1.com"),
-                        },
-                        new PageDocumentModel
-                        {
-                            Filters = new List<string>
-                            {
-                                "https://Uri1.com",
-                            },
-                            Uri = new Uri("https://Page2.com"),
-                        },
-                    },
-                    Title = "option 2",
-                },
-            };
         }
     }
 }

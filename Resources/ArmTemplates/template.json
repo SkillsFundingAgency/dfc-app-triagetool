@@ -138,6 +138,15 @@
         },
         "workspaceResourceGroup": {
             "type": "string"
+        },
+        "WorkerThreads": {
+            "type": "string"
+        },
+        "IocpThreads":{
+            "type": "string"
+        },
+        "contentMode": {
+            "type": "string"
         }
     },
     "variables": {
@@ -422,6 +431,18 @@
                             {
                                 "name": "SubscriptionSettings__Filter__PropertyContainsFilters__0__Values__4",
                                 "value": "[parameters('SubscriptionSettingsFilterPropertyContainsFilters0Values4')]"
+                            },
+                            {
+                                "name": "ThreadSettings__WorkerThreads",
+                                "value": "[parameters('WorkerThreads')]"
+                            },
+                            {
+                                "name": "ThreadSettings__IocpThreads",
+                                "value": "[parameters('IocpThreads')]"
+                            },
+                            {
+                                "name": "contentMode__contentMode",
+                                "value": "[parameters('contentMode')]"
                             }
                         ]
                     }

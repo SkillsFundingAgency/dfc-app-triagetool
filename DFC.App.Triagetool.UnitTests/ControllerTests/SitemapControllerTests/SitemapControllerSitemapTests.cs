@@ -1,55 +1,100 @@
-﻿using DFC.App.Triagetool.Data.Models.ContentModels;
-using DFC.Compui.Cosmos.Models;
-using FakeItEasy;
-using FluentAssertions;
+﻿using DFC.App.Triagetool.Controllers;
+using DFC.App.Triagetool.Models;
+using DFC.Common.SharedContent.Pkg.Netcore.Interfaces;
+using DFC.Common.SharedContent.Pkg.Netcore.Model.Common;
+using DFC.Common.SharedContent.Pkg.Netcore.Model.ContentItems;
+using DFC.Common.SharedContent.Pkg.Netcore.Model.Response;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Net.Mime;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+using Microsoft.VisualStudio.TestPlatform.ObjectModel;
+using Moq;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
+using AppConstants = DFC.Common.SharedContent.Pkg.Netcore.Constant.ApplicationKeys;
 
 namespace DFC.App.Triagetool.UnitTests.ControllerTests.SitemapControllerTests
 {
     [Trait("Category", "Sitemap Controller Unit Tests")]
     public class SitemapControllerSitemapTests : BaseSitemapControllerTests
     {
-        /*[Fact]
+        [Fact]
         public async Task SitemapControllerSitemapReturnsSuccess()
         {
-            // Arrange
-            const int resultsCount = 2;
-            var expectedResults = A.CollectionOfFake<TriageToolOptionDocumentModel>(resultsCount);
-            using var controller = BuildSitemapController();
+            //Arrange
+            var loggerMock = new Mock<ILogger<SitemapController>>();
+            var requestMock = new Mock<HttpRequest>();
+            var httpContextMock = new Mock<HttpContext>();
+            var contentMode = new Dictionary<string, string>
+            {
+                {"contentMode:contentMode", "PUBLISHED" },
+            };
+            IConfiguration configuration = new ConfigurationBuilder()
+                .AddInMemoryCollection(contentMode)
+                .Build();
 
-            A.CallTo(() => FakeTriageToolDocumentService.GetAllAsync(A<string>.Ignored)).Returns(expectedResults);
+            httpContextMock.Setup(c => c.Request).Returns(requestMock.Object);
 
-            // Act
-            var result = await controller.Sitemap().ConfigureAwait(false);
+            var sharedContentRedisMock = new Mock<ISharedContentRedisInterface>();
+            var triageResponse = new TriageToolFilterResponse
+            {
+                TriageToolFilter = new List<TriageToolFilters>
+                {
+                    new()
+                    {
+                        DisplayText = "Changing your career"
+                    },
+                },
+            };
+            sharedContentRedisMock.Setup(m => m.GetDataAsync<TriageToolFilterResponse>(AppConstants.TriageToolFilters, "PUBLISHED")).ReturnsAsync(triageResponse);
+            var sitemap = new SitemapLocation
+            {
+                Url = triageResponse.TriageToolFilter[0].DisplayText,
+                Priority = 0.5,
+            };
 
-            // Assert
-            A.CallTo(() => FakeTriageToolDocumentService.GetAllAsync(A<string>.Ignored)).MustHaveHappenedOnceExactly();
 
+            var controller = new SitemapController(loggerMock.Object, sharedContentRedisMock.Object, configuration);
+
+            //Act
+            var result = await controller.Sitemap();
+
+            //Assert
+            Assert.IsType<ContentResult>(result);
             var contentResult = Assert.IsType<ContentResult>(result);
+            Assert.NotNull(contentResult.Content);
+        }
 
-            contentResult.ContentType.Should().Be(MediaTypeNames.Application.Xml);
-        }*/
-
-       /* [Fact]
+        [Fact]
         public async Task SitemapControllerSitemapReturnsSuccessWhenNoData()
         {
-            // Arrange
-            const int resultsCount = 0;
-            var expectedResults = A.CollectionOfFake<TriageToolOptionDocumentModel>(resultsCount);
-            using var controller = BuildSitemapController();
+            //Arrange
+            var loggerMock = new Mock<ILogger<SitemapController>>();
+            var requestMock = new Mock<HttpRequest>();
+            var contentMode = new Dictionary<string, string>
+            {
+                {"contentMode:contentMode", "PUBLISHED" },
+            };
+            IConfiguration configuration = new ConfigurationBuilder()
+                .AddInMemoryCollection(contentMode)
+                .Build();
 
-            A.CallTo(() => FakeTriageToolDocumentService.GetAllAsync(A<string>.Ignored)).Returns(expectedResults);
+            requestMock.Setup(r => r.Scheme).Returns("https");
+            requestMock.Setup(r => r.Host).Returns(new HostString("example.com"));
+            var httpContextMock = new Mock<HttpContext>();
+            httpContextMock.Setup(c => c.Request).Returns(requestMock.Object);
 
-            // Act
-            var result = await controller.Sitemap().ConfigureAwait(false);
+            var sharedContentRedisMock = new Mock<ISharedContentRedisInterface>();
+            sharedContentRedisMock.Setup(m => m.GetDataAsync<TriageToolFilterResponse>(AppConstants.TriageToolFilters, "PUBLISHED")).ReturnsAsync((TriageToolFilterResponse) null);
+            var controller = new SitemapController(loggerMock.Object, sharedContentRedisMock.Object, configuration);
 
-            // Assert
-            A.CallTo(() => FakeTriageToolDocumentService.GetAllAsync(A<string>.Ignored)).MustHaveHappenedOnceExactly();
+            //Act
+            var result = await controller.Sitemap();
 
-            _ = Assert.IsType<NoContentResult>(result);
-        }*/
+            //Assert
+            Assert.IsType<NoContentResult>(result);
+        }
     }
 }

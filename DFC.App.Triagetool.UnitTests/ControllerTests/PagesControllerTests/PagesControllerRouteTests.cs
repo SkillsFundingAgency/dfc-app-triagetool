@@ -1,5 +1,7 @@
 ﻿using DFC.App.Triagetool.Controllers;
 using DFC.App.Triagetool.Data.Models.ContentModels;
+using DFC.Common.SharedContent.Pkg.Netcore.Model.Common;
+using DFC.Common.SharedContent.Pkg.Netcore.Model.Response;
 using FakeItEasy;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -22,25 +24,34 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
             new object[] { "/pages/{article}/body", string.Empty, nameof(PagesController.Body) },
         };
 
-       /* [Theory]
+        [Theory]
         [MemberData(nameof(PagesRouteDataOk))]
         public async Task PagesControllerCallsContentPageServiceUsingPagesRouteForOkResult(string route, string option, string actionMethod)
         {
             // Arrange
             using var controller = BuildController(route);
+            option = "Test";
             var expectedResult = new SharedContentItemModel() { Content = "<h1>A document</h1>" };
             var expectedResults = new List<SharedContentItemModel> { expectedResult };
+            var expected = new TriageToolFilterResponse()
+            {
+                TriageToolFilter = new List<TriageToolFilters>
+                {
+                    new ()
+                    {
+                        DisplayText = "Test",
+                    },
+                },
+            };
 
-            //A.CallTo(() => FakeSharedContentItemDocumentService.GetAllAsync(A<string>.Ignored)).Returns(expectedResults);
-            A.CallTo(() => FakeTriageToolOptionDocumentService.GetAllAsync(A<string>.Ignored)).Returns(new List<TriageToolOptionDocumentModel>());
+            A.CallTo(() => FakeSharedContentRedisInterface.GetDataAsync<TriageToolFilterResponse>("Test", "PUBLISHED")).Returns(expected);
 
             // Act
             var result = await RunControllerAction(controller, option, actionMethod).ConfigureAwait(false);
 
             // Assert
             Assert.IsType<ViewResult>(result);
-           // A.CallTo(() => FakeSharedContentItemDocumentService.GetAllAsync(A<string>.Ignored)).MustHaveHappenedOnceOrLess();
-            A.CallTo(() => FakeTriageToolOptionDocumentService.GetAllAsync(A<string>.Ignored)).MustHaveHappenedOnceExactly();
+            controller.Dispose();
         }
 
         private static async Task<IActionResult> RunControllerAction(PagesController controller, string option, string actionName)
@@ -57,13 +68,13 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
             httpContext.Request.Path = route;
             httpContext.Request.Headers[HeaderNames.Accept] = MediaTypeNames.Application.Json;
 
-            return new PagesController(Logger, FakeMapper, FakeSharedContentRedisInterface, FakeTriageToolOptionDocumentService)
+            return new PagesController(Logger, FakeMapper, FakeSharedContentRedisInterface, FakeConfiguration)
             {
                 ControllerContext = new ControllerContext
                 {
                     HttpContext = httpContext,
                 },
             };
-        }*/
+        }
     }
 }
