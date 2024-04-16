@@ -18,6 +18,8 @@ using DFC.Common.SharedContent.Pkg.Netcore.Interfaces;
 using DFC.Common.SharedContent.Pkg.Netcore.Model.ContentItems;
 using Microsoft.Extensions.Logging;
 using DFC.Common.SharedContent.Pkg.Netcore.Model.Common;
+using Microsoft.Extensions.Configuration;
+using Microsoft.CodeAnalysis.FlowAnalysis;
 
 namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
 {
@@ -29,16 +31,22 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
         [MemberData(nameof(HtmlMediaTypes))]
         public async Task PagesControllerBodyReturnsViewWhenNoDataFound(string mediaTypeName)
         {
+            var contentMode = new Dictionary<string, string>
+            {
+                {"contentMode:contentMode", "PUBLISHED" },
+            };
+            IConfiguration configuration = new ConfigurationBuilder()
+                .AddInMemoryCollection(contentMode)
+                .Build();
+
             var redisMock = new Mock<ISharedContentRedisInterface>();
-
-
             var mapperMock = new Mock<IMapper>();
             var loggerMock = new Mock<ILogger<PagesController>>();
 
             redisMock.Setup(r => r.GetDataAsync<TriageToolFilterResponse>("TriageToolFilters/All", "PUBLISHED"))
                      .ReturnsAsync((TriageToolFilterResponse) null);
 
-            var controller = new PagesController(loggerMock.Object, mapperMock.Object, redisMock.Object);
+            var controller = new PagesController(loggerMock.Object, mapperMock.Object, redisMock.Object, configuration);
 
             // Act
             var result = await controller.Body("YourArticleId") as ViewResult;
@@ -53,6 +61,14 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
         {
             var redisMock = new Mock<ISharedContentRedisInterface>();
             var mapperMock = new Mock<IMapper>();
+            var contentMode = new Dictionary<string, string>
+            {
+                {"contentMode:contentMode", "PUBLISHED" },
+            };
+            IConfiguration configuration = new ConfigurationBuilder()
+                .AddInMemoryCollection(contentMode)
+                .Build();
+
             var loggerMock = new Mock<ILogger<PagesController>>();
             var triageToolFilterResponse = new TriageToolFilterResponse
             {
@@ -65,7 +81,7 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
             redisMock.Setup(r => r.GetDataAsync<TriageToolFilterResponse>("TriageToolFilters/All", "PUBLISHED"))
                      .ReturnsAsync(triageToolFilterResponse);
 
-            var controller = new PagesController(loggerMock.Object, mapperMock.Object, redisMock.Object);
+            var controller = new PagesController(loggerMock.Object, mapperMock.Object, redisMock.Object, configuration);
 
             var mockSharedContentRedis = new Mock<ISharedContentRedisInterface>();
             var triagePageResponse = new TriagePageResponse();
@@ -88,6 +104,14 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
         {
             var redisMock = new Mock<ISharedContentRedisInterface>();
             var mapperMock = new Mock<IMapper>();
+            var contentMode = new Dictionary<string, string>
+            {
+                {"contentMode:contentMode", "PUBLISHED" },
+            };
+            IConfiguration configuration = new ConfigurationBuilder()
+                .AddInMemoryCollection(contentMode)
+                .Build();
+
             var loggerMock = new Mock<ILogger<PagesController>>();
             var triageToolFilterResponse = new TriageToolFilterResponse
             {
@@ -100,7 +124,7 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
             redisMock.Setup(r => r.GetDataAsync<TriageToolFilterResponse>("TriageToolFilters/All", "PUBLISHED"))
                      .ReturnsAsync(triageToolFilterResponse);
 
-            var controller = new PagesController(loggerMock.Object, mapperMock.Object, redisMock.Object);
+            var controller = new PagesController(loggerMock.Object, mapperMock.Object, redisMock.Object, configuration);
 
             // Mocking sharedContentRedis.GetDataAsync<TriagePageResponse>
             var mockSharedContentRedis = new Mock<ISharedContentRedisInterface>();

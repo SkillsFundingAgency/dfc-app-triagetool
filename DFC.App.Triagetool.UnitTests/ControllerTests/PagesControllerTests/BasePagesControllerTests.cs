@@ -5,6 +5,7 @@ using DFC.Compui.Cosmos.Contracts;
 using FakeItEasy;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Net.Http.Headers;
 using System;
@@ -22,6 +23,7 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
             Logger = A.Fake<ILogger<PagesController>>();
             FakeSharedContentRedisInterface = A.Fake<ISharedContentRedisInterface>();
             FakeMapper = A.Fake<AutoMapper.IMapper>();
+            FakeConfiguration = A.Fake<IConfiguration>();
         }
 
         public static IEnumerable<object[]> HtmlMediaTypes => new List<object[]>
@@ -44,6 +46,8 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
 
         public ISharedContentRedisInterface FakeSharedContentRedisInterface { get; }
 
+        public IConfiguration FakeConfiguration { get; }
+
         protected IDocumentService<SharedContentItemModel> FakeSharedContentItemDocumentService { get; }
 
         protected IDocumentService<TriageToolOptionDocumentModel> FakeTriageToolOptionDocumentService { get; }
@@ -56,7 +60,7 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
 
             httpContext.Request.Headers[HeaderNames.Accept] = mediaTypeName;
 
-            var controller = new PagesController(Logger, FakeMapper, FakeSharedContentRedisInterface)
+            var controller = new PagesController(Logger, FakeMapper, FakeSharedContentRedisInterface, FakeConfiguration)
             {
                 ControllerContext = new ControllerContext()
                 {

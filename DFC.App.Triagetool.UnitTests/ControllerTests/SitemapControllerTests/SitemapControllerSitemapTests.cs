@@ -6,6 +6,7 @@ using DFC.Common.SharedContent.Pkg.Netcore.Model.ContentItems;
 using DFC.Common.SharedContent.Pkg.Netcore.Model.Response;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 using Moq;
@@ -26,6 +27,13 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.SitemapControllerTests
             var loggerMock = new Mock<ILogger<SitemapController>>();
             var requestMock = new Mock<HttpRequest>();
             var httpContextMock = new Mock<HttpContext>();
+            var contentMode = new Dictionary<string, string>
+            {
+                {"contentMode:contentMode", "PUBLISHED" },
+            };
+            IConfiguration configuration = new ConfigurationBuilder()
+                .AddInMemoryCollection(contentMode)
+                .Build();
 
             httpContextMock.Setup(c => c.Request).Returns(requestMock.Object);
 
@@ -48,7 +56,7 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.SitemapControllerTests
             };
 
 
-            var controller = new SitemapController(loggerMock.Object, sharedContentRedisMock.Object);
+            var controller = new SitemapController(loggerMock.Object, sharedContentRedisMock.Object, configuration);
 
             //Act
             var result = await controller.Sitemap();
@@ -65,6 +73,13 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.SitemapControllerTests
             //Arrange
             var loggerMock = new Mock<ILogger<SitemapController>>();
             var requestMock = new Mock<HttpRequest>();
+            var contentMode = new Dictionary<string, string>
+            {
+                {"contentMode:contentMode", "PUBLISHED" },
+            };
+            IConfiguration configuration = new ConfigurationBuilder()
+                .AddInMemoryCollection(contentMode)
+                .Build();
 
             requestMock.Setup(r => r.Scheme).Returns("https");
             requestMock.Setup(r => r.Host).Returns(new HostString("example.com"));
@@ -73,7 +88,7 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.SitemapControllerTests
 
             var sharedContentRedisMock = new Mock<ISharedContentRedisInterface>();
             sharedContentRedisMock.Setup(m => m.GetDataAsync<TriageToolFilterResponse>(AppConstants.TriageToolFilters, "PUBLISHED")).ReturnsAsync((TriageToolFilterResponse) null);
-            var controller = new SitemapController(loggerMock.Object, sharedContentRedisMock.Object);
+            var controller = new SitemapController(loggerMock.Object, sharedContentRedisMock.Object, configuration);
 
             //Act
             var result = await controller.Sitemap();

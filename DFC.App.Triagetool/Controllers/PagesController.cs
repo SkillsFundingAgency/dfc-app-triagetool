@@ -27,7 +27,7 @@ namespace DFC.App.Triagetool.Controllers
 
         private readonly ILogger<PagesController> logger;
         private readonly IConfiguration configuration;
-        private string status;
+        private string status = string.Empty;
         private readonly AutoMapper.IMapper mapper;
         private readonly ISharedContentRedisInterface sharedContentRedis;
 

@@ -68,7 +68,7 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
             httpContext.Request.Path = route;
             httpContext.Request.Headers[HeaderNames.Accept] = MediaTypeNames.Application.Json;
 
-            return new PagesController(Logger, FakeMapper, FakeSharedContentRedisInterface)
+            return new PagesController(Logger, FakeMapper, FakeSharedContentRedisInterface, FakeConfiguration)
             {
                 ControllerContext = new ControllerContext
                 {
