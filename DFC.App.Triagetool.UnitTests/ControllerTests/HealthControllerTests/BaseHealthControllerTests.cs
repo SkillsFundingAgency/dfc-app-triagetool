@@ -1,13 +1,16 @@
 ﻿using DFC.App.Triagetool.Controllers;
-using DFC.App.Triagetool.Data.Models.ContentModels;
-using DFC.Compui.Cosmos.Contracts;
 using FakeItEasy;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Net.Http.Headers;
+using System;
 using System.Collections.Generic;
 using System.Net.Mime;
+using System.Threading.Tasks;
+
 
 namespace DFC.App.Triagetool.UnitTests.ControllerTests.HealthControllerTests
 {
@@ -15,7 +18,6 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.HealthControllerTests
     {
         public BaseHealthControllerTests()
         {
-            FakeContentPageService = A.Fake<IDocumentService<SharedContentItemModel>>();
             FakeLogger = A.Fake<ILogger<HealthController>>();
         }
 
@@ -35,17 +37,27 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.HealthControllerTests
             new string[] { MediaTypeNames.Application.Json },
         };
 
-        protected IDocumentService<SharedContentItemModel> FakeContentPageService { get; }
-
         protected ILogger<HealthController> FakeLogger { get; }
 
-        protected HealthController BuildHealthController(string mediaTypeName)
+        protected HealthCheckService CreateHealthChecksService(Action<IHealthChecksBuilder> configure)
+        {
+            var services = new ServiceCollection();
+            services.AddLogging();
+            services.AddOptions();
+
+            var builder = services.AddHealthChecks();
+            configure?.Invoke(builder);
+
+            return services.BuildServiceProvider(validateScopes: true).GetRequiredService<HealthCheckService>();
+        }
+
+        protected HealthController BuildHealthController(string mediaTypeName, HealthCheckService healthCheckService)
         {
             var httpContext = new DefaultHttpContext();
 
             httpContext.Request.Headers[HeaderNames.Accept] = mediaTypeName;
 
-            var controller = new HealthController(FakeLogger, FakeContentPageService)
+            var controller = new HealthController(FakeLogger, healthCheckService)
             {
                 ControllerContext = new ControllerContext()
                 {

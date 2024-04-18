@@ -107,6 +107,7 @@ stages:
   - group: dfc-app-uiautomation-testexecution-retry-all
   - group: dfc-browserstack
   - group: dfc-app-uiautomation-lab
+  - group: dfc-stax-shared-all
   - group: 'KeyVault - dfc-lab-shared-kv'
   - template: VariableTemplates\LabEnvironmentVariables.yml
 
@@ -165,6 +166,7 @@ stages:
   - group: dfc-app-uiautomation-testexecution-retry-all
   - group: dfc-browserstack
   - group: dfc-app-uiautomation-lab
+  - group: dfc-stax-shared-all
   - group: 'KeyVault - dfc-lab-shared-kv'
   - template: VariableTemplates\LabDraftEnvironmentVariables.yml
 
@@ -222,6 +224,7 @@ stages:
   - group: dfc-app-uiautomation-testexecution-retry-all
   - group: dfc-browserstack
   - group: dfc-app-uiautomation-dev
+  - group: dfc-stax-shared-all
   - group: 'KeyVault - dfc-dev-shared-kv'
   - template: VariableTemplates\DevEnvironmentVariables.yml
 
@@ -280,6 +283,7 @@ stages:
   - group: dfc-app-uiautomation-testexecution-retry-all
   - group: dfc-browserstack
   - group: dfc-app-uiautomation-dev
+  - group: dfc-stax-shared-all
   - group: 'KeyVault - dfc-dev-shared-kv'
   - template: VariableTemplates\DevDraftEnvironmentVariables.yml
 
@@ -337,6 +341,7 @@ stages:
   - group: dfc-app-uiautomation-testexecution-retry-all
   - group: dfc-browserstack
   - group: dfc-app-uiautomation-sit
+  - group: dfc-stax-shared-all
   - group: 'KeyVault - dfc-sit-shared-kv'
   - template: VariableTemplates\SitEnvironmentVariables.yml
 
@@ -395,6 +400,7 @@ stages:
   - group: dfc-app-uiautomation-testexecution-retry-all
   - group: dfc-browserstack
   - group: dfc-app-uiautomation-sit
+  - group: dfc-stax-shared-all
   - group: 'KeyVault - dfc-sit-shared-kv'
   - template: VariableTemplates\SitDraftEnvironmentVariables.yml
 
@@ -452,6 +458,7 @@ stages:
   - group: dfc-app-uiautomation-testexecution-retry-all
   - group: dfc-browserstack
   - group: dfc-app-uiautomation-pp
+  - group: dfc-stax-shared-all
   - group: 'KeyVault - dfc-pp-shared-kv'
   - template: VariableTemplates\PPEnvironmentVariables.yml
 
@@ -510,6 +517,7 @@ stages:
   - group: dfc-app-uiautomation-testexecution-retry-all
   - group: dfc-browserstack
   - group: dfc-app-uiautomation-pp
+  - group: dfc-stax-shared-all
   - group: 'KeyVault - dfc-pp-shared-kv'
   - template: VariableTemplates\PPDraftEnvironmentVariables.yml
 
@@ -567,6 +575,7 @@ stages:
   - group: dfc-app-uiautomation-testexecution-retry-all
   - group: dfc-browserstack
   - group: dfc-app-uiautomation-prd
+  - group: dfc-stax-shared-all
   - group: 'KeyVault - dfc-prd-shared-kv'
   - template: VariableTemplates\PRDEnvironmentVariables.yml
 
@@ -625,6 +634,7 @@ stages:
   - group: dfc-app-uiautomation-testexecution-retry-all
   - group: dfc-browserstack
   - group: dfc-app-uiautomation-prd
+  - group: dfc-stax-shared-all
   - group: 'KeyVault - dfc-prd-shared-kv'
   - template: VariableTemplates\PRDDraftEnvironmentVariables.yml
 

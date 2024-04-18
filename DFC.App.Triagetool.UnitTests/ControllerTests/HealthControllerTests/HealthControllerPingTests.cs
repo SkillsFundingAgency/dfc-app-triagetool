@@ -1,7 +1,10 @@
 ﻿using FakeItEasy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System.Net;
 using System.Net.Mime;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace DFC.App.Triagetool.UnitTests.ControllerTests.HealthControllerTests
@@ -13,7 +16,11 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.HealthControllerTests
         public void HealthControllerPingReturnsSuccess()
         {
             // Arrange
-            using var controller = BuildHealthController(MediaTypeNames.Application.Json);
+            var service = CreateHealthChecksService(b =>
+            {
+                b.AddAsyncCheck("HealthyCheck", _ => Task.FromResult(HealthCheckResult.Healthy()));
+            });
+            var controller = BuildHealthController(MediaTypeNames.Application.Json, service);
 
             // Act
             var result = controller.Ping();
@@ -22,6 +29,8 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.HealthControllerTests
             var statusResult = Assert.IsType<OkResult>(result);
 
             A.Equals((int)HttpStatusCode.OK, statusResult.StatusCode);
+
+            controller.Dispose();
         }
     }
 }

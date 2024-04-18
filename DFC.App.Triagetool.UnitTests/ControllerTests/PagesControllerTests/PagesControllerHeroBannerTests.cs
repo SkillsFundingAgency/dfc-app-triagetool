@@ -1,12 +1,20 @@
-using DFC.App.Triagetool.Data.Models.ContentModels;
+using AutoMapper;
+using DFC.App.Triagetool.Controllers;
 using DFC.App.Triagetool.ViewModels;
-using FakeItEasy;
+using DFC.Common.SharedContent.Pkg.Netcore.Interfaces;
+using DFC.Common.SharedContent.Pkg.Netcore.Model.Common;
+using DFC.Common.SharedContent.Pkg.Netcore.Model.ContentItems;
+using DFC.Common.SharedContent.Pkg.Netcore.Model.Response;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+using Moq;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
+using AppConstants = DFC.Common.SharedContent.Pkg.Netcore.Constant.ApplicationKeys;
 
 namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
 {
@@ -17,32 +25,69 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
         [Theory]
         [MemberData(nameof(JsonMediaTypes))]
         [MemberData(nameof(HtmlMediaTypes))]
-        public async Task PagesControllerHeroBannerReturnsNoContentWhenNoData(string mediaTypeName)
+        public async Task PagesControllerHeroBannerReturnsSuccessWhenNoData(string mediaTypeName)
         {
-            // Arrange
-            A.CallTo(() => FakeTriageToolOptionDocumentService.GetAllAsync(A<string>.Ignored))
-                .Returns(new List<TriageToolOptionDocumentModel>());
-            using var controller = BuildPagesController(mediaTypeName);
+            var redisMock = new Mock<ISharedContentRedisInterface>();
+            var mapperMock = new Mock<IMapper>();
+            var contentMode = new Dictionary<string, string>
+            {
+                {"contentMode:contentMode", "PUBLISHED" },
+            };
+            IConfiguration configuration = new ConfigurationBuilder()
+                .AddInMemoryCollection(contentMode)
+                .Build();
+            var loggerMock = new Mock<ILogger<PagesController>>();
+
+            redisMock.Setup(m => m.GetDataAsync<TriageToolFilterResponse>("Test", "PUBLISHED")).ReturnsAsync((TriageToolFilterResponse) null);
+            var controller = new PagesController(loggerMock.Object, mapperMock.Object, redisMock.Object, configuration);
 
             // Act
-            var result = await controller.HeroBanner("an-article").ConfigureAwait(false);
+            var result = await controller.HeroBanner(null); // Pass null to simulate no data
 
             // Assert
-            var statusResult = Assert.IsType<ViewResult>(result);
-            }
+            var viewResult = Assert.IsType<ViewResult>(result);
+            var model = Assert.IsAssignableFrom<HeroBannerViewModel>(viewResult.ViewData.Model);
+        }
 
         [Theory]
         [MemberData(nameof(JsonMediaTypes))]
         [MemberData(nameof(HtmlMediaTypes))]
-        public async Task PagesControllerHeroBannerReturnsViewtWhenOptionsFound(string mediaTypeName)
+        public async Task PagesControllerHeroBannerReturnsViewWhenOptionsFound(string mediaTypeName)
         {
-            // Arrange
-            A.CallTo(() => FakeTriageToolOptionDocumentService.GetAllAsync(A<string>.Ignored))
-                .Returns(Getdocuments());
-            using var controller = BuildPagesController(mediaTypeName);
+            var sharedContentRedisMock = new Mock<ISharedContentRedisInterface>();
+            var mapperMock = new Mock<IMapper>();
+            var contentMode = new Dictionary<string, string>
+            {
+                {"contentMode:contentMode", "PUBLISHED" },
+            };
+            IConfiguration configuration = new ConfigurationBuilder()
+                .AddInMemoryCollection(contentMode)
+                .Build();
+            var loggerMock = new Mock<ILogger<PagesController>>();
+            var triageToolFilterResponse = new TriageToolFilterResponse
+            {
+                TriageToolFilter = new List<TriageToolFilters>
+                {
+                    new ()
+                    {
+                        DisplayText = "Test",
+                        GraphSync = new()
+                        {
+                            NodeId = "test",
+                        },
+                    },
+                    new ()
+                    {
+                        DisplayText = "Test",
+                    },
+                },
+            };
+            sharedContentRedisMock.Setup(m => m.GetDataAsync<TriageToolFilterResponse>(AppConstants.TriageToolFilters, "PUBLISHED")).ReturnsAsync(triageToolFilterResponse);
+
+            var controller = new PagesController(loggerMock.Object, mapperMock.Object, sharedContentRedisMock.Object, configuration);
 
             // Act
-            var result = await controller.HeroBanner("an-article").ConfigureAwait(false);
+            var result = await controller.HeroBanner("article").ConfigureAwait(false);
 
             // Assert
             var statusResult = Assert.IsType<ViewResult>(result);
@@ -50,3 +95,4 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
         }
     }
 }
+

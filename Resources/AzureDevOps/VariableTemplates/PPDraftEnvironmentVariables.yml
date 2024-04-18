@@ -61,3 +61,5 @@ variables:
   value: 75
 - name: CPUPercentageThreshold
   value: 75
+- name: contentMode
+  value: DRAFT

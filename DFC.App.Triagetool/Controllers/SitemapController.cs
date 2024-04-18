@@ -1,26 +1,31 @@
-﻿using DFC.App.Triagetool.Data.Models.ContentModels;
-using DFC.App.Triagetool.Extensions;
+﻿using DFC.App.Triagetool.Extensions;
 using DFC.App.Triagetool.Models;
-using DFC.Compui.Cosmos.Contracts;
+using DFC.Common.SharedContent.Pkg.Netcore.Interfaces;
+using DFC.Common.SharedContent.Pkg.Netcore.Model.Common;
+using DFC.Common.SharedContent.Pkg.Netcore.Model.Response;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System.Linq;
 using System.Net.Mime;
 using System.Threading.Tasks;
+using AppConstants = DFC.Common.SharedContent.Pkg.Netcore.Constant.ApplicationKeys;
 
 namespace DFC.App.Triagetool.Controllers
 {
     public class SitemapController : Controller
     {
         public const string SitemapViewCanonicalName = "sitemap";
-
         private readonly ILogger<SitemapController> logger;
-        private readonly IDocumentService<TriageToolOptionDocumentModel> triageToolDocumentService;
+        private readonly ISharedContentRedisInterface sharedContentRedis;
+        private readonly IConfiguration configuration;
+        private string status;
 
-        public SitemapController(ILogger<SitemapController> logger, IDocumentService<TriageToolOptionDocumentModel> triageToolDocumentService)
+        public SitemapController(ILogger<SitemapController> logger, ISharedContentRedisInterface sharedContentRedis, IConfiguration configuration)
         {
             this.logger = logger;
-            this.triageToolDocumentService = triageToolDocumentService;
+            this.sharedContentRedis = sharedContentRedis;
+            status = configuration.GetSection("contentMode:contentMode").Get<string>();
         }
 
         [HttpGet]
@@ -36,19 +41,25 @@ namespace DFC.App.Triagetool.Controllers
         [Route("/sitemap.xml")]
         public async Task<IActionResult> Sitemap()
         {
+            if (string.IsNullOrEmpty(status))
+            {
+                status = "PUBLISHED";
+            }
+
             logger.LogInformation("Generating Sitemap");
 
             var sitemapUrlPrefix = $"{Request.GetBaseAddress()}{PagesController.RegistrationPath}";
             var sitemap = new Sitemap();
-            var triageToolOptionModels = await triageToolDocumentService.GetAllAsync().ConfigureAwait(false);
+            var triagetooldocuments = await sharedContentRedis.GetDataAsync<TriageToolFilterResponse>(AppConstants.TriageToolFilters, status);
 
-            if (triageToolOptionModels != null && triageToolOptionModels.Any())
-            {
-                foreach (var contentPageModel in triageToolOptionModels)
+                if (triagetooldocuments != null )
                 {
+                for (int i = 0; i < triagetooldocuments.TriageToolFilter.Count; i++)
+                {
+                    TriageToolFilters? contentPageModel = triagetooldocuments.TriageToolFilter[i];
                     sitemap.Add(new SitemapLocation
                     {
-                        Url = $"{sitemapUrlPrefix}/{contentPageModel.Title}",
+                        Url = $"{sitemapUrlPrefix}/{contentPageModel.DisplayText}",
                         Priority = 0.5,
                         ChangeFrequency = SitemapLocation.ChangeFrequencies.Monthly,
                     });

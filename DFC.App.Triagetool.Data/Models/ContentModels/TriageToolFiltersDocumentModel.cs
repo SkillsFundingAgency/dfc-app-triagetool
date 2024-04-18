@@ -6,11 +6,11 @@ using System.Diagnostics.CodeAnalysis;
 namespace DFC.App.Triagetool.Data.Models.ContentModels
 {
     [ExcludeFromCodeCoverage]
-    public class TriageToolOptionDocumentModel : DocumentModel
+    public class TriageToolFiltersDocumentModel : DocumentModel
     {
         public const string DefaultPartitionKey = "triage-tool";
 
-        public TriageToolOptionDocumentModel()
+        public TriageToolFiltersDocumentModel()
         {
             Filters = new List<TriageToolFilterDocumentModel>();
             Pages = new List<PageDocumentModel>();
@@ -23,8 +23,6 @@ namespace DFC.App.Triagetool.Data.Models.ContentModels
         public Uri? Url { get; set; }
 
         public string? Title { get; set; }
-        public string? DisplayText { get; set; }
-
 
         public DateTime LastCached { get; set; } = DateTime.UtcNow;
 
