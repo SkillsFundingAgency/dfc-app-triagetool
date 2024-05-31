@@ -44,26 +44,11 @@
         "aspSize": {
             "value": "__aspSize__"
         },
-        "cosmosDBName": {
-            "value": "__appSharedCosmosDBName__"
-        },
-        "cosmosDbKey": {
-            "value": "__appSharedCosmosPrimaryKey__"
-        },
-        "CosmosDbResourceGroup": {
-            "value": "__appSharedResourceGroup__"
-        },
         "environment": {
             "value": "__ReleaseEnvironmentName__",
             "metadata": {
                 "comment": "Bug in tokenisation task prevents referencing Release.EnvironmentName directly.  https://github.com/TotalALM/VSTS-Tasks/issues/29"
             }
-        },
-        "cosmosDBCollectionName": {
-            "value": "__cosmosDBCollectionName__"
-        },
-        "triagetoolDbCollectionName": {
-            "value": "__triagetoolDbCollectionName__"
         },
         "appDatabaseNeedsCreation": {
             "value": __CosmosDbDatabaseDoesntExist__
@@ -74,41 +59,11 @@
         "enableAlerts": {
             "value": __EnableAzureMonitorAlerting__
         },
-        "SubscriptionSettingsEndpoint": {
-            "value": "__SubscriptionSettingsEndpoint__"
-        },
         "apimCompositeApiKey": {
             "value": "__apimCompositeKey__"
         },
-        "SubscriptionSettingsFilterIncludeEventTypes3": {
-            "value": "__SubscriptionSettingsFilterIncludeEventTypes3__"
-        },
-        "SubscriptionSettingsFilterIncludeEventTypes4": {
-            "value": "__SubscriptionSettingsFilterIncludeEventTypes4__"
-        },
-        "SubscriptionSettingsFilterPropertyContainsFilters0Values0": {
-            "value": "__SubscriptionSettingsFilterPropertyContainsFilters0Values0__"
-        },
-        "SubscriptionSettingsFilterPropertyContainsFilters0Values1": {
-            "value": "__SubscriptionSettingsFilterPropertyContainsFilters0Values1__"
-        },
-        "SubscriptionSettingsFilterPropertyContainsFilters0Values2": {
-            "value": "__SubscriptionSettingsFilterPropertyContainsFilters0Values2__"
-        },
-        "SubscriptionSettingsFilterPropertyContainsFilters0Values3": {
-            "value": "__SubscriptionSettingsFilterPropertyContainsFilters0Values3__"
-        },
-        "SubscriptionSettingsFilterPropertyContainsFilters0Values4": {
-            "value": "__SubscriptionSettingsFilterPropertyContainsFilters0Values4__"
-        },
         "ApplicationName": {
             "value": "__ApplicationName__"
-        },
-        "contentUrl": {
-            "value": "__contentUrl__"
-        },
-        "subscriptionUrl": {
-            "value": "__subscriptionUrl__"
         },
         "ApimResourceGroup": {
             "value": "__SharedResourceGroupName__"
