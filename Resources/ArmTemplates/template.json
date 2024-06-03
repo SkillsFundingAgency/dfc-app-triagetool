@@ -64,6 +64,9 @@
         "ApplicationName": {
             "type": "string"
         },
+        "contentUrl": {
+            "type": "string"
+        },
         "ApimResourceGroup": {
             "type": "string"
         },

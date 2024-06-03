@@ -56,6 +56,9 @@
         "ApplicationName": {
             "value": "anothervalue"
         },
+        "contentUrl": {
+            "value": "anothervalue"
+        },
         "ApimResourceGroup": {
             "value": "dfc-dev-shared-rg"
         },

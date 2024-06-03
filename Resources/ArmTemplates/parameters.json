@@ -65,6 +65,9 @@
         "ApplicationName": {
             "value": "__ApplicationName__"
         },
+        "contentUrl": {
+            "value": "__contentUrl__"
+        },
         "ApimResourceGroup": {
             "value": "__SharedResourceGroupName__"
         },
