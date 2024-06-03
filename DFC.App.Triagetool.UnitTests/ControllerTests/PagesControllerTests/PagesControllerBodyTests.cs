@@ -1,25 +1,17 @@
-using DFC.App.Triagetool.Data.Models.ContentModels;
 using DFC.App.Triagetool.ViewModels;
-using FakeItEasy;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 using Moq;
 using DFC.App.Triagetool.Controllers;
 using DFC.Common.SharedContent.Pkg.Netcore.Model.Response;
-using DFC.Common.SharedContent.Pkg.Netcore;
 using AutoMapper;
 using DFC.Common.SharedContent.Pkg.Netcore.Interfaces;
-using DFC.Common.SharedContent.Pkg.Netcore.Model.ContentItems;
 using Microsoft.Extensions.Logging;
 using DFC.Common.SharedContent.Pkg.Netcore.Model.Common;
 using Microsoft.Extensions.Configuration;
-using Microsoft.CodeAnalysis.FlowAnalysis;
 
 namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
 {

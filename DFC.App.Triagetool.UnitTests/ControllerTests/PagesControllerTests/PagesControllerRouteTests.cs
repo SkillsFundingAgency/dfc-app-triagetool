@@ -1,5 +1,4 @@
 ﻿using DFC.App.Triagetool.Controllers;
-using DFC.App.Triagetool.Data.Models.ContentModels;
 using DFC.Common.SharedContent.Pkg.Netcore.Model.Common;
 using DFC.Common.SharedContent.Pkg.Netcore.Model.Response;
 using FakeItEasy;
@@ -31,8 +30,6 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
             // Arrange
             using var controller = BuildController(route);
             option = "Test";
-            var expectedResult = new SharedContentItemModel() { Content = "<h1>A document</h1>" };
-            var expectedResults = new List<SharedContentItemModel> { expectedResult };
             var expected = new TriageToolFilterResponse()
             {
                 TriageToolFilter = new List<TriageToolFilters>

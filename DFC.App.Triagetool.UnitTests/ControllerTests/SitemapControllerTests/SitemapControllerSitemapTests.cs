@@ -18,7 +18,7 @@ using AppConstants = DFC.Common.SharedContent.Pkg.Netcore.Constant.ApplicationKe
 namespace DFC.App.Triagetool.UnitTests.ControllerTests.SitemapControllerTests
 {
     [Trait("Category", "Sitemap Controller Unit Tests")]
-    public class SitemapControllerSitemapTests : BaseSitemapControllerTests
+    public class SitemapControllerSitemapTests
     {
         [Fact]
         public async Task SitemapControllerSitemapReturnsSuccess()
