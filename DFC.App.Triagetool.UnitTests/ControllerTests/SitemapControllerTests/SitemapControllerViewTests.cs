@@ -19,7 +19,7 @@ using Microsoft.Extensions.Configuration;
 namespace DFC.App.Triagetool.UnitTests.ControllerTests.SitemapControllerTests
 {
     [Trait("Category", "Sitemap Controller Unit Tests")]
-    public class SitemapControllerViewTests : BaseSitemapControllerTests
+    public class SitemapControllerViewTests
     {
         [Fact]
         public async Task Sitemap_ReturnsNoContent_When_TriageToolFilterResponseIsNull()

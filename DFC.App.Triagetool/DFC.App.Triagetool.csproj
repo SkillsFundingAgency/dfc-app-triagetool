@@ -27,6 +27,7 @@
     <PackageReference Include="DFC.Common.SharedContent.Pkg.Netcore" Version="0.1.81" />
     <PackageReference Include="DFC.Compui.Subscriptions" Version="1.0.96" />
     <PackageReference Include="DFC.Compui.Telemetry" Version="1.0.31" />
+    <PackageReference Include="DFC.Content.Pkg.Netcore" Version="2.0.0" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.21.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.13" />
     <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="7.0.0">
@@ -40,12 +41,6 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-  </ItemGroup>
-
-
-
-  <ItemGroup>
-    <ProjectReference Include="..\DFC.App.Triagetool.Data\DFC.App.Triagetool.Data.csproj" />
   </ItemGroup>
 
 
