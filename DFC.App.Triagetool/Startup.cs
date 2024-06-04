@@ -14,6 +14,7 @@ using GraphQL.Client.Serializer.Newtonsoft;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -94,7 +95,7 @@ namespace DFC.App.Triagetool
                 var option = new GraphQLHttpClientOptions()
                 {
                     EndPoint = new Uri(configuration.GetSection(GraphApiUrlAppSettings).Get<string>()),
-                    HttpMessageHandler = new CmsRequestHandler(s.GetService<IHttpClientFactory>(), s.GetService<IConfiguration>(), s.GetService<IHttpContextAccessor>()),
+                    HttpMessageHandler = new CmsRequestHandler(s.GetService<IHttpClientFactory>(), s.GetService<IConfiguration>(), s.GetService<IHttpContextAccessor>(), s.GetService<IMemoryCache>()),
                 };
                 var client = new GraphQLHttpClient(option, new NewtonsoftJsonSerializer());
                 return client;

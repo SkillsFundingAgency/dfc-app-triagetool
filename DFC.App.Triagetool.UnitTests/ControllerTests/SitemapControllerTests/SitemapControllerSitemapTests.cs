@@ -2,7 +2,6 @@
 using DFC.App.Triagetool.Models;
 using DFC.Common.SharedContent.Pkg.Netcore.Interfaces;
 using DFC.Common.SharedContent.Pkg.Netcore.Model.Common;
-using DFC.Common.SharedContent.Pkg.Netcore.Model.ContentItems;
 using DFC.Common.SharedContent.Pkg.Netcore.Model.Response;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -48,7 +47,7 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.SitemapControllerTests
                     },
                 },
             };
-            sharedContentRedisMock.Setup(m => m.GetDataAsync<TriageToolFilterResponse>(AppConstants.TriageToolFilters, "PUBLISHED")).ReturnsAsync(triageResponse);
+            sharedContentRedisMock.Setup(m => m.GetDataAsync<TriageToolFilterResponse>(AppConstants.TriageToolFilters, "PUBLISHED", 4)).ReturnsAsync(triageResponse);
             var sitemap = new SitemapLocation
             {
                 Url = triageResponse.TriageToolFilter[0].DisplayText,
@@ -87,7 +86,7 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.SitemapControllerTests
             httpContextMock.Setup(c => c.Request).Returns(requestMock.Object);
 
             var sharedContentRedisMock = new Mock<ISharedContentRedisInterface>();
-            sharedContentRedisMock.Setup(m => m.GetDataAsync<TriageToolFilterResponse>(AppConstants.TriageToolFilters, "PUBLISHED")).ReturnsAsync((TriageToolFilterResponse) null);
+            sharedContentRedisMock.Setup(m => m.GetDataAsync<TriageToolFilterResponse>(AppConstants.TriageToolFilters, "PUBLISHED", 4)).ReturnsAsync((TriageToolFilterResponse)null);
             var controller = new SitemapController(loggerMock.Object, sharedContentRedisMock.Object, configuration);
 
             //Act
