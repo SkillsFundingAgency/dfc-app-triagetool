@@ -1,17 +1,17 @@
+using AutoMapper;
+using DFC.App.Triagetool.Controllers;
 using DFC.App.Triagetool.ViewModels;
+using DFC.Common.SharedContent.Pkg.Netcore.Interfaces;
+using DFC.Common.SharedContent.Pkg.Netcore.Model.Common;
+using DFC.Common.SharedContent.Pkg.Netcore.Model.Response;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+using Moq;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using Xunit;
-using Moq;
-using DFC.App.Triagetool.Controllers;
-using DFC.Common.SharedContent.Pkg.Netcore.Model.Response;
-using AutoMapper;
-using DFC.Common.SharedContent.Pkg.Netcore.Interfaces;
-using Microsoft.Extensions.Logging;
-using DFC.Common.SharedContent.Pkg.Netcore.Model.Common;
-using Microsoft.Extensions.Configuration;
 
 namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
 {
@@ -35,8 +35,8 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
             var mapperMock = new Mock<IMapper>();
             var loggerMock = new Mock<ILogger<PagesController>>();
 
-            redisMock.Setup(r => r.GetDataAsync<TriageToolFilterResponse>("TriageToolFilters/All", "PUBLISHED"))
-                     .ReturnsAsync((TriageToolFilterResponse) null);
+            redisMock.Setup(r => r.GetDataAsync<TriageToolFilterResponse>("TriageToolFilters/All", "PUBLISHED", 4))
+                     .ReturnsAsync((TriageToolFilterResponse)null);
 
             var controller = new PagesController(loggerMock.Object, mapperMock.Object, redisMock.Object, configuration);
 
@@ -70,14 +70,14 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
                 new () { DisplayText = "Option2" },
             },
             };
-            redisMock.Setup(r => r.GetDataAsync<TriageToolFilterResponse>("TriageToolFilters/All", "PUBLISHED"))
+            redisMock.Setup(r => r.GetDataAsync<TriageToolFilterResponse>("TriageToolFilters/All", "PUBLISHED", 4))
                      .ReturnsAsync(triageToolFilterResponse);
 
             var controller = new PagesController(loggerMock.Object, mapperMock.Object, redisMock.Object, configuration);
 
             var mockSharedContentRedis = new Mock<ISharedContentRedisInterface>();
             var triagePageResponse = new TriagePageResponse();
-            mockSharedContentRedis.Setup(x => x.GetDataAsync<TriagePageResponse>("TriageToolPages", "PUBLISHED")).ReturnsAsync(triagePageResponse);
+            mockSharedContentRedis.Setup(x => x.GetDataAsync<TriagePageResponse>("TriageToolPages", "PUBLISHED", 4)).ReturnsAsync(triagePageResponse);
 
             // Act
             var result = await controller.Body("Article");
@@ -113,7 +113,7 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
                 new () { DisplayText = "Option2" },
             },
             };
-            redisMock.Setup(r => r.GetDataAsync<TriageToolFilterResponse>("TriageToolFilters/All", "PUBLISHED"))
+            redisMock.Setup(r => r.GetDataAsync<TriageToolFilterResponse>("TriageToolFilters/All", "PUBLISHED", 4))
                      .ReturnsAsync(triageToolFilterResponse);
 
             var controller = new PagesController(loggerMock.Object, mapperMock.Object, redisMock.Object, configuration);
@@ -121,7 +121,7 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
             // Mocking sharedContentRedis.GetDataAsync<TriagePageResponse>
             var mockSharedContentRedis = new Mock<ISharedContentRedisInterface>();
             var triagePageResponse = new TriagePageResponse();
-            mockSharedContentRedis.Setup(x => x.GetDataAsync<TriagePageResponse>("TriageToolPages", "PUBLISHED")).ReturnsAsync(triagePageResponse);
+            mockSharedContentRedis.Setup(x => x.GetDataAsync<TriagePageResponse>("TriageToolPages", "PUBLISHED", 4)).ReturnsAsync(triagePageResponse);
 
             // Act
             var result = await controller.Body("Article");
