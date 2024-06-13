@@ -8,22 +8,12 @@
         "appSharedStorageAccountName": {
             "type": "string"
         },
-        "aseHostingEnvironmentName": {
-            "type": "string",
-            "defaultValue": ""
-        },
-        "aseResourceGroup": {
-            "type": "string",
-            "defaultValue": ""
-        },
-        "aspInstances": {
-            "type": "int"
-        },
-        "aspSize": {
+        "appServiceName": {
             "type": "string"
         },
-        "aspTier": {
-            "type": "string"
+        "appServicePlanSuffix": {
+            "type": "string",
+            "defaultValue": ""
         },
         "clientAffinity": {
             "type": "bool"
@@ -127,12 +117,6 @@
         "ExceptionCountThreshold": {
             "type": "string"
         },
-        "CPUPercentageThreshold": {
-            "type": "string"
-        },
-        "MemoryPercentageThreshold": {
-            "type": "string"
-        },
         "workspaceName": {
             "type": "string"
         },
@@ -151,7 +135,7 @@
     },
     "variables": {
         "ApiName": "[concat(parameters('ApimProductInstanceName'), '-', parameters('ApiName'))]",
-        "appServicePlanName": "[concat(variables('resourcePrefix'), '-asp')]",
+        "appServicePlanName": "[concat(variables('resourcePrefix'), parameters('appServicePlanSuffix'), '-asp')]",
         "appServicePlanResourceGroup": "[concat(variables('resourcePrefix'),'-rg')]",
         "buildingBlocksDfcBaseUrl": "https://raw.githubusercontent.com/SkillsFundingAgency/dfc-devops/master/ArmTemplates/",
         "cosmosDbDatabaseName": "dfc-app-triagetool",
@@ -159,7 +143,6 @@
         "triagetoolDbCollectionPartitionKey": "/PartitionKey",
         "cosmosDbEndpoint": "[concat('https://', parameters('cosmosDbName'), '.documents.azure.com:443/')]",
         "resourcePrefix": "[tolower(concat('dfc-', parameters('Environment'), '-app-triagetool'))]",
-        "webAppName": "[concat(variables('ResourcePrefix'), '-as')]",
         "webAppInsightsName": "[concat(variables('resourcePrefix'), '-ai')]",
         "ActionGroupName": "[concat('dfc-', replace(tolower(parameters('Environment')), '-draft', ''), '-app-sharedresources-actgrp')]"
     },
@@ -219,7 +202,7 @@
         },
         {
             "apiVersion": "2017-05-10",
-            "name": "[variables('WebAppName')]",
+            "name": "[parameters('appServiceName')]",
             "type": "Microsoft.Resources/deployments",
             "dependsOn": [
                 "[variables('webAppInsightsName')]"
@@ -232,7 +215,7 @@
                 },
                 "parameters": {
                     "appServiceName": {
-                        "value": "[variables('webAppName')]"
+                        "value": "[parameters('appServiceName')]"
                     },
                     "appServicePlanName": {
                         "value": "[variables('appServicePlanName')]"

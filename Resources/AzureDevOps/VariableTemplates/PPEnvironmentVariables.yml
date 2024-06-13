@@ -2,7 +2,9 @@ variables:
 - name: ReleaseEnvironmentName
   value: pp
 - name: AppServiceName
-  value: $(WebAppPrefix)-as
+  value: $(WebAppPrefix)-as-ver2
+- name: AppServicePlanSuffix
+  value: -migrated
 - name: cosmosDBCollectionName
   value: shared-content
 - name: triagetoolDbCollectionName
@@ -18,7 +20,7 @@ variables:
 - name: contentUrl
   value: $(ContentApiAddress)/api/execute
 - name: subscriptionUrl
-  value: https://dfc-pp-api-eventgridsubscriptions-fa.$(appServiceDomain)
+  value: https://dfc-pp-api-eventgridsubscriptions-fa-ver2.$(appServiceDomain)
 - name: SubscriptionSettingsEndpoint
   value: $(ApimProxyAddress)/composite-ui/triagetool
 - name: apiName
@@ -45,21 +47,11 @@ variables:
   value: /content/applicationview/
 - name: EnableAzureMonitorAlerting
   value: true
-- name: aspTier
-  value: Standard
-- name: aspInstances
-  value: 2
-- name: aspSize
-  value: 1
 - name: clientAffinity
   value: false
 - name: appDatabaseThroughput
   value: 2500
 - name: ExceptionCountThreshold
   value: 10
-- name: MemoryPercentageThreshold
-  value: 75
-- name: CPUPercentageThreshold
-  value: 75
 - name: contentMode
   value: PUBLISHED
