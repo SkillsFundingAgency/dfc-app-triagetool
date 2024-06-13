@@ -45,6 +45,9 @@
         "cosmosDbKey": {
             "type": "securestring"
         },
+        "CmsCacheKeyExpiry": {
+            "type": "string"
+        },
         "environment": {
             "type": "string"
         },
@@ -321,6 +324,10 @@
                             {
                                 "name": "CmsApiClientOptions__BaseAddress",
                                 "value": "[parameters('contentUrl')]"
+                            },
+                            {
+                                "name": "Cms_CacheKeyExpiry",
+                                "value": "[parameters('CmsCacheKeyExpiry')]"
                             },
                             {
                                 "name": "CmsApiClientOptions__SummaryEndpoint",

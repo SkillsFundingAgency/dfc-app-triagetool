@@ -44,6 +44,9 @@
         "CosmosDbResourceGroup": {
             "value": "__appSharedResourceGroup__"
         },
+        "CmsCacheKeyExpiry": {
+            "value": "__CmsCacheKeyExpiry__"
+        },
         "environment": {
             "value": "__ReleaseEnvironmentName__",
             "metadata": {
