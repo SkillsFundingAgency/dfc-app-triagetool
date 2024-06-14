@@ -31,20 +31,6 @@ variables:
   value: https://$(AppServiceName).$(appServiceDomain)
 - name: WebAppPrefix
   value: dfc-pp-draft-app-triagetool
-- name: SubscriptionSettingsFilterIncludeEventTypes3
-  value: draft-discarded
-- name: SubscriptionSettingsFilterIncludeEventTypes4
-  value: draft
-- name: SubscriptionSettingsFilterPropertyContainsFilters0Values0
-  value: 2c9da1b3-3529-4834-afc9-9cd741e59788
-- name: SubscriptionSettingsFilterPropertyContainsFilters0Values1
-  value: /content/page/
-- name: SubscriptionSettingsFilterPropertyContainsFilters0Values2
-  value: /content/triagetooloption/
-- name: SubscriptionSettingsFilterPropertyContainsFilters0Values3
-  value: /content/triagetoolfilter/
-- name: SubscriptionSettingsFilterPropertyContainsFilters0Values4
-  value: /content/applicationview/
 - name: EnableAzureMonitorAlerting
   value: true
 - name: aspTier

@@ -8,6 +8,15 @@
         "appSharedStorageAccountName": {
             "value": "dfcdevappsharedstr"
         },
+        "aspSize": {
+            "value": "2"
+        },
+        "aspTier": {
+            "value": "Standard"
+        },
+        "aspInstances": {
+            "value": 2
+        },
         "appServiceName": {
             "value": "dfc-foo-app-triagetool-as-ver2"
         },
@@ -50,9 +59,6 @@
         "Environment": {
             "value": "FOO"
         },
-        "CosmosDbResourceGroup": {
-            "value": "dfc-dev-app-sharedresources-rg"
-        },
         "appDatabaseNeedsCreation": {
             "value": true
         },
@@ -62,40 +68,13 @@
         "enableAlerts": {
             "value": false
         },
-        "SubscriptionSettingsEndpoint": {
-            "value": "http://www.food.co.uk"
-        },
         "apimCompositeApiKey": {
             "value": "fake-key-mate"
-        },
-        "SubscriptionSettingsFilterIncludeEventTypes3": {
-            "value": "value"
-        },
-        "SubscriptionSettingsFilterIncludeEventTypes4": {
-            "value": "anothervalue"
-        },
-        "SubscriptionSettingsFilterPropertyContainsFilters0Values0": {
-            "value": "anothervalue"
-        },
-        "SubscriptionSettingsFilterPropertyContainsFilters0Values1": {
-            "value": "anothervalue"
-        },
-        "SubscriptionSettingsFilterPropertyContainsFilters0Values2": {
-            "value": "anothervalue"
-        },
-        "SubscriptionSettingsFilterPropertyContainsFilters0Values3": {
-            "value": "anothervalue"
-        },
-        "SubscriptionSettingsFilterPropertyContainsFilters0Values4": {
-            "value": "anothervalue"
         },
         "ApplicationName": {
             "value": "anothervalue"
         },
         "contentUrl": {
-            "value": "anothervalue"
-        },
-        "subscriptionUrl": {
             "value": "anothervalue"
         },
         "ApimResourceGroup": {
