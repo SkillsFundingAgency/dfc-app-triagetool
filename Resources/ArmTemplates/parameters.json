@@ -8,14 +8,11 @@
         "appSharedStorageAccountName": {
             "value": "__appSharedStorageAccountName__"
         },
-        "aseHostingEnvironmentName": {
-            "value": "__AseServiceName__"
+        "appServiceName": {
+            "value": "__AppServiceName__"
         },
-        "aseResourceGroup": {
-            "value": "__aseResourceGroup__"
-        },
-        "aspInstances": {
-            "value": __aspInstances__
+        "appServicePlanSuffix": {
+            "value": "__AppServicePlanSuffix__"
         },
         "clientAffinity": {
             "value": __clientAffinity__
@@ -43,6 +40,15 @@
         },
         "aspSize": {
             "value": "__aspSize__"
+        },
+        "cosmosDBName": {
+            "value": "__appSharedCosmosDBName__"
+        },
+        "cosmosDbKey": {
+            "value": "__appSharedCosmosPrimaryKey__"
+        },
+        "CosmosDbResourceGroup": {
+            "value": "__appSharedResourceGroup__"
         },
         "environment": {
             "value": "__ReleaseEnvironmentName__",
