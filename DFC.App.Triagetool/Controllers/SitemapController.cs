@@ -16,16 +16,24 @@ namespace DFC.App.Triagetool.Controllers
     public class SitemapController : Controller
     {
         public const string SitemapViewCanonicalName = "sitemap";
+        private const string ExpiryAppSettings = "Cms:Expiry";
         private readonly ILogger<SitemapController> logger;
         private readonly ISharedContentRedisInterface sharedContentRedis;
         private readonly IConfiguration configuration;
         private string status;
+        private double expiry = 4;
 
         public SitemapController(ILogger<SitemapController> logger, ISharedContentRedisInterface sharedContentRedis, IConfiguration configuration)
         {
             this.logger = logger;
             this.sharedContentRedis = sharedContentRedis;
+            this.configuration = configuration;
             status = configuration.GetSection("contentMode:contentMode").Get<string>();
+            if (this.configuration != null)
+            {
+                string expiryAppString = this.configuration.GetSection(ExpiryAppSettings).Get<string>();
+                this.expiry = double.Parse(string.IsNullOrEmpty(expiryAppString) ? "4" : expiryAppString);
+            }
         }
 
         [HttpGet]
@@ -50,10 +58,10 @@ namespace DFC.App.Triagetool.Controllers
 
             var sitemapUrlPrefix = $"{Request.GetBaseAddress()}{PagesController.RegistrationPath}";
             var sitemap = new Sitemap();
-            var triagetooldocuments = await sharedContentRedis.GetDataAsync<TriageToolFilterResponse>(AppConstants.TriageToolFilters, status);
+            var triagetooldocuments = await sharedContentRedis.GetDataAsyncWithExpiry<TriageToolFilterResponse>(AppConstants.TriageToolFilters, status, expiry);
 
-                if (triagetooldocuments != null )
-                {
+            if (triagetooldocuments != null)
+            {
                 for (int i = 0; i < triagetooldocuments.TriageToolFilter.Count; i++)
                 {
                     TriageToolFilters? contentPageModel = triagetooldocuments.TriageToolFilter[i];

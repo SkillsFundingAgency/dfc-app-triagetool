@@ -25,11 +25,13 @@ namespace DFC.App.Triagetool.Controllers
         public const string DefaultPageTitleSuffix = BradcrumbTitle + " | National Careers Service";
         public const string PageTitleSuffix = " | " + DefaultPageTitleSuffix;
 
+        private const string ExpiryAppSettings = "Cms:Expiry";
         private readonly ILogger<PagesController> logger;
         private readonly IConfiguration configuration;
         private string status = string.Empty;
         private readonly AutoMapper.IMapper mapper;
         private readonly ISharedContentRedisInterface sharedContentRedis;
+        private double expiry = 4;
 
         public PagesController(
             ILogger<PagesController> logger,
@@ -37,10 +39,16 @@ namespace DFC.App.Triagetool.Controllers
             ISharedContentRedisInterface sharedContentRedis,
             IConfiguration configuration)
         {
+            this.configuration = configuration;
             this.logger = logger;
             this.mapper = mapper;
             this.sharedContentRedis = sharedContentRedis;
             status = configuration.GetSection("contentMode:contentMode").Get<string>();
+            if (this.configuration != null)
+            {
+                string expiryAppString = this.configuration.GetSection(ExpiryAppSettings).Get<string>();
+                this.expiry = double.Parse(string.IsNullOrEmpty(expiryAppString) ? "4" : expiryAppString);
+            }
         }
 
         [HttpGet]
@@ -111,7 +119,7 @@ namespace DFC.App.Triagetool.Controllers
                 status = "PUBLISHED";
             }
 
-            var triagetooldocuments = await sharedContentRedis.GetDataAsync<TriagePageResponse>(Constants.TriagePages, status);
+            var triagetooldocuments = await sharedContentRedis.GetDataAsyncWithExpiry<TriagePageResponse>(Constants.TriagePages, status, expiry);
             if (article != null)
             {
                 article = string.Concat(article[0].ToString().ToUpper(), article.AsSpan(1));
@@ -127,7 +135,7 @@ namespace DFC.App.Triagetool.Controllers
 
             try
             {
-                var sharedhtml = await this.sharedContentRedis.GetDataAsync<SharedHtml>(Constants.SpeakToAnAdviserSharedContent, status);
+                var sharedhtml = await this.sharedContentRedis.GetDataAsyncWithExpiry<SharedHtml>(Constants.SpeakToAnAdviserSharedContent, status, expiry);
                 triageToolModel.SharedContent = sharedhtml?.Html;
             }
             catch
@@ -158,7 +166,7 @@ namespace DFC.App.Triagetool.Controllers
                 status = "PUBLISHED";
             }
 
-            var triageFilters = await sharedContentRedis.GetDataAsync<TriageToolFilterResponse>(Constants.TriageToolFilters, status);
+            var triageFilters = await sharedContentRedis.GetDataAsyncWithExpiry<TriageToolFilterResponse>(Constants.TriageToolFilters, status, expiry);
 
             var viewModel = new HeroBannerViewModel
             {
@@ -182,8 +190,8 @@ namespace DFC.App.Triagetool.Controllers
                 status = "PUBLISHED";
             }
 
-            var triagetooldocuments = await sharedContentRedis.GetDataAsync<TriagePageResponse>(Constants.TriagePages, status);
-            var triageFilters = await sharedContentRedis.GetDataAsync<TriageToolFilterResponse>(Constants.TriageToolFilters, status);
+            var triagetooldocuments = await sharedContentRedis.GetDataAsyncWithExpiry<TriagePageResponse>(Constants.TriagePages, status, expiry);
+            var triageFilters = await sharedContentRedis.GetDataAsyncWithExpiry<TriageToolFilterResponse>(Constants.TriageToolFilters, status, expiry);
             var sortedFilters = triageFilters.TriageToolFilter;
 
             List<TriageModelClass> modelClass = new List<TriageModelClass>();

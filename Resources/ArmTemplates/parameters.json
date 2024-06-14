@@ -112,6 +112,9 @@
         },
         "contentMode":{
             "value": "__contentMode__"
+        },
+        "Expiry": {
+            "value": "__Expiry__"
         }
     }
 }

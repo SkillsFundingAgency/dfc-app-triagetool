@@ -89,6 +89,9 @@
         },
         "contentMode": {
             "type": "string"
+        },
+        "Expiry": {
+          "type": "string"
         }
     },
     "variables": {
@@ -256,6 +259,10 @@
                             {
                                 "name": "contentMode__contentMode",
                                 "value": "[parameters('contentMode')]"
+                            },
+                            {
+                              "name": "Cms__Expiry",
+                              "value": "[parameters('Expiry')]"
                             }
                         ]
                     }
