@@ -35,18 +35,6 @@
         "RedisCacheConnectionString": {
             "value": "__RedisConnectionString__"
         },
-        "aspTier": {
-            "value": "__aspTier__"
-        },
-        "aspSize": {
-            "value": "__aspSize__"
-        },
-        "cosmosDBName": {
-            "value": "__appSharedCosmosDBName__"
-        },
-        "cosmosDbKey": {
-            "value": "__appSharedCosmosPrimaryKey__"
-        },
         "CosmosDbResourceGroup": {
             "value": "__appSharedResourceGroup__"
         },
