@@ -23,14 +23,6 @@ variables:
   value: dfc-prd-draft-app-triagetool
 - name: EnableAzureMonitorAlerting
   value: true
-- name: aspTier
-  value: Standard
-- name: aspInstances
-  value: 2
-- name: aspSize
-  value: 1
-- name: clientAffinity
-  value: false
 - name: appDatabaseThroughput
   value: 2500
 - name: ExceptionCountThreshold

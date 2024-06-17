@@ -15,9 +15,6 @@
             "type": "string",
             "defaultValue": ""
         },
-        "clientAffinity": {
-            "type": "bool"
-        },
         "TokenEndPointURL": {
             "type": "string"
         },
@@ -188,7 +185,7 @@
                         "value": true
                     },
                     "clientAffinity": {
-                        "value": "[parameters('clientAffinity')]"
+                        "value": false
                     },
                     "appServiceAppSettings": {
                         "value": [
