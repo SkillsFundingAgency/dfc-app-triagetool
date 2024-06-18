@@ -21,7 +21,7 @@ namespace DFC.App.Triagetool.Controllers
         private readonly ISharedContentRedisInterface sharedContentRedis;
         private readonly IConfiguration configuration;
         private string status;
-        private double expiry = 4;
+        private double expiryInHours = 4;
 
         public SitemapController(ILogger<SitemapController> logger, ISharedContentRedisInterface sharedContentRedis, IConfiguration configuration)
         {
@@ -32,7 +32,10 @@ namespace DFC.App.Triagetool.Controllers
             if (this.configuration != null)
             {
                 string expiryAppString = this.configuration.GetSection(ExpiryAppSettings).Get<string>();
-                this.expiry = double.Parse(string.IsNullOrEmpty(expiryAppString) ? "4" : expiryAppString);
+                if (double.TryParse(expiryAppString, out var expiryAppStringParseResult))
+                {
+                    expiryInHours = expiryAppStringParseResult;
+                }
             }
         }
 
@@ -58,7 +61,7 @@ namespace DFC.App.Triagetool.Controllers
 
             var sitemapUrlPrefix = $"{Request.GetBaseAddress()}{PagesController.RegistrationPath}";
             var sitemap = new Sitemap();
-            var triagetooldocuments = await sharedContentRedis.GetDataAsyncWithExpiry<TriageToolFilterResponse>(AppConstants.TriageToolFilters, status, expiry);
+            var triagetooldocuments = await sharedContentRedis.GetDataAsyncWithExpiry<TriageToolFilterResponse>(AppConstants.TriageToolFilters, status, expiryInHours);
 
             if (triagetooldocuments != null)
             {
