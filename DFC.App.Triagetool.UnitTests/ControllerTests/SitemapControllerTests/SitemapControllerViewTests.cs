@@ -1,25 +1,24 @@
 ﻿using DFC.App.Triagetool.Controllers;
 using DFC.Common.SharedContent.Pkg.Netcore.Interfaces;
-using DFC.Common.SharedContent.Pkg.Netcore.Model.ContentItems;
+using DFC.Common.SharedContent.Pkg.Netcore.Model.Common;
 using DFC.Common.SharedContent.Pkg.Netcore.Model.Response;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Moq;
 using System.Collections.Generic;
 using System.Net.Mime;
 using System.Threading.Tasks;
 using Xunit;
-using Moq;
 using AppConstants = DFC.Common.SharedContent.Pkg.Netcore.Constant.ApplicationKeys;
-using DFC.Common.SharedContent.Pkg.Netcore.Model.Common;
-using Microsoft.Extensions.Configuration;
 
 
 namespace DFC.App.Triagetool.UnitTests.ControllerTests.SitemapControllerTests
 {
     [Trait("Category", "Sitemap Controller Unit Tests")]
-    public class SitemapControllerViewTests : BaseSitemapControllerTests
+    public class SitemapControllerViewTests
     {
         [Fact]
         public async Task Sitemap_ReturnsNoContent_When_TriageToolFilterResponseIsNull()
@@ -40,7 +39,7 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.SitemapControllerTests
             httpContextMock.Setup(c => c.Request).Returns(requestMock.Object);
 
             var sharedContentRedisMock = new Mock<ISharedContentRedisInterface>();
-            sharedContentRedisMock.Setup(m => m.GetDataAsync<TriageToolFilterResponse>("TriageToolFilters/All","PUBLISHED")).ReturnsAsync((TriageToolFilterResponse)null);
+            sharedContentRedisMock.Setup(m => m.GetDataAsync<TriageToolFilterResponse>("TriageToolFilters/All","PUBLISHED", 4)).ReturnsAsync((TriageToolFilterResponse)null);
 
             var controller = new SitemapController(loggerMock.Object, sharedContentRedisMock.Object, configuration);
 
@@ -82,7 +81,7 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.SitemapControllerTests
                     },
                 },
             };
-            sharedContentRedisMock.Setup(m => m.GetDataAsync<TriageToolFilterResponse>(AppConstants.TriageToolFilters, "PUBLISHED")).ReturnsAsync(triageToolFilterResponse);
+            sharedContentRedisMock.Setup(m => m.GetDataAsync<TriageToolFilterResponse>(AppConstants.TriageToolFilters, "PUBLISHED", 4)).ReturnsAsync(triageToolFilterResponse);
 
             var controller = new SitemapController(loggerMock.Object, sharedContentRedisMock.Object, configuration);
 

@@ -30,8 +30,4 @@
     </PackageReference>
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\DFC.App.Triagetool.Data\DFC.App.Triagetool.Data.csproj" />
-  </ItemGroup>
-
 </Project>
