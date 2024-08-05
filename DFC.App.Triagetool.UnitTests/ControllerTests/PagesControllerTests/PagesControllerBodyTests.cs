@@ -111,6 +111,7 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
                 new () { DisplayText = "Option2" },
             },
             };
+            
             redisMock.Setup(r => r.GetDataAsync<TriageToolFilterResponse>("TriageTool/TriageToolFilters/All", "PUBLISHED", 4))
                      .ReturnsAsync(triageToolFilterResponse);
 

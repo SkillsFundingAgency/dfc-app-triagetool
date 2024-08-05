@@ -5,10 +5,6 @@ variables:
   value: $(WebAppPrefix)-as-ver2
 - name: AppServicePlanSuffix
   value: -migrated
-- name: cosmosDBCollectionName
-  value: shared-content-draft
-- name: triagetoolDbCollectionName
-  value: triagetool-draft
 - name: ResourceGroup
   value: $(WebAppPrefix)-rg
 - name: WebAppProjectName
@@ -33,21 +29,11 @@ variables:
   value: dfc-pp-draft-app-triagetool
 - name: EnableAzureMonitorAlerting
   value: true
-- name: aspTier
-  value: Standard
-- name: aspInstances
-  value: 2
-- name: aspSize
-  value: 1
-- name: clientAffinity
-  value: false
 - name: appDatabaseThroughput
   value: 2500
 - name: ExceptionCountThreshold
   value: 10
-- name: MemoryPercentageThreshold
-  value: 75
-- name: CPUPercentageThreshold
-  value: 75
 - name: contentMode
   value: DRAFT
+- name: Expiry
+  value: 4
