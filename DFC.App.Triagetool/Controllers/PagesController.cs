@@ -5,6 +5,7 @@ using DFC.App.Triagetool.ViewModels;
 using DFC.Common.SharedContent.Pkg.Netcore.Interfaces;
 using DFC.Common.SharedContent.Pkg.Netcore.Model.ContentItems.SharedHtml;
 using DFC.Common.SharedContent.Pkg.Netcore.Model.Response;
+using Google.Protobuf.WellKnownTypes;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -112,9 +113,12 @@ namespace DFC.App.Triagetool.Controllers
             }
 
             var triagetooldocuments = await sharedContentRedis.GetDataAsync<TriagePageResponse>(Constants.TriagePages, status);
-            if (article != null)
+            var triageFilters = await sharedContentRedis.GetDataAsync<TriageToolFilterResponse>(Constants.TriageToolFilters, status);
+            var sortedFilters = triageFilters?.TriageToolFilter.Select(x => x.DisplayText).OrderBy(o => o).ToList() !;
+
+            if (article != null && sortedFilters != null)
             {
-                article = string.Concat(article[0].ToString().ToUpper(), article.AsSpan(1));
+                article = FormatFilterCase(article, sortedFilters);
             }
 
             var subList = triagetooldocuments?.Page?.Where(doc => doc.TriageToolFilters.ContentItems.Any(tp => tp.DisplayText == article)).ToList();
@@ -160,14 +164,16 @@ namespace DFC.App.Triagetool.Controllers
 
             var triageFilters = await sharedContentRedis.GetDataAsync<TriageToolFilterResponse>(Constants.TriageToolFilters, status);
 
-            var viewModel = new HeroBannerViewModel
-            {
-                Selected = article,
-            };
+            var viewModel = new HeroBannerViewModel();
 
             if (triageFilters != null)
             {
-                viewModel.Options = triageFilters?.TriageToolFilter.Select(x => x.DisplayText).OrderBy(o => o).ToList()!;
+                viewModel.Options = triageFilters?.TriageToolFilter.Select(x => x.DisplayText).OrderBy(o => o).ToList() !;
+
+                if (viewModel.Options.Count > 0)
+                {
+                   viewModel.Selected = FormatFilterCase(article, viewModel.Options);
+                }
             }
 
             return View(viewModel);
@@ -207,6 +213,20 @@ namespace DFC.App.Triagetool.Controllers
             }
 
             return Json(modelClass);
+        }
+
+        private string FormatFilterCase(string article, List<string> sortedFilters)
+        {
+            foreach (var option in sortedFilters)
+            {
+                if (string.Equals(option, article, StringComparison.CurrentCultureIgnoreCase))
+                {
+                    article = option;
+                    break;
+                }
+            }
+
+            return article;
         }
     }
 }
