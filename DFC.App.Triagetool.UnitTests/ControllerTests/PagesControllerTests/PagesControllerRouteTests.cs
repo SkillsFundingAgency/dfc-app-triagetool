@@ -41,7 +41,7 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
                 },
             };
 
-            A.CallTo(() => FakeSharedContentRedisInterface.GetDataAsyncWithExpiry<TriageToolFilterResponse>("Test", "PUBLISHED", 4)).Returns(expected);
+            A.CallTo(() => FakeSharedContentRedisInterface.GetDataAsync<TriageToolFilterResponse>("TriageTool/TriageToolFilters/All", "PUBLISHED", 4)).Returns(expected);
 
             // Act
             var result = await RunControllerAction(controller, option, actionMethod).ConfigureAwait(false);
