@@ -35,7 +35,7 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
             var mapperMock = new Mock<IMapper>();
             var loggerMock = new Mock<ILogger<PagesController>>();
 
-            redisMock.Setup(r => r.GetDataAsync<TriageToolFilterResponse>("TriageTool/TriageToolFilters/All", "PUBLISHED", 4))
+            redisMock.Setup(r => r.GetDataAsyncWithExpiry<TriageToolFilterResponse>("TriageTool/TriageToolFilters/All", "PUBLISHED", 4))
                      .ReturnsAsync((TriageToolFilterResponse)null);
 
             var controller = new PagesController(loggerMock.Object, mapperMock.Object, redisMock.Object, configuration);
@@ -70,13 +70,13 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
                 new () { DisplayText = "Option2" },
             },
             };
-            redisMock.Setup(r => r.GetDataAsync<TriageToolFilterResponse>("TriageTool/TriageToolFilters/All", "PUBLISHED", 4))
+            redisMock.Setup(r => r.GetDataAsyncWithExpiry<TriageToolFilterResponse>("TriageTool/TriageToolFilters/All", "PUBLISHED", 4))
                      .ReturnsAsync(triageToolFilterResponse);
 
             var controller = new PagesController(loggerMock.Object, mapperMock.Object, redisMock.Object, configuration);
 
             var triagePageResponse = new TriagePageResponse();
-            redisMock.Setup(r => r.GetDataAsync<TriagePageResponse>("TriageTool/TriageToolPages", "PUBLISHED", 4)).ReturnsAsync(triagePageResponse);
+            redisMock.Setup(r => r.GetDataAsyncWithExpiry<TriagePageResponse>("TriageTool/TriageToolPages", "PUBLISHED", 4)).ReturnsAsync(triagePageResponse);
 
             // Act
             var result = await controller.Body("Article");
@@ -112,13 +112,13 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
             },
             };
             
-            redisMock.Setup(r => r.GetDataAsync<TriageToolFilterResponse>("TriageTool/TriageToolFilters/All", "PUBLISHED", 4))
+            redisMock.Setup(r => r.GetDataAsyncWithExpiry<TriageToolFilterResponse>("TriageTool/TriageToolFilters/All", "PUBLISHED", 4))
                      .ReturnsAsync(triageToolFilterResponse);
 
             var controller = new PagesController(loggerMock.Object, mapperMock.Object, redisMock.Object, configuration);
 
             var triagePageResponse = new TriagePageResponse();
-            redisMock.Setup(x => x.GetDataAsync<TriagePageResponse>("TriageTool/TriageToolPages", "PUBLISHED", 4)).ReturnsAsync(triagePageResponse);
+            redisMock.Setup(x => x.GetDataAsyncWithExpiry<TriagePageResponse>("TriageTool/TriageToolPages", "PUBLISHED", 4)).ReturnsAsync(triagePageResponse);
 
             // Act
             var result = await controller.Body("Article");

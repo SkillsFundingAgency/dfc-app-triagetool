@@ -123,8 +123,8 @@ namespace DFC.App.Triagetool.Controllers
                 status = "PUBLISHED";
             }
 
-            var triagetooldocuments = await sharedContentRedis.GetDataAsync<TriagePageResponse>(Constants.TriagePages, status);
-            var triageFilters = await sharedContentRedis.GetDataAsync<TriageToolFilterResponse>(Constants.TriageToolFilters, status);
+            var triagetooldocuments = await sharedContentRedis.GetDataAsyncWithExpiry<TriagePageResponse>(Constants.TriagePages, status, expiryInHours);
+            var triageFilters = await sharedContentRedis.GetDataAsyncWithExpiry<TriageToolFilterResponse>(Constants.TriageToolFilters, status, expiryInHours);
             var sortedFilters = triageFilters?.TriageToolFilter.Select(x => x.DisplayText).OrderBy(o => o).ToList() !;
 
             if (article != null && sortedFilters != null)
