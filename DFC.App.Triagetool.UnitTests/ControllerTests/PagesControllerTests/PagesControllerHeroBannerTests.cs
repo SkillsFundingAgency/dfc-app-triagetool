@@ -37,7 +37,7 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
                 .Build();
             var loggerMock = new Mock<ILogger<PagesController>>();
 
-            redisMock.Setup(m => m.GetDataAsync<TriageToolFilterResponse>("Test", "PUBLISHED", 4)).ReturnsAsync((TriageToolFilterResponse)null);
+            redisMock.Setup(m => m.GetDataAsyncWithExpiry<TriageToolFilterResponse>("Test", "PUBLISHED", 4)).ReturnsAsync((TriageToolFilterResponse)null);
             var controller = new PagesController(loggerMock.Object, mapperMock.Object, redisMock.Object, configuration);
 
             // Act
@@ -81,7 +81,7 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
                     },
                 },
             };
-            sharedContentRedisMock.Setup(m => m.GetDataAsync<TriageToolFilterResponse>(AppConstants.TriageToolFilters, "PUBLISHED", 4)).ReturnsAsync(triageToolFilterResponse);
+            sharedContentRedisMock.Setup(m => m.GetDataAsyncWithExpiry<TriageToolFilterResponse>(AppConstants.TriageToolFilters, "PUBLISHED", 4)).ReturnsAsync(triageToolFilterResponse);
 
             var controller = new PagesController(loggerMock.Object, mapperMock.Object, sharedContentRedisMock.Object, configuration);
 

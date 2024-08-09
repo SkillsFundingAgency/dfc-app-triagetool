@@ -5,10 +5,6 @@ variables:
   value: $(WebAppPrefix)-as-ver2
 - name: AppServicePlanSuffix
   value: -migrated
-- name: cosmosDBCollectionName
-  value: shared-content
-- name: triagetoolDbCollectionName
-  value: triagetool
 - name: ResourceGroup
   value: $(WebAppPrefix)-rg
 - name: WebAppProjectName
@@ -33,11 +29,11 @@ variables:
   value: dfc-pp-app-triagetool
 - name: EnableAzureMonitorAlerting
   value: true
-- name: clientAffinity
-  value: false
 - name: appDatabaseThroughput
   value: 2500
 - name: ExceptionCountThreshold
   value: 10
 - name: contentMode
   value: PUBLISHED
+- name: Expiry
+  value: 4

@@ -14,9 +14,6 @@
         "appServicePlanSuffix": {
             "value": "suffix"
         },
-        "clientAffinity": {
-            "value": false
-        },
         "TokenEndPointURL": {
             "value": "test"
         },
@@ -88,6 +85,9 @@
         },
         "contentMode":{
             "value": "PUBLISHED"
+        },
+        "Expiry": {
+          "value": "4"
         }
     }
 }

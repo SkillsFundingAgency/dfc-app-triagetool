@@ -5,6 +5,7 @@ using DFC.App.Triagetool.ViewModels;
 using DFC.Common.SharedContent.Pkg.Netcore.Interfaces;
 using DFC.Common.SharedContent.Pkg.Netcore.Model.ContentItems.SharedHtml;
 using DFC.Common.SharedContent.Pkg.Netcore.Model.Response;
+using Google.Protobuf.WellKnownTypes;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -25,11 +26,13 @@ namespace DFC.App.Triagetool.Controllers
         public const string DefaultPageTitleSuffix = BradcrumbTitle + " | National Careers Service";
         public const string PageTitleSuffix = " | " + DefaultPageTitleSuffix;
 
+        private const string ExpiryAppSettings = "Cms:Expiry";
         private readonly ILogger<PagesController> logger;
         private readonly IConfiguration configuration;
         private string status = string.Empty;
         private readonly AutoMapper.IMapper mapper;
         private readonly ISharedContentRedisInterface sharedContentRedis;
+        private double expiryInHours = 4;
 
         public PagesController(
             ILogger<PagesController> logger,
@@ -37,10 +40,19 @@ namespace DFC.App.Triagetool.Controllers
             ISharedContentRedisInterface sharedContentRedis,
             IConfiguration configuration)
         {
+            this.configuration = configuration;
             this.logger = logger;
             this.mapper = mapper;
             this.sharedContentRedis = sharedContentRedis;
             status = configuration.GetSection("contentMode:contentMode").Get<string>();
+            if (this.configuration != null)
+            {
+                string expiryAppString = this.configuration.GetSection(ExpiryAppSettings).Get<string>();
+                if (double.TryParse(expiryAppString, out var expiryAppStringParseResult))
+                {
+                    expiryInHours = expiryAppStringParseResult;
+                }
+            }
         }
 
         [HttpGet]
@@ -111,10 +123,13 @@ namespace DFC.App.Triagetool.Controllers
                 status = "PUBLISHED";
             }
 
-            var triagetooldocuments = await sharedContentRedis.GetDataAsync<TriagePageResponse>(Constants.TriagePages, status);
-            if (article != null)
+            var triagetooldocuments = await sharedContentRedis.GetDataAsyncWithExpiry<TriagePageResponse>(Constants.TriagePages, status, expiryInHours);
+            var triageFilters = await sharedContentRedis.GetDataAsyncWithExpiry<TriageToolFilterResponse>(Constants.TriageToolFilters, status, expiryInHours);
+            var sortedFilters = triageFilters?.TriageToolFilter.Select(x => x.DisplayText).OrderBy(o => o).ToList() !;
+
+            if (article != null && sortedFilters != null)
             {
-                article = string.Concat(article[0].ToString().ToUpper(), article.AsSpan(1));
+                article = FormatFilterCase(article, sortedFilters);
             }
 
             var subList = triagetooldocuments?.Page?.Where(doc => doc.TriageToolFilters.ContentItems.Any(tp => tp.DisplayText == article)).ToList();
@@ -127,7 +142,7 @@ namespace DFC.App.Triagetool.Controllers
 
             try
             {
-                var sharedhtml = await this.sharedContentRedis.GetDataAsync<SharedHtml>(Constants.SpeakToAnAdviserSharedContent, status);
+                var sharedhtml = await this.sharedContentRedis.GetDataAsyncWithExpiry<SharedHtml>(Constants.SpeakToAnAdviserSharedContent, status, expiryInHours);
                 triageToolModel.SharedContent = sharedhtml?.Html;
             }
             catch
@@ -158,16 +173,18 @@ namespace DFC.App.Triagetool.Controllers
                 status = "PUBLISHED";
             }
 
-            var triageFilters = await sharedContentRedis.GetDataAsync<TriageToolFilterResponse>(Constants.TriageToolFilters, status);
+            var triageFilters = await sharedContentRedis.GetDataAsyncWithExpiry<TriageToolFilterResponse>(Constants.TriageToolFilters, status, expiryInHours);
 
-            var viewModel = new HeroBannerViewModel
-            {
-                Selected = article,
-            };
+            var viewModel = new HeroBannerViewModel();
 
             if (triageFilters != null)
             {
-                viewModel.Options = triageFilters?.TriageToolFilter.Select(x => x.DisplayText).OrderBy(o => o).ToList()!;
+                viewModel.Options = triageFilters?.TriageToolFilter.Select(x => x.DisplayText).OrderBy(o => o).ToList() !;
+
+                if (viewModel.Options.Count > 0)
+                {
+                   viewModel.Selected = FormatFilterCase(article, viewModel.Options);
+                }
             }
 
             return View(viewModel);
@@ -182,8 +199,8 @@ namespace DFC.App.Triagetool.Controllers
                 status = "PUBLISHED";
             }
 
-            var triagetooldocuments = await sharedContentRedis.GetDataAsync<TriagePageResponse>(Constants.TriagePages, status);
-            var triageFilters = await sharedContentRedis.GetDataAsync<TriageToolFilterResponse>(Constants.TriageToolFilters, status);
+            var triagetooldocuments = await sharedContentRedis.GetDataAsyncWithExpiry<TriagePageResponse>(Constants.TriagePages, status, expiryInHours);
+            var triageFilters = await sharedContentRedis.GetDataAsyncWithExpiry<TriageToolFilterResponse>(Constants.TriageToolFilters, status, expiryInHours);
             var sortedFilters = triageFilters.TriageToolFilter;
 
             List<TriageModelClass> modelClass = new List<TriageModelClass>();
@@ -207,6 +224,20 @@ namespace DFC.App.Triagetool.Controllers
             }
 
             return Json(modelClass);
+        }
+
+        private string FormatFilterCase(string article, List<string> sortedFilters)
+        {
+            foreach (var option in sortedFilters)
+            {
+                if (string.Equals(option, article, StringComparison.CurrentCultureIgnoreCase))
+                {
+                    article = option;
+                    break;
+                }
+            }
+
+            return article;
         }
     }
 }

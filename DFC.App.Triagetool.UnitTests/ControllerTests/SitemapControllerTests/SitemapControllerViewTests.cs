@@ -39,7 +39,7 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.SitemapControllerTests
             httpContextMock.Setup(c => c.Request).Returns(requestMock.Object);
 
             var sharedContentRedisMock = new Mock<ISharedContentRedisInterface>();
-            sharedContentRedisMock.Setup(m => m.GetDataAsync<TriageToolFilterResponse>("TriageToolFilters/All","PUBLISHED", 4)).ReturnsAsync((TriageToolFilterResponse)null);
+            sharedContentRedisMock.Setup(m => m.GetDataAsyncWithExpiry<TriageToolFilterResponse>("TriageToolFilters/All","PUBLISHED", 4)).ReturnsAsync((TriageToolFilterResponse)null);
 
             var controller = new SitemapController(loggerMock.Object, sharedContentRedisMock.Object, configuration);
 
@@ -81,7 +81,7 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.SitemapControllerTests
                     },
                 },
             };
-            sharedContentRedisMock.Setup(m => m.GetDataAsync<TriageToolFilterResponse>(AppConstants.TriageToolFilters, "PUBLISHED", 4)).ReturnsAsync(triageToolFilterResponse);
+            sharedContentRedisMock.Setup(m => m.GetDataAsyncWithExpiry<TriageToolFilterResponse>(AppConstants.TriageToolFilters, "PUBLISHED", 4)).ReturnsAsync(triageToolFilterResponse);
 
             var controller = new SitemapController(loggerMock.Object, sharedContentRedisMock.Object, configuration);
 

@@ -14,9 +14,6 @@
         "appServicePlanSuffix": {
             "value": "__AppServicePlanSuffix__"
         },
-        "clientAffinity": {
-            "value": __clientAffinity__
-        },
         "TokenEndPointURL": {
             "value": "__StaxGraphqlTokenEndPointURL__"
         },
@@ -91,6 +88,9 @@
         },
         "contentMode":{
             "value": "__contentMode__"
+        },
+        "Expiry": {
+            "value": "__Expiry__"
         }
     }
 }
