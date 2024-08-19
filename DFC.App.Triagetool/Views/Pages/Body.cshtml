@@ -3,6 +3,79 @@
 @model TriageToolOptionViewModel
 
 <div>
+    <form method="post" novalidate="novalidate" action="/triagetool" id="triageToolFilters">
+        <div class="govuk-grid-row govuk-!-margin-top-2 govuk-!-padding-top-5">
+            <div class="govuk-grid-column-full">
+                <div class="" style="width: 960px; height: 424px">
+                    <div style="background-color: #F3F2F1; width: 960px; height: 50px">
+                        <label>Change or refine the careers advice you see </label>
+                        <a href="/">Clear all</a>
+                    </div>
+                    <div>
+                        <label>I'm</label>
+                        <select id="triageLevelOne" name="triage-level-one" class="govuk-select triage-select">
+                            @foreach (var levelOne in Model.TriageLevelOnes)
+                            {
+                                if (Model.SelectedLevelOne != null && Model.SelectedLevelOne.Equals(levelOne.Title, StringComparison.OrdinalIgnoreCase))
+                                {
+                                    <option value="@levelOne.Title" selected>@levelOne.Title</option>
+                                }
+                                else
+                                {
+                                    <option value="@levelOne.Title">@levelOne.Title</option>
+                                }
+                            }
+                        </select>
+
+                        <label>and</label>
+                        <select id="triageLevelTwo" name="triage-level-two" class="govuk-select triage-select">
+                            @if (Model.TriageLevelTwos != null)
+                            {
+                                @foreach (var levelTwo in Model.TriageLevelTwos)
+                                {
+                                    if (Model.SelectedLevelTwo != null && Model.SelectedLevelTwo.Equals(levelTwo.Title, StringComparison.OrdinalIgnoreCase))
+                                    {
+                                        <option value="@levelTwo.Title" selected>@levelTwo.Title</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@levelTwo.Title">@levelTwo.Title</option>
+                                    }
+                                }
+                                
+                            }
+                           
+
+                        </select>
+                    </div>
+                    <div>
+                        <label>Select the advice you want to see</label>
+                    </div>
+                    <div>
+
+                    </div>
+                    <div>
+                        <button>Apply Filters</button>
+                    </div>
+
+                </div>
+            </div>
+            <div>
+                Showing @Model.Pages.Count() career resources
+            </div>
+            <div>
+                <div>Filter Text as Head</div>
+                <div>
+                    Image
+                </div>
+                <div>
+                    Page title
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+@* <div>
     <form method="post" novalidate="novalidate" action="/triagetool" id="TriageToolFilters">
         <div class="govuk-grid-row govuk-!-margin-top-2 govuk-!-padding-top-5">
             <div class="govuk-grid-column-one-third triage-filter-hide">
@@ -71,4 +144,4 @@
             </div>
         </div>
     </form>
-</div>
+</div> *@

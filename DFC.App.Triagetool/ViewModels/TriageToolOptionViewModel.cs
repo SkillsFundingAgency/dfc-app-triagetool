@@ -1,4 +1,5 @@
-﻿using DFC.Common.SharedContent.Pkg.Netcore.Model.ContentItems;
+﻿using DFC.Common.SharedContent.Pkg.Netcore.Model.Common;
+using DFC.Common.SharedContent.Pkg.Netcore.Model.ContentItems;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
@@ -23,6 +24,16 @@ namespace DFC.App.Triagetool.ViewModels
         public List<TriagePage> Pages { get; set; }
 
         public List<string> SelectedFilters { get; set; }
+
+        public List<TriageLevelOne>? TriageLevelOnes { get; set; }
+
+        public List<TriageLevelTwo>? TriageLevelTwos { get; set; }
+
+        public List<string?>? FilterAdviceGroups { get; set; }
+
+        public string? SelectedLevelOne { get; set; }
+
+        public string? SelectedLevelTwo { get; set; }
 
         public string? SharedContent { get; set; }
     }

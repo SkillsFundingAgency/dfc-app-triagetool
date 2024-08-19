@@ -101,10 +101,12 @@ namespace DFC.App.Triagetool
                 return client;
             });
 
-            services.AddSingleton<ISharedContentRedisInterfaceStrategy<SharedHtml>, SharedHtmlQueryStrategy>();
-            services.AddSingleton<ISharedContentRedisInterfaceStrategy<TriageToolFilterResponse>, TriageToolAllQueryStrategy>();
-            services.AddSingleton<ISharedContentRedisInterfaceStrategy<TriagePageResponse>, PagesByTriageToolFilterStrategy>();
+            services.AddSingleton<ISharedContentRedisInterfaceStrategyWithRedisExpiry<SharedHtml>, SharedHtmlQueryStrategy>();
+            services.AddSingleton<ISharedContentRedisInterfaceStrategyWithRedisExpiry<TriageToolFilterResponse>, TriageToolAllQueryStrategy>();
+            services.AddSingleton<ISharedContentRedisInterfaceStrategyWithRedisExpiry<TriagePageResponse>, PagesByTriageToolFilterStrategy>();
             services.AddSingleton<ISharedContentRedisInterfaceStrategyFactory, SharedContentRedisStrategyFactory>();
+            services.AddSingleton<ISharedContentRedisInterfaceStrategyWithRedisExpiry<TriageLookupResponse>, TriageLookupQueryStrategy>();
+            services.AddSingleton<ISharedContentRedisInterfaceStrategyWithRedisExpiry<TriageResultPageResponse>, TriageResultPageQueryStrategy>();
             services.AddScoped<ISharedContentRedisInterface, SharedContentRedis>();
 
             services.AddApplicationInsightsTelemetry();

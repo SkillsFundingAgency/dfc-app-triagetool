@@ -104,25 +104,26 @@ namespace DFC.App.Triagetool.Controllers
         [HttpGet]
         [Route("pages/body")]
         [Route("pages/{triage-select?}/body")]
-        public async Task<IActionResult> Body([ModelBinder(Name = "triage-select")] string article)
+        [Route("pages/{triage-level-one?}/{triage-level-two?}/body")]
+        public async Task<IActionResult> Body([ModelBinder(Name = "triage-level-one")] string levelOne, [ModelBinder(Name = "triage-level-two")] string levelTwo)
         {
             if (string.IsNullOrEmpty(status))
             {
                 status = "PUBLISHED";
             }
 
-            var triagetooldocuments = await sharedContentRedis.GetDataAsync<TriagePageResponse>(Constants.TriagePages, status);
-            if (article != null)
+          //  var triagetooldocuments = await sharedContentRedis.GetDataAsync<TriagePageResponse>(Constants.TriagePages, status);
+            if (levelOne != null)
             {
-                article = string.Concat(article[0].ToString().ToUpper(), article.AsSpan(1));
+                levelOne = string.Concat(levelOne[0].ToString().ToUpper(), levelOne.AsSpan(1));
             }
 
-            var subList = triagetooldocuments?.Page?.Where(doc => doc.TriageToolFilters.ContentItems.Any(tp => tp.DisplayText == article)).ToList();
+          //  var subList = triagetooldocuments?.Page?.Where(doc => doc.TriageToolFilters.ContentItems.Any(tp => tp.DisplayText == levelOne)).ToList();
 
             var triageToolModel = new TriageToolOptionViewModel
             {
-                Title = article,
-                Pages = subList,
+                Title = levelOne,
+                Pages = new List<Common.SharedContent.Pkg.Netcore.Model.ContentItems.TriagePage>(),
             };
 
             try
@@ -133,6 +134,21 @@ namespace DFC.App.Triagetool.Controllers
             catch
             {
                 triageToolModel.SharedContent = string.Empty;
+            }
+
+            var triageLookup = await sharedContentRedis.GetDataAsyncWithExpiry<TriageLookupResponse>(Constants.TriageToolFilters, status);
+
+            if (triageLookup != null)
+            {
+                triageToolModel.TriageLevelOnes = triageLookup.TriageLevelOne?.OrderBy(x => x.Ordinal).ToList();
+                triageToolModel.TriageLevelTwos = triageLookup.TriageLevelOne?.SingleOrDefault(x => string.Equals(x.Title, levelOne, StringComparison.InvariantCultureIgnoreCase))?.LevelTwo?.ContentItems?.ToList();
+                triageToolModel.FilterAdviceGroups = triageToolModel.TriageLevelTwos?.SingleOrDefault(x => string.Equals(x.Title, levelTwo, StringComparison.InvariantCultureIgnoreCase))?
+                                                                        .FilterAdviceGroup?.ContentItems?.Select(x => x.Title).ToList();
+                if (triageToolModel.FilterAdviceGroups == null)
+                {
+                    triageToolModel.FilterAdviceGroups = triageToolModel.TriageLevelOnes?.SingleOrDefault(x => string.Equals(x.Title, levelOne, StringComparison.InvariantCultureIgnoreCase))?
+                                                                        .FilterAdviceGroup?.ContentItems?.Select(x => x.Title).ToList();
+                }
             }
 
             return View(triageToolModel);
@@ -158,17 +174,17 @@ namespace DFC.App.Triagetool.Controllers
                 status = "PUBLISHED";
             }
 
-            var triageFilters = await sharedContentRedis.GetDataAsync<TriageToolFilterResponse>(Constants.TriageToolFilters, status);
+          //  var triageFilters = await sharedContentRedis.GetDataAsync<TriageToolFilterResponse>(Constants.TriageToolFilters, status);
 
             var viewModel = new HeroBannerViewModel
             {
                 Selected = article,
             };
 
-            if (triageFilters != null)
-            {
-                viewModel.Options = triageFilters?.TriageToolFilter.Select(x => x.DisplayText).OrderBy(o => o).ToList()!;
-            }
+            //if (triageFilters != null)
+            //{
+            //    viewModel.Options = triageFilters?.TriageToolFilter.Select(x => x.DisplayText).OrderBy(o => o).ToList()!;
+            //}
 
             return View(viewModel);
         }

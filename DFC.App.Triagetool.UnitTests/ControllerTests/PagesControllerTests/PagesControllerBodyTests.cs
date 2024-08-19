@@ -41,7 +41,7 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
             var controller = new PagesController(loggerMock.Object, mapperMock.Object, redisMock.Object, configuration);
 
             // Act
-            var result = await controller.Body("YourArticleId") as ViewResult;
+            var result = await controller.Body("YourArticleId","Article") as ViewResult;
 
             // Assert
             Assert.Equal(null, result.ContentType);
@@ -80,7 +80,7 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
             mockSharedContentRedis.Setup(x => x.GetDataAsync<TriagePageResponse>("TriageToolPages", "PUBLISHED", 4)).ReturnsAsync(triagePageResponse);
 
             // Act
-            var result = await controller.Body("Article");
+            var result = await controller.Body("Article", "Article");
 
             // Assert
             Assert.IsType<ViewResult>(result);
@@ -124,7 +124,7 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
             mockSharedContentRedis.Setup(x => x.GetDataAsync<TriagePageResponse>("TriageToolPages", "PUBLISHED", 4)).ReturnsAsync(triagePageResponse);
 
             // Act
-            var result = await controller.Body("Article");
+            var result = await controller.Body("Article", "Article");
 
             // Assert
             Assert.IsType<ViewResult>(result);

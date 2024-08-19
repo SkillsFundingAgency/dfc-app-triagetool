@@ -55,7 +55,7 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
         {
             return actionName switch
             {
-                _ => await controller.Body(option).ConfigureAwait(false),
+                _ => await controller.Body(option, null).ConfigureAwait(false),
             };
         }
 
