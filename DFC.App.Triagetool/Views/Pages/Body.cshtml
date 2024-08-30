@@ -2,77 +2,103 @@
 @using Microsoft.Extensions.Configuration
 @model TriageToolOptionViewModel
 
-<div>
+<div class="triage-body">
     <form method="post" novalidate="novalidate" action="/triagetool" id="triageToolFilters">
-        <div class="govuk-grid-row govuk-!-margin-top-2 govuk-!-padding-top-5">
-            <div class="govuk-grid-column-full">
-                <div class="" style="width: 960px; height: 424px">
-                    <div style="background-color: #F3F2F1; width: 960px; height: 50px">
-                        <label>Change or refine the careers advice you see </label>
-                        <a href="/">Clear all</a>
+            
+            <div class="dfc-app-triage-search-header-panel">
+            <div class="dfc-app-triage-filter-header">
+                <span>Select the advice you want to see</span>
+            </div>
+            </div>
+        <div class="dfc-app-triage-search-panel">
+                    <div class="dfc-app-triage-filter-sub-header">
+                        <span>Showing all</span>
                     </div>
-                    <div>
-                        <label>I'm</label>
-                        <select id="triageLevelOne" name="triage-level-one" class="govuk-select triage-select">
-                            @foreach (var levelOne in Model.TriageLevelOnes)
+
+          <div class="dfc-app-triage-filter-advice-group-container govuk-grid-row">
+                        @if(Model.FilterAdviceGroups != null )
+                        {
+                            @foreach (var fac in Model.FilterAdviceGroups)
                             {
-                                if (Model.SelectedLevelOne != null && Model.SelectedLevelOne.Equals(levelOne.Title, StringComparison.OrdinalIgnoreCase))
-                                {
-                                    <option value="@levelOne.Title" selected>@levelOne.Title</option>
-                                }
-                                else
-                                {
-                                    <option value="@levelOne.Title">@levelOne.Title</option>
-                                }
+                            <div class="govuk-grid-column-one-third dfc-app-triage-filter-item">
+                                <div class="govuk-checkboxes--small">
+                                        <div class="govuk-checkboxes__item">
+                                            <input class="govuk-checkboxes__input" id="@fac.ContentItemId" type="checkbox" value="@fac.ContentItemId"/>
+                                                        <label class="govuk-label govuk-checkboxes__label" for="@fac.ContentItemId">
+                                                @fac.Title
+                                            </label>
+                                        </div>
+                                </div>
+                            </div>
+
                             }
-                        </select>
-
-                        <label>and</label>
-                        <select id="triageLevelTwo" name="triage-level-two" class="govuk-select triage-select">
-                            @if (Model.TriageLevelTwos != null)
-                            {
-                                @foreach (var levelTwo in Model.TriageLevelTwos)
-                                {
-                                    if (Model.SelectedLevelTwo != null && Model.SelectedLevelTwo.Equals(levelTwo.Title, StringComparison.OrdinalIgnoreCase))
-                                    {
-                                        <option value="@levelTwo.Title" selected>@levelTwo.Title</option>
-                                    }
-                                    else
-                                    {
-                                        <option value="@levelTwo.Title">@levelTwo.Title</option>
-                                    }
-                                }
-                                
-                            }
-                           
-
-                        </select>
-                    </div>
-                    <div>
-                        <label>Select the advice you want to see</label>
-                    </div>
-                    <div>
-
-                    </div>
-                    <div>
-                        <button>Apply Filters</button>
+                        }
+                     </div>
+                     <div>
+                         <button class="govuk-button dfc-app-triage-btn ncs-button__primary govuk-button--start">Apply Filters</button>
                     </div>
 
+         </div>
+        <div class="dfc-app-triage-page-number-panel">
+
+            <span>Showing @Model.Pages.Count() career resources </span>
+         </div>
+         @foreach(var filterAdviceGroup in Model.FilterAdviceGroups)
+        {
+            <div class="dfc-app-filter-advice-group-result-container">
+                <span class="heading">
+                    @filterAdviceGroup.Title
+                </span>
+                <div class="product-tile-container">
+                @foreach(var resultPage in Model.Pages.Where(x => x.FilterAdviceGroup.ContentItems.Any(x => x.ContentItemId == filterAdviceGroup.ContentItemId)))
+                {
+              
+                        <div class="article-tile">
+                            <div class="tile-header">
+                                <span>  @resultPage.PageLocation.FullUrl </span>
+                            </div>
+                            <div class="tile-decription">
+                                @resultPage.PageLocation.FullUrl
+                            </div>
+                        </div>
+                       @*  <div class="app-view-tile">
+                            <div class="tile-header">
+                                <span class="header-text"> Explore Careers </span>
+                                <img src="http://127.0.0.1:8080/assets/dist/images/compass.png" class="header-image" />
+                            </div>
+                            <div class="tile-description">
+                                How to understand the skills you already have and prepare to find a new job.
+                            </div>
+                        </div>
+
+                        <div class="app-view-tile">
+                            <div class="tile-header">
+                                <span class="header-text"> Explore Careers </span>
+                                <img src="http://127.0.0.1:8080/assets/dist/images/compass.png" class="header-image" />
+                            </div>
+                            <div class="tile-description">
+                                How to understand the skills you already have and prepare to find a new job.
+                            </div>
+                        </div>
+                        <div class="app-view-tile">
+                            <div class="tile-header">
+                                <span class="header-text"> Explore Careers </span>
+                                <img src="http://127.0.0.1:8080/assets/dist/images/compass.png" class="header-image" />
+                            </div>
+                            <div class="tile-description">
+                                How to understand the skills you already have and prepare to find a new job.
+                            </div>
+                        </div> *@
+                   
+                }
                 </div>
+                @*  <div style="width: 300px;height: 190px;display:inline-block;border:solid 1px;">
+
+            <img style="width: 300px;height: 190px;"src="http://127.0.0.1:8080/assets/dist/images/FilterGroupTileImage.jpg" alt="not loaded" />
+            </div> *@
+               
             </div>
-            <div>
-                Showing @Model.Pages.Count() career resources
-            </div>
-            <div>
-                <div>Filter Text as Head</div>
-                <div>
-                    Image
-                </div>
-                <div>
-                    Page title
-                </div>
-            </div>
-        </div>
+        }
     </form>
 </div>
 @* <div>
