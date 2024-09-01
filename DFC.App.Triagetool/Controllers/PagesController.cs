@@ -136,8 +136,8 @@ namespace DFC.App.Triagetool.Controllers
                 triageToolModel.SharedContent = string.Empty;
             }
 
-            var triageResultPages = await sharedContentRedis.GetDataAsyncWithExpiry<TriageResultPageResponse>("TriageTool/Results6", status);
-            var lookupResponse = await sharedContentRedis.GetDataAsyncWithExpiry<TriageLookupResponse>("Triage/lookup9", status, expiry);
+            var triageResultPages = await sharedContentRedis.GetDataAsyncWithExpiry<TriageResultPageResponse>("TriageTool/Results23", status);
+            var lookupResponse = await sharedContentRedis.GetDataAsyncWithExpiry<TriageLookupResponse>("Triage/lookup24", status, expiry);
 
             if (lookupResponse != null)
             {
@@ -152,6 +152,7 @@ namespace DFC.App.Triagetool.Controllers
                 triageToolModel.SelectedLevelOne = levelOne;
                 triageToolModel.SelectedLevelTwo = levelTwo;
                 var levelOneContentItemId = lookupResponse?.TriageLevelOne?.SingleOrDefault(x => x.Value == levelOne)?.ContentItemId;
+                triageToolModel.LevelOneContentItemId = levelOneContentItemId;
                 var levelTwoIds = lookupResponse?.TriageLevelOne?.SingleOrDefault(x => x.Value == levelOne)?.LevelTwo?.ContentItems?.Select(x => x.ContentItemId).ToList();
                 var levelTwoContentItemId = lookupResponse?.TriageLevelTwo?.SingleOrDefault(x => x.Value == levelTwo && levelTwoIds != null && levelTwoIds.Contains(x.ContentItemId))?.ContentItemId;
                 triageToolModel.Pages = triageResultPages?.Page?.Where(x => x.TriageLevelTwo != null && x.TriageLevelTwo.ContentItems.Any(x => x.ContentItemId == levelTwoContentItemId)
@@ -161,6 +162,7 @@ namespace DFC.App.Triagetool.Controllers
                 var l1 = lookupResponse.TriageLevelOne.SingleOrDefault(l1 => l1.Value == levelOne);
                 var leveTwos=  l1.LevelTwo.ContentItems;
                 triageToolModel.FilterAdviceGroups = leveTwos.SingleOrDefault(x => x.Value == levelTwo)?.FilterAdviceGroup?.ContentItems;
+                triageToolModel.TriageResultTiles = triageResultPages.TriageResultTile;
             }
 
             return View(triageToolModel);

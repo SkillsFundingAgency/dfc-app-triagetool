@@ -34,10 +34,13 @@ namespace DFC.App.Triagetool.ViewModels
 
         public List<FilterAdviceGroup>? FilterAdviceGroups { get; set; }
 
+        public List<TriageResultTile> TriageResultTiles { get; set; }
+
         public string? SelectedLevelOne { get; set; }
 
         public string? SelectedLevelTwo { get; set; }
 
         public string? SharedContent { get; set; }
+        public string? LevelOneContentItemId { get; internal set; }
     }
 }

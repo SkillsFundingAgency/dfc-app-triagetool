@@ -1,5 +1,6 @@
 ﻿
 @using Microsoft.Extensions.Configuration
+@using System.Web
 @model TriageToolOptionViewModel
 
 <div class="triage-body">
@@ -50,17 +51,22 @@
                     @filterAdviceGroup.Title
                 </span>
                 <div class="product-tile-container">
-                @foreach(var resultPage in Model.Pages.Where(x => x.FilterAdviceGroup.ContentItems.Any(x => x.ContentItemId == filterAdviceGroup.ContentItemId)))
+                @foreach(var resultPage in Model.Pages.
+                Where(x => x.FilterAdviceGroup.ContentItems.Any(x => x.ContentItemId == filterAdviceGroup.ContentItemId)).OrderBy(x => x.TriageOrdinal))
                 {
-              
-                        <div class="article-tile">
+                    Console.WriteLine(resultPage.ContentItemId);
+                        var tile = Model.TriageResultTiles.SingleOrDefault(x => x.TriageResult.ContentItems.Any(y => y.ResultContentItemId == resultPage.ContentItemId)
+                                          && x.TriageLevelOne.ContentItems.Any(z => z.ContentItemId == Model.LevelOneContentItemId));
+                        if (tile != null && tile.TriageTileHtml != null && !string.IsNullOrEmpty(tile.TriageTileHtml.Html))
+                            @Html.Raw(tile.TriageTileHtml.Html);                        ;
+                      @*   <div class="article-tile">
                             <div class="tile-header">
                                 <span>  @resultPage.PageLocation.FullUrl </span>
                             </div>
                             <div class="tile-decription">
                                 @resultPage.PageLocation.FullUrl
                             </div>
-                        </div>
+                        </div> *@
                        @*  <div class="app-view-tile">
                             <div class="tile-header">
                                 <span class="header-text"> Explore Careers </span>
