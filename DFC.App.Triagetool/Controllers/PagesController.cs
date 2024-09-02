@@ -136,8 +136,8 @@ namespace DFC.App.Triagetool.Controllers
                 triageToolModel.SharedContent = string.Empty;
             }
 
-            var triageResultPages = await sharedContentRedis.GetDataAsyncWithExpiry<TriageResultPageResponse>("TriageTool/Results23", status);
-            var lookupResponse = await sharedContentRedis.GetDataAsyncWithExpiry<TriageLookupResponse>("Triage/lookup24", status, expiry);
+            var triageResultPages = await sharedContentRedis.GetDataAsyncWithExpiry<TriageResultPageResponse>("TriageTool/Results6", status);
+            var lookupResponse = await sharedContentRedis.GetDataAsyncWithExpiry<TriageLookupResponse>("Triage/lookup6", status, expiry);
 
             if (lookupResponse != null)
             {
