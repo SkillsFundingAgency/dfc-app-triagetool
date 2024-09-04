@@ -136,8 +136,8 @@ namespace DFC.App.Triagetool.Controllers
                 triageToolModel.SharedContent = string.Empty;
             }
 
-            var triageResultPages = await sharedContentRedis.GetDataAsyncWithExpiry<TriageResultPageResponse>("TriageTool/Results6", status);
-            var lookupResponse = await sharedContentRedis.GetDataAsyncWithExpiry<TriageLookupResponse>("Triage/lookup6", status, expiry);
+            var triageResultPages = await sharedContentRedis.GetDataAsyncWithExpiry<TriageResultPageResponse>("TriageTool/Results8", status);
+            var lookupResponse = await sharedContentRedis.GetDataAsyncWithExpiry<TriageLookupResponse>("Triage/lookup9", status, expiry);
 
             if (lookupResponse != null)
             {
@@ -158,6 +158,8 @@ namespace DFC.App.Triagetool.Controllers
                 triageToolModel.Pages = triageResultPages?.Page?.Where(x => x.TriageLevelTwo != null && x.TriageLevelTwo.ContentItems.Any(x => x.ContentItemId == levelTwoContentItemId)
                 && x.TriageLevelOne != null && x.TriageLevelOne.ContentItems.Any(x => x.ContentItemId == levelOneContentItemId)).ToList();
                 triageToolModel.Pages.AddRange(triageResultPages.ApplicationView.Where(x => x.TriageLevelTwo != null && x.TriageLevelTwo.ContentItems.Any(x => x.ContentItemId == levelTwoContentItemId)));
+                triageToolModel.Pages.AddRange(triageResultPages.ApprenticeshipLink.Where(x => x.TriageLevelTwo != null && x.TriageLevelTwo.ContentItems.Any(x => x.ContentItemId == levelTwoContentItemId)));
+
                 triageToolModel.Pages = triageToolModel.Pages.OrderBy(x => x.TriageOrdinal).ToList();
                 var l1 = lookupResponse.TriageLevelOne.SingleOrDefault(l1 => l1.Value == levelOne);
                 var leveTwos=  l1.LevelTwo.ContentItems;
