@@ -4,8 +4,8 @@
 @model TriageToolOptionViewModel
 
 <div class="triage-body">
-    <form method="post" novalidate="novalidate" action="/triagetool" id="triageToolFilters">
-            
+            <input  type="hidden"  id="selectedLevelOne" value="@Model.SelectedLevelOne"/>
+        <input type="hidden" id="selectedLevelTwo" value="@Model.SelectedLevelTwo" />
             <div class="dfc-app-triage-search-header-panel">
             <div class="dfc-app-triage-filter-header">
                 <span>Select the advice you want to see</span>
@@ -24,7 +24,7 @@
                             <div class="govuk-grid-column-one-third dfc-app-triage-filter-item">
                                 <div class="govuk-checkboxes--small">
                                         <div class="govuk-checkboxes__item">
-                                            <input class="govuk-checkboxes__input" id="@fac.ContentItemId" type="checkbox" value="@fac.ContentItemId"/>
+                                            <input typeof="checkbox" class="govuk-checkboxes__input" name="filterAdviceGroupOptions" id="@fac.ContentItemId" type="checkbox" value="@fac.ContentItemId"/>
                                                         <label class="govuk-label govuk-checkboxes__label" for="@fac.ContentItemId">
                                                 @fac.Title
                                             </label>
@@ -36,77 +36,15 @@
                         }
                      </div>
                      <div>
-                         <button class="govuk-button dfc-app-triage-btn ncs-button__primary govuk-button--start">Apply Filters</button>
-                @* <button class="govuk-button ncs-button__secondary" data-module="govuk-button">Clear Filters</button> *@
+                         <button class="govuk-button dfc-app-triage-btn ncs-button__primary govuk-button--start"  id="applyFilters">Apply Filters</button>
+                         <button class="govuk-button ncs-button__secondary triage-tool-clear-button" id="clearFilters" >Clear Filters</button>
                     </div>
 
          </div>
-        <div class="dfc-app-triage-page-number-panel">
-
-            <span>Showing @Model.Pages.Count() career resources </span>
+         <div id="triageResultPanel">
+            @(await Html.PartialAsync("TriageToolPartialViews/TriageResult", Model))
          </div>
-         @foreach(var filterAdviceGroup in Model.FilterAdviceGroups)
-        {
-            <div class="dfc-app-filter-advice-group-result-container">
-                <span class="heading">
-                    @filterAdviceGroup.Title
-                </span>
-                <div class="product-tile-container">
-                @foreach(var resultPage in Model.Pages.
-                Where(x => x.FilterAdviceGroup.ContentItems.Any(x => x.ContentItemId == filterAdviceGroup.ContentItemId)).OrderBy(x => x.TriageOrdinal))
-                {
-                    Console.WriteLine(resultPage.ContentItemId);
-                        var tile = Model.TriageResultTiles.SingleOrDefault(x => x.TriageResult.ContentItems.Any(y => y.ResultContentItemId == resultPage.ContentItemId)
-                                          && x.TriageLevelOne.ContentItems.Any(z => z.ContentItemId == Model.LevelOneContentItemId));
-                        if (tile != null && tile.TriageTileHtml != null && !string.IsNullOrEmpty(tile.TriageTileHtml.Html))
-                            @Html.Raw(tile.TriageTileHtml.Html);                        ;
-                      @*   <div class="article-tile">
-                            <div class="tile-header">
-                                <span>  @resultPage.PageLocation.FullUrl </span>
-                            </div>
-                            <div class="tile-decription">
-                                @resultPage.PageLocation.FullUrl
-                            </div>
-                        </div> *@
-                       @*  <div class="app-view-tile">
-                            <div class="tile-header">
-                                <span class="header-text"> Explore Careers </span>
-                                <img src="http://127.0.0.1:8080/assets/dist/images/compass.png" class="header-image" />
-                            </div>
-                            <div class="tile-description">
-                                How to understand the skills you already have and prepare to find a new job.
-                            </div>
-                        </div>
-
-                        <div class="app-view-tile">
-                            <div class="tile-header">
-                                <span class="header-text"> Explore Careers </span>
-                                <img src="http://127.0.0.1:8080/assets/dist/images/compass.png" class="header-image" />
-                            </div>
-                            <div class="tile-description">
-                                How to understand the skills you already have and prepare to find a new job.
-                            </div>
-                        </div>
-                        <div class="app-view-tile">
-                            <div class="tile-header">
-                                <span class="header-text"> Explore Careers </span>
-                                <img src="http://127.0.0.1:8080/assets/dist/images/compass.png" class="header-image" />
-                            </div>
-                            <div class="tile-description">
-                                How to understand the skills you already have and prepare to find a new job.
-                            </div>
-                        </div> *@
-                   
-                }
-                </div>
-                @*  <div style="width: 300px;height: 190px;display:inline-block;border:solid 1px;">
-
-            <img style="width: 300px;height: 190px;"src="http://127.0.0.1:8080/assets/dist/images/FilterGroupTileImage.jpg" alt="not loaded" />
-            </div> *@
-               
-            </div>
-        }
-    </form>
+  
 </div>
 @* <div>
     <form method="post" novalidate="novalidate" action="/triagetool" id="TriageToolFilters">
