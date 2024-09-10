@@ -36,15 +36,17 @@
                         }
                      </div>
                      <div>
-                         <button class="govuk-button dfc-app-triage-btn ncs-button__primary govuk-button--start"  id="applyFilters">Apply Filters</button>
-                         <button class="govuk-button ncs-button__secondary triage-tool-clear-button" id="clearFilters" >Clear Filters</button>
+                         <button type="button" class="govuk-button dfc-app-triage-btn ncs-button__primary govuk-button--start"  id="applyFilters">Apply Filters</button>
+                         <button type="button"  class="govuk-button ncs-button__secondary triage-tool-clear-button" id="clearFilters">Clear Filters</button>
                     </div>
 
          </div>
          <div id="triageResultPanel">
             @(await Html.PartialAsync("TriageToolPartialViews/TriageResult", Model))
          </div>
-  
+    <div class="speak-to-adviser-container">
+        @Html.Raw(Model.SharedContent)
+    </div>
 </div>
 @* <div>
     <form method="post" novalidate="novalidate" action="/triagetool" id="TriageToolFilters">
