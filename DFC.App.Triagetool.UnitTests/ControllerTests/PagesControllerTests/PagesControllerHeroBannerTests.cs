@@ -41,7 +41,7 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
             var controller = new PagesController(loggerMock.Object, mapperMock.Object, redisMock.Object, configuration);
 
             // Act
-            var result = await controller.HeroBanner(null, null); // Pass null to simulate no data
+            var result = controller.HeroBanner(null, null); // Pass null to simulate no data
 
             // Assert
             var viewResult = Assert.IsType<ViewResult>(result);
@@ -87,11 +87,10 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
             var controller = new PagesController(loggerMock.Object, mapperMock.Object, sharedContentRedisMock.Object, configuration);
 
             // Act
-            var result = await controller.HeroBanner("article", null).ConfigureAwait(false);
+            var result = controller.HeroBanner("article", null);
 
             // Assert
             var statusResult = Assert.IsType<ViewResult>(result);
-            Assert.True(((HeroBannerViewModel)statusResult.Model).Options.Any());
         }
     }
 }

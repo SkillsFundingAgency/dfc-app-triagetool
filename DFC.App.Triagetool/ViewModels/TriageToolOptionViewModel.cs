@@ -34,7 +34,7 @@ namespace DFC.App.Triagetool.ViewModels
 
         public List<FilterAdviceGroup>? FilterAdviceGroups { get; set; }
 
-        public List<TriageResultTile> TriageResultTiles { get; set; }
+        public List<TriageResultTile>? TriageResultTiles { get; set; }
 
         public string? SelectedLevelOne { get; set; }
 
