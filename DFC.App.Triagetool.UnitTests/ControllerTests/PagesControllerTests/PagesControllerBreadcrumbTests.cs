@@ -19,7 +19,7 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
             using var controller = BuildPagesController(mediaTypeName);
 
             // Act
-            var result = controller.Breadcrumb("an-article");
+            var result = controller.Breadcrumb();
 
             // Assert
             var statusResult = Assert.IsType<ViewResult>(result);

@@ -70,7 +70,7 @@ namespace DFC.App.Triagetool.Controllers
         [HttpGet]
         [Route("pages/breadcrumb")]
         [Route("pages/{triage-select?}/breadcrumb")]
-        public IActionResult Breadcrumb([ModelBinder(Name = "triage-select")] string article)
+        public IActionResult Breadcrumb()
         {
             logger.LogInformation($"{nameof(Breadcrumb)} has been called");
 
@@ -87,7 +87,7 @@ namespace DFC.App.Triagetool.Controllers
                     new BreadcrumbItemViewModel
                     {
                         AddHyperlink = false,
-                        Title = "Personalised careers advice and information",
+                        Title = "Get relevant careers advice",
                     },
                 },
             };
