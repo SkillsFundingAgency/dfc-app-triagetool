@@ -41,6 +41,9 @@ namespace DFC.App.Triagetool.ViewModels
         public string? SelectedLevelTwo { get; set; }
 
         public string? SharedContent { get; set; }
-        public string? LevelOneContentItemId { get; internal set; }
+
+        public string? LevelOneContentItemId { get;  set; }
+
+        public List<TriageFilterAdviceGroupImage>? TriageFilterAdviceGroupImage { get;  set; }
     }
 }

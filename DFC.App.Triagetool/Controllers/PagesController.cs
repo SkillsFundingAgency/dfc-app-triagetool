@@ -2,6 +2,7 @@
 using DFC.App.Triagetool.Extensions;
 using DFC.App.Triagetool.Models;
 using DFC.App.Triagetool.ViewModels;
+using DFC.Common.SharedContent.Pkg.Netcore.Constant;
 using DFC.Common.SharedContent.Pkg.Netcore.Interfaces;
 using DFC.Common.SharedContent.Pkg.Netcore.Model.Common;
 using DFC.Common.SharedContent.Pkg.Netcore.Model.ContentItems.SharedHtml;
@@ -156,24 +157,6 @@ namespace DFC.App.Triagetool.Controllers
 
             List<TriageModelClass> modelClass = new List<TriageModelClass>();
 
-            //foreach (var filter in sortedFilters)
-            //{
-            //    var subList = triagetooldocuments?.Page?.Where(doc => doc.TriageToolFilters.ContentItems.Any(tp => tp.DisplayText.Equals(filter.DisplayText, StringComparison.OrdinalIgnoreCase))).ToList();
-            //    var pages = mapper.Map<List<TriagePages>>(subList);
-            //    var filters = mapper.Map<TriageModelClass>(filter);
-            //    filters.pages = pages;
-            //    filters.filters = new List<TriageFilters>()
-            //    {
-            //        new TriageFilters()
-            //        {
-            //            selected = false,
-            //            title = filters.title,
-            //            url = string.Empty,
-            //        },
-            //    };
-            //    modelClass.Add(filters);
-            //}
-
             return Json(modelClass);
         }
 
@@ -244,10 +227,10 @@ namespace DFC.App.Triagetool.Controllers
                 Title = levelOne,
             };
 
-            var sharedhtml = await this.sharedContentRedis.GetDataAsync<SharedHtml>(Constants.SpeakToAnAdviserSharedContent, status);
-            triageToolModel.SharedContent = sharedhtml?.Html;
-            var triageResultPages = await sharedContentRedis.GetDataAsyncWithExpiry<TriageResultPageResponse>("TriageTool/Results", status);
-            var lookupResponse = await sharedContentRedis.GetDataAsyncWithExpiry<TriageLookupResponse>("Triage/lookup", status, expiry);
+            //var sharedhtml = await this.sharedContentRedis.GetDataAsyncWithExpiry<SharedHtml>(ApplicationKeys.TriageToolSpeakToAnAdviser, status);
+           // triageToolModel.SharedContent = sharedhtml?.Html;
+            var triageResultPages = await sharedContentRedis.GetDataAsyncWithExpiry<TriageResultPageResponse>(ApplicationKeys.TriageResults, status);
+            var lookupResponse = await sharedContentRedis.GetDataAsyncWithExpiry<TriageLookupResponse>(ApplicationKeys.TriageToolLookup, status, expiry);
 
             if (lookupResponse != null)
             {
@@ -279,22 +262,25 @@ namespace DFC.App.Triagetool.Controllers
                                                                               x.TriageLevelTwo.ContentItems.Any(x => x.ContentItemId == levelTwoContentItemId) &&
                                                                               x.TriageLevelOne?.ContentItems != null &&
                                                                               x.TriageLevelOne.ContentItems.Any(x => x.ContentItemId == levelOneContentItemId)).ToList();
-                    if (triageResultPages.ApplicationView != null)
-                    {
-                        //Filter triage application views based on selected level one and level two content Item ids
-                        triageToolModel.Pages.AddRange(triageResultPages.ApplicationView.Where(x => x.TriageLevelTwo?.ContentItems != null &&
-                                                                                                x.TriageLevelTwo.ContentItems.Any(x => x.ContentItemId == levelTwoContentItemId)));
-                    }
-
-                    if (triageResultPages.ApprenticeshipLink != null)
-                    {
-                        //Filter triage ApprenticeshipLink based on selected level one and level two content Item ids
-                        triageToolModel.Pages.AddRange(triageResultPages.ApprenticeshipLink.Where(x => x.TriageLevelTwo?.ContentItems != null &&
-                                                                                                   x.TriageLevelTwo.ContentItems.Any(x => x.ContentItemId == levelTwoContentItemId)));
-                    }
-
-                    triageToolModel.Pages = triageToolModel.Pages.OrderBy(x => x.TriageOrdinal).ToList();
+                    triageToolModel.SharedContent = triageResultPages.SharedContent?.FirstOrDefault()?.Content.Html;
                 }
+
+                if (triageResultPages?.ApplicationView != null)
+                {
+                        //Filter triage application views based on selected level one and level two content Item ids
+                     triageToolModel.Pages.AddRange(triageResultPages.ApplicationView.Where(x => x.TriageLevelTwo?.ContentItems != null &&
+                                                                                                x.TriageLevelTwo.ContentItems.Any(x => x.ContentItemId == levelTwoContentItemId)));
+                }
+
+                if (triageResultPages?.ApprenticeshipLink != null)
+                {
+                        //Filter triage ApprenticeshipLink based on selected level one and level two content Item ids
+                     triageToolModel.Pages.AddRange(triageResultPages.ApprenticeshipLink.Where(x => x.TriageLevelTwo?.ContentItems != null &&
+                                                                                                   x.TriageLevelTwo.ContentItems.Any(x => x.ContentItemId == levelTwoContentItemId)));
+                }
+
+                triageToolModel.Pages = triageToolModel.Pages.OrderBy(x => x.TriageOrdinal).ToList();
+                triageToolModel.TriageFilterAdviceGroupImage = triageResultPages?.TriageFilterAdviceGroupImage;
 
                 //Filter advice groups based on level one and level two
                 if (lookupResponse?.TriageLevelOne != null)
