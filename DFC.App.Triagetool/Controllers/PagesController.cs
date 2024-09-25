@@ -52,7 +52,8 @@ namespace DFC.App.Triagetool.Controllers
         [HttpGet]
         [Route("pages/head")]
         [Route("pages/{triage-select?}/head")]
-        public IActionResult Head([ModelBinder(Name = "triage-select")] string article)
+        [Route("pages/{triage-level-one?}/{triage-level-two?}/head")]
+        public IActionResult Head([ModelBinder(Name = "triage-level-one")] string levelOne, [ModelBinder(Name = "triage-level-two")] string levelTwo)
         {
             logger.LogInformation($"{nameof(Head)} has been called");
 
@@ -60,10 +61,10 @@ namespace DFC.App.Triagetool.Controllers
             {
                 Title = "Triage | National Careers Service",
                 CanonicalUrl = new Uri($"{Request.GetBaseAddress()}{RegistrationPath}", UriKind.RelativeOrAbsolute),
-                Description = "Personalised careers advice and information",
+                Description = "Get relevant careers advice",
             };
 
-            logger.LogInformation($"{nameof(Head)} has returned content for: /{article}");
+            logger.LogInformation($"{nameof(Head)} has returned content for: /{levelOne} and {levelTwo}");
 
             return this.NegotiateContentResult(viewModel);
         }
@@ -71,9 +72,10 @@ namespace DFC.App.Triagetool.Controllers
         [HttpGet]
         [Route("pages/breadcrumb")]
         [Route("pages/{triage-select?}/breadcrumb")]
-        public IActionResult Breadcrumb()
+        [Route("pages/{triage-level-one?}/{triage-level-two?}/breadcrumb")]
+        public IActionResult Breadcrumb([ModelBinder(Name = "triage-level-one")] string levelOne, [ModelBinder(Name = "triage-level-two")] string levelTwo)
         {
-            logger.LogInformation($"{nameof(Breadcrumb)} has been called");
+            logger.LogInformation($"{nameof(Breadcrumb)} has been called with {levelOne} and {levelTwo}");
 
             const string slash = "/";
             var viewModel = new BreadcrumbViewModel
@@ -92,7 +94,7 @@ namespace DFC.App.Triagetool.Controllers
                     },
                 },
             };
-            logger.LogInformation($"{nameof(Breadcrumb)} has returned content ");
+            logger.LogInformation($"{nameof(Breadcrumb)} has returned content with {levelOne} and {levelTwo}");
 
             return View(viewModel);
         }
@@ -100,9 +102,10 @@ namespace DFC.App.Triagetool.Controllers
         [HttpGet]
         [Route("pages/bodytop")]
         [Route("pages/{triage-select?}/bodytop")]
-        public IActionResult BodyTop([ModelBinder(Name = "triage-select")] string article)
+        [Route("pages/{triage-level-one?}/{triage-level-two?}/bodytop")]
+        public IActionResult BodyTop([ModelBinder(Name = "triage-level-one")] string levelOne, [ModelBinder(Name = "triage-level-two")] string levelTwo)
         {
-            logger.LogWarning($"{nameof(BodyTop)} has returned no content for: {article}");
+            logger.LogWarning($"{nameof(BodyTop)} has returned no content for: {levelOne} and {levelTwo}");
 
             return NoContent();
         }
@@ -121,9 +124,10 @@ namespace DFC.App.Triagetool.Controllers
         [HttpGet]
         [Route("pages/bodyfooter")]
         [Route("pages/{triage-select?}/bodyfooter")]
-        public IActionResult BodyFooter([ModelBinder(Name = "triage-select")] string article)
+        [Route("pages/{triage-level-one?}/{triage-level-two?}/bodyfooter")]
+        public IActionResult BodyFooter([ModelBinder(Name = "triage-level-one")] string levelOne, [ModelBinder(Name = "triage-level-two")] string levelTwo)
         {
-            logger.LogWarning($"{nameof(BodyFooter)} has returned no content for: {article}");
+            logger.LogWarning($"{nameof(BodyFooter)} has returned no content for: {levelOne} and {levelTwo}");
 
             return NoContent();
         }
@@ -131,6 +135,7 @@ namespace DFC.App.Triagetool.Controllers
         [HttpGet]
         [Route("pages/herobanner")]
         [Route("pages/{triage-select?}/herobanner")]
+        [Route("pages/{triage-level-one?}/{triage-level-two?}/herobanner")]
         public IActionResult HeroBanner([ModelBinder(Name = "triage-level-one")] string? levelOne, [ModelBinder(Name = "triage-level-two")] string? levelTwo)
         {
             var viewModel = new HeroBannerViewModel
@@ -227,8 +232,6 @@ namespace DFC.App.Triagetool.Controllers
                 Title = levelOne,
             };
 
-            //var sharedhtml = await this.sharedContentRedis.GetDataAsyncWithExpiry<SharedHtml>(ApplicationKeys.TriageToolSpeakToAnAdviser, status);
-           // triageToolModel.SharedContent = sharedhtml?.Html;
             var triageResultPages = await sharedContentRedis.GetDataAsyncWithExpiry<TriageResultPageResponse>(ApplicationKeys.TriageResults, status);
             var lookupResponse = await sharedContentRedis.GetDataAsyncWithExpiry<TriageLookupResponse>(ApplicationKeys.TriageToolLookup, status, expiry);
 

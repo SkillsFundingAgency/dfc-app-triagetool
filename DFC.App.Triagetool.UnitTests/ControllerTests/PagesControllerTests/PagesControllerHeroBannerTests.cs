@@ -4,6 +4,7 @@ using DFC.App.Triagetool.ViewModels;
 using DFC.Common.SharedContent.Pkg.Netcore.Interfaces;
 using DFC.Common.SharedContent.Pkg.Netcore.Model.Common;
 using DFC.Common.SharedContent.Pkg.Netcore.Model.Response;
+using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -24,7 +25,7 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
         [Theory]
         [MemberData(nameof(JsonMediaTypes))]
         [MemberData(nameof(HtmlMediaTypes))]
-        public async Task PagesControllerHeroBannerReturnsSuccessWhenNoData(string mediaTypeName)
+        public async Task PagesControllerHeroBannerReturnsSuccessWithSelectedLevelOneAndLevelTwo(string mediaTypeName)
         {
             var redisMock = new Mock<ISharedContentRedisInterface>();
             var mapperMock = new Mock<IMapper>();
@@ -37,61 +38,16 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
                 .Build();
             var loggerMock = new Mock<ILogger<PagesController>>();
 
-            redisMock.Setup(m => m.GetDataAsync<TriageToolFilterResponse>("Test", "PUBLISHED", 4)).ReturnsAsync((TriageToolFilterResponse)null);
             var controller = new PagesController(loggerMock.Object, mapperMock.Object, redisMock.Object, configuration);
 
             // Act
-            var result = controller.HeroBanner(null, null); // Pass null to simulate no data
+            var result = controller.HeroBanner("levelOne", "levelTwo"); // Pass null to simulate no data
 
             // Assert
             var viewResult = Assert.IsType<ViewResult>(result);
             var model = Assert.IsAssignableFrom<HeroBannerViewModel>(viewResult.ViewData.Model);
-        }
-
-        [Theory(Skip ="WIP")]
-        [MemberData(nameof(JsonMediaTypes))]
-        [MemberData(nameof(HtmlMediaTypes))]
-
-        public async Task PagesControllerHeroBannerReturnsViewWhenOptionsFound(string mediaTypeName)
-        {
-            var sharedContentRedisMock = new Mock<ISharedContentRedisInterface>();
-            var mapperMock = new Mock<IMapper>();
-            var contentMode = new Dictionary<string, string>
-            {
-                {"contentMode:contentMode", "PUBLISHED" },
-            };
-            IConfiguration configuration = new ConfigurationBuilder()
-                .AddInMemoryCollection(contentMode)
-                .Build();
-            var loggerMock = new Mock<ILogger<PagesController>>();
-            var triageToolFilterResponse = new TriageToolFilterResponse
-            {
-                TriageToolFilter = new List<TriageToolFilters>
-                {
-                    new ()
-                    {
-                        DisplayText = "Test",
-                        GraphSync = new()
-                        {
-                            NodeId = "test",
-                        },
-                    },
-                    new ()
-                    {
-                        DisplayText = "Test",
-                    },
-                },
-            };
-            sharedContentRedisMock.Setup(m => m.GetDataAsync<TriageToolFilterResponse>(AppConstants.TriageToolFilters, "PUBLISHED", 4)).ReturnsAsync(triageToolFilterResponse);
-
-            var controller = new PagesController(loggerMock.Object, mapperMock.Object, sharedContentRedisMock.Object, configuration);
-
-            // Act
-            var result = controller.HeroBanner("article", null);
-
-            // Assert
-            var statusResult = Assert.IsType<ViewResult>(result);
+            model.SelectedLevelOne.Should().Be("levelOne");
+            model.SelectedLevelTwo.Should().Be("levelTwo");
         }
     }
 }
-
