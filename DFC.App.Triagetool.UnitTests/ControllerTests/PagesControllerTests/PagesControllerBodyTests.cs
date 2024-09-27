@@ -5,12 +5,15 @@ using DFC.Common.SharedContent.Pkg.Netcore.Interfaces;
 using DFC.Common.SharedContent.Pkg.Netcore.Model.Common;
 using DFC.Common.SharedContent.Pkg.Netcore.Model.ContentItems;
 using DFC.Common.SharedContent.Pkg.Netcore.Model.Response;
+using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Moq;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Net;
+using System.Net.Mime;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -20,83 +23,98 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
     [Trait("Category", "Pages Controller - Body Unit Tests")]
     public class PagesControllerBodyTests : BasePagesControllerTests
     {
+        public static IEnumerable<object[]> FilterTestData => new List<object[]>
+        {
+            new object[] { "Education", "LevelTwo1" },
+        };
+
         [Theory]
         [MemberData(nameof(HtmlMediaTypes))]
         public async Task PagesControllerBodyReturnsViewWhenNoDataFound(string mediaTypeName)
         {
-            var contentMode = new Dictionary<string, string>
-            {
-                {"contentMode:contentMode", "PUBLISHED" },
-            };
-            IConfiguration configuration = new ConfigurationBuilder()
-                .AddInMemoryCollection(contentMode)
-                .Build();
+            IConfiguration configuration = SetupConfiguration();
 
-            var redisMock = new Mock<ISharedContentRedisInterface>();
-            var mapperMock = new Mock<IMapper>();
-            var loggerMock = new Mock<ILogger<PagesController>>();
-
-            redisMock.Setup(r => r.GetDataAsync<TriageToolFilterResponse>("TriageToolFilters/All", "PUBLISHED", 4))
-                     .ReturnsAsync((TriageToolFilterResponse)null);
-
-            var controller = new PagesController(loggerMock.Object, mapperMock.Object, redisMock.Object, configuration);
+            Mock<ISharedContentRedisInterface> redisMock;
+            PagesController controller;
+            SetupController(configuration, out redisMock, out controller);
 
             // Act
-            var result = await controller.Body("YourArticleId","Article") as ViewResult;
+            var result = await controller.Body("YourArticleId", "Article") as ViewResult;
 
             // Assert
             Assert.Equal(null, result.ContentType);
+            redisMock.VerifyAll();
+        }
 
+        [Fact]
+        public async Task PagesControllerBodyCalledWithNullFactorValuesShoutReturnNotFound()
+        {
+            IConfiguration configuration = SetupConfiguration();
+            Mock<ISharedContentRedisInterface> redisMock;
+            PagesController controller;
+            SetupController(configuration, out redisMock, out controller);
+
+            var result = await controller.Body(null, null) as NotFoundResult;
+
+            // Assert
+            result.StatusCode.Should().Be((int?)HttpStatusCode.NotFound);
         }
 
         [Fact]
         public async Task PagesControllerBodyCalledWithValueReturnsCorrectView()
         {
-            var redisMock = new Mock<ISharedContentRedisInterface>();
-            var mapperMock = new Mock<IMapper>();
-            var contentMode = new Dictionary<string, string>
-            {
-                {"contentMode:contentMode", "PUBLISHED" },
-            };
-            IConfiguration configuration = new ConfigurationBuilder()
-                .AddInMemoryCollection(contentMode)
-                .Build();
-
-            var loggerMock = new Mock<ILogger<PagesController>>();
-            var triageToolFilterResponse = new TriageToolFilterResponse
-            {
-                TriageToolFilter = new List<TriageToolFilters>
-            {
-                new () { DisplayText = "Option1" },
-                new () { DisplayText = "Option2" },
-            },
-            };
-            redisMock.Setup(r => r.GetDataAsync<TriageToolFilterResponse>("TriageToolFilters/All", "PUBLISHED", 4))
-                     .ReturnsAsync(triageToolFilterResponse);
-
-            var controller = new PagesController(loggerMock.Object, mapperMock.Object, redisMock.Object, configuration);
-
-            var mockSharedContentRedis = new Mock<ISharedContentRedisInterface>();
-            var triagePageResponse = new TriagePageResponse();
-            mockSharedContentRedis.Setup(x => x.GetDataAsync<TriagePageResponse>("TriageToolPages", "PUBLISHED", 4)).ReturnsAsync(triagePageResponse);
+            IConfiguration configuration = SetupConfiguration();
+            Mock<ISharedContentRedisInterface> redisMock;
+            PagesController controller;
+            SetupController(configuration, out redisMock, out controller);
 
             // Act
-            var result = await controller.Body("Article", "Article");
+            var result = await controller.Body("levelOne", "levelTwo");
 
             // Assert
             Assert.IsType<ViewResult>(result);
             var viewResult = result as ViewResult;
-            //Assert.IsInstanceOf<TriageToolOptionViewModel>(viewResult.Model);
+           
             var model = viewResult.Model as TriageToolOptionViewModel;
-            Assert.Equal("Article", model.Title);
-
+            Assert.Equal("levelOne", model.SelectedLevelOne);
+            Assert.Equal("levelTwo", model.SelectedLevelTwo);
         }
 
-        [Fact]
-        public async Task PagesControllerBodyReturnsFirstDocumentWhenCalledWithOutOption()
+        [Theory]
+        [MemberData(nameof(FilterTestData))]
+        public async Task PagesControllerBodyReturnsArticlesAndProductsForSelectedLevelOneAndLevelTwo(string levelOne, string levelTwo)
         {
-            var redisMock = new Mock<ISharedContentRedisInterface>();
+            IConfiguration configuration = SetupConfiguration();
+            Mock<ISharedContentRedisInterface> redisMock;
+            PagesController controller;
+            SetupController(configuration, out redisMock, out controller);
+
+            // Act
+            var result = await controller.Body(levelOne, levelTwo);
+            redisMock.VerifyAll();
+            var viewResult = result as ViewResult;
+            var model = viewResult.Model as TriageToolOptionViewModel;
+
+            // Assert
+            Assert.IsType<ViewResult>(result);
+        }
+
+        private void SetupController(IConfiguration configuration, out Mock<ISharedContentRedisInterface> redisMock, out PagesController controller)
+        {
+            redisMock = new Mock<ISharedContentRedisInterface>();
             var mapperMock = new Mock<IMapper>();
+            var loggerMock = new Mock<ILogger<PagesController>>();
+
+            redisMock.Setup(r => r.GetDataAsyncWithExpiry<TriageLookupResponse>("TriageTool/Lookup", "PUBLISHED", 4))
+                     .ReturnsAsync(GetTriageLookupResponse());
+            redisMock.Setup(r => r.GetDataAsyncWithExpiry<TriageResultPageResponse>("TriageTool/TriageResults", "PUBLISHED", 4))
+                     .ReturnsAsync(GetTriagePageResponse());
+
+            controller = new PagesController(loggerMock.Object, mapperMock.Object, redisMock.Object, configuration);
+        }
+
+        private static IConfiguration SetupConfiguration()
+        {
             var contentMode = new Dictionary<string, string>
             {
                 {"contentMode:contentMode", "PUBLISHED" },
@@ -104,31 +122,7 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
             IConfiguration configuration = new ConfigurationBuilder()
                 .AddInMemoryCollection(contentMode)
                 .Build();
-
-            var loggerMock = new Mock<ILogger<PagesController>>();
-            var triageToolFilterResponse = new TriageToolFilterResponse
-            {
-                TriageToolFilter = new List<TriageToolFilters>
-            {
-                new () { DisplayText = "Option1" },
-                new () { DisplayText = "Option2" },
-            },
-            };
-            redisMock.Setup(r => r.GetDataAsync<TriageToolFilterResponse>("TriageToolFilters/All", "PUBLISHED", 4))
-                     .ReturnsAsync(triageToolFilterResponse);
-
-            var controller = new PagesController(loggerMock.Object, mapperMock.Object, redisMock.Object, configuration);
-
-            // Mocking sharedContentRedis.GetDataAsync<TriagePageResponse>
-            var mockSharedContentRedis = new Mock<ISharedContentRedisInterface>();
-            var triagePageResponse = new TriagePageResponse();
-            mockSharedContentRedis.Setup(x => x.GetDataAsync<TriagePageResponse>("TriageToolPages", "PUBLISHED", 4)).ReturnsAsync(triagePageResponse);
-
-            // Act
-            var result = await controller.Body("Article", "Article");
-
-            // Assert
-            Assert.IsType<ViewResult>(result);
+            return configuration;
         }
 
         private TriageLookupResponse GetTriageLookupResponse()
@@ -387,6 +381,16 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
                                },
                            },
                        },
+                       FilterAdviceGroup = new FilterAdviceGroup
+                       {
+                           ContentItems = new List<FilterAdviceGroup>
+                           {
+                               new FilterAdviceGroup
+                               {
+                                   ContentItemId = "1",
+                               },
+                           },
+                       },
                    },
                    new TriageResultPage
                    {
@@ -399,6 +403,61 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
                                new TriageLevelOne
                                {
                                    ContentItemId = "1",
+                               },
+                           },
+                       },
+                       TriageLevelTwo = new TriageLevelTwo
+                       {
+                           ContentItems = new List<TriageLevelTwo>
+                           {
+                               new TriageLevelTwo
+                               {
+                                   ContentItemId = "LevelTwo2",
+                               },
+                           },
+                       },
+                       FilterAdviceGroup = new FilterAdviceGroup
+                       {
+                           ContentItems = new List<FilterAdviceGroup>
+                           {
+                               new FilterAdviceGroup
+                               {
+                                   ContentItemId = "3",
+                               },
+                           },
+                       },
+                   },
+                   new TriageResultPage
+                   {
+                       TriageOrdinal = 1,
+                       DisplayText = "page 3",
+                       TriageLevelOne = new TriageLevelOne
+                       {
+                           ContentItems = new List<TriageLevelOne>
+                           {
+                               new TriageLevelOne
+                               {
+                                   ContentItemId = "2",
+                               },
+                           },
+                       },
+                       TriageLevelTwo = new TriageLevelTwo
+                       {
+                           ContentItems = new List<TriageLevelTwo>
+                           {
+                               new TriageLevelTwo
+                               {
+                                   ContentItemId = "LevelTwo4",
+                               },
+                           },
+                       },
+                       FilterAdviceGroup = new FilterAdviceGroup
+                       {
+                           ContentItems = new List<FilterAdviceGroup>
+                           {
+                               new FilterAdviceGroup
+                               {
+                                   ContentItemId = "3",
                                },
                            },
                        },

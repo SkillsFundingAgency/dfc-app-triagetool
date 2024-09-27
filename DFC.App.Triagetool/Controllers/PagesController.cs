@@ -106,7 +106,6 @@ namespace DFC.App.Triagetool.Controllers
         public IActionResult BodyTop([ModelBinder(Name = "triage-level-one")] string levelOne, [ModelBinder(Name = "triage-level-two")] string levelTwo)
         {
             logger.LogWarning($"{nameof(BodyTop)} has returned no content for: {levelOne} and {levelTwo}");
-
             return NoContent();
         }
 
@@ -117,6 +116,11 @@ namespace DFC.App.Triagetool.Controllers
         public async Task<IActionResult> Body([ModelBinder(Name = "triage-level-one")] string levelOne, [ModelBinder(Name = "triage-level-two")] string levelTwo)
         {
             TriageToolOptionViewModel triageToolModel = await FilterResults(levelOne, levelTwo);
+
+            if (string.IsNullOrEmpty(levelOne) || string.IsNullOrEmpty(levelTwo))
+            {
+                return NotFound();
+            }
 
             return View(triageToolModel);
         }
@@ -227,12 +231,9 @@ namespace DFC.App.Triagetool.Controllers
                 status = "PUBLISHED";
             }
 
-            var triageToolModel = new TriageToolOptionViewModel
-            {
-                Title = levelOne,
-            };
+            var triageToolModel = new TriageToolOptionViewModel();
 
-            var triageResultPages = await sharedContentRedis.GetDataAsyncWithExpiry<TriageResultPageResponse>(ApplicationKeys.TriageResults, status);
+            var triageResultPages = await sharedContentRedis.GetDataAsyncWithExpiry<TriageResultPageResponse>(ApplicationKeys.TriageResults, status, expiry);
             var lookupResponse = await sharedContentRedis.GetDataAsyncWithExpiry<TriageLookupResponse>(ApplicationKeys.TriageToolLookup, status, expiry);
 
             if (lookupResponse != null)
