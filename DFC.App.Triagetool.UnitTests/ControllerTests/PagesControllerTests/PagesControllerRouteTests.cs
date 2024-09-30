@@ -58,8 +58,8 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
         private static async Task<IActionResult> RunControllerAction(PagesController controller, string levelOne, string levelTwo, string actionName)
         {
             return actionName switch
-            {
-                _ => await controller.Body(levelOne, levelTwo, null).ConfigureAwait(false),
+                {
+                    _ => await controller.Body(levelOne, levelTwo, null, null,null).ConfigureAwait(false),
             };
         }
 

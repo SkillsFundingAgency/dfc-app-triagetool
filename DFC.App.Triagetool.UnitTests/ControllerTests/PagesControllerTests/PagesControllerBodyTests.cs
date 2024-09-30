@@ -39,7 +39,7 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
             SetupController(configuration, out redisMock, out controller);
 
             // Act
-            var result = await controller.Body("YourArticleId", "Article", null) as ViewResult;
+            var result = await controller.Body("YourArticleId", "Article", null, null, null) as ViewResult;
 
             // Assert
             Assert.Equal(null, result.ContentType);
@@ -47,17 +47,17 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
         }
 
         [Fact]
-        public async Task PagesControllerBodyCalledWithNullFactorValuesShoutReturnNotFound()
+        public async Task PagesControllerBodyCalledWithNullFactorValuesShoutReturnError()
         {
             IConfiguration configuration = SetupConfiguration();
             Mock<ISharedContentRedisInterface> redisMock;
             PagesController controller;
             SetupController(configuration, out redisMock, out controller);
 
-            var result = await controller.Body(null, null, null) as NotFoundResult;
+            var result = await controller.Body(null, null, null, null,null) as ViewResult;
 
             // Assert
-            result.StatusCode.Should().Be((int?)HttpStatusCode.NotFound);
+            result.ViewName.Should().Be("Error");
         }
 
         [Fact]
@@ -69,12 +69,12 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
             SetupController(configuration, out redisMock, out controller);
 
             // Act
-            var result = await controller.Body("levelOne", "levelTwo", null);
+            var result = await controller.Body("levelOne", "levelTwo", null, null, null);
 
             // Assert
             Assert.IsType<ViewResult>(result);
             var viewResult = result as ViewResult;
-           
+
             var model = viewResult.Model as TriageToolOptionViewModel;
             Assert.Equal("levelOne", model.SelectedLevelOne);
             Assert.Equal("levelTwo", model.SelectedLevelTwo);
@@ -90,7 +90,7 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
             SetupController(configuration, out redisMock, out controller);
 
             // Act
-            var result = await controller.Body(levelOne, levelTwo, null);
+            var result = await controller.Body(levelOne, levelTwo, null, null, null);
             redisMock.VerifyAll();
             var viewResult = result as ViewResult;
             var model = viewResult.Model as TriageToolOptionViewModel;
