@@ -41,7 +41,7 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
             var controller = new PagesController(loggerMock.Object, mapperMock.Object, redisMock.Object, configuration);
 
             // Act
-            var result = controller.HeroBanner("levelOne", "levelTwo"); // Pass null to simulate no data
+            var result = controller.HeroBanner("levelOne", "levelTwo", null); // Pass null to simulate no data
 
             // Assert
             var viewResult = Assert.IsType<ViewResult>(result);

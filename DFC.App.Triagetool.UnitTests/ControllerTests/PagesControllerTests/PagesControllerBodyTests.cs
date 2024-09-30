@@ -39,7 +39,7 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
             SetupController(configuration, out redisMock, out controller);
 
             // Act
-            var result = await controller.Body("YourArticleId", "Article") as ViewResult;
+            var result = await controller.Body("YourArticleId", "Article", null) as ViewResult;
 
             // Assert
             Assert.Equal(null, result.ContentType);
@@ -54,7 +54,7 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
             PagesController controller;
             SetupController(configuration, out redisMock, out controller);
 
-            var result = await controller.Body(null, null) as NotFoundResult;
+            var result = await controller.Body(null, null, null) as NotFoundResult;
 
             // Assert
             result.StatusCode.Should().Be((int?)HttpStatusCode.NotFound);
@@ -69,7 +69,7 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
             SetupController(configuration, out redisMock, out controller);
 
             // Act
-            var result = await controller.Body("levelOne", "levelTwo");
+            var result = await controller.Body("levelOne", "levelTwo", null);
 
             // Assert
             Assert.IsType<ViewResult>(result);
@@ -90,7 +90,7 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
             SetupController(configuration, out redisMock, out controller);
 
             // Act
-            var result = await controller.Body(levelOne, levelTwo);
+            var result = await controller.Body(levelOne, levelTwo, null);
             redisMock.VerifyAll();
             var viewResult = result as ViewResult;
             var model = viewResult.Model as TriageToolOptionViewModel;

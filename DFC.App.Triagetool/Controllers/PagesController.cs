@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.VisualBasic;
 using System;
 using System.Collections.Generic;
 using System.Composition;
@@ -109,11 +110,36 @@ namespace DFC.App.Triagetool.Controllers
             return NoContent();
         }
 
+        [HttpPost]
+        [Route("pages/body")]
+        [Route("pages/{triage-select?}/body")]
+        [Route("pages/{triage-level-one?}/{triage-level-two?}/body")]
+        public async Task<IActionResult> Body(TriageToolFilterViewModel viewModel)
+        {
+            TriageToolOptionViewModel triageToolModel = await FilterResults(viewModel.LevelOne, viewModel.LevelTwo);
+            if (viewModel.FilterAction == TriageToolFilerAction.ClearFilters)
+            {
+                triageToolModel.SelectedFilters = new List<string>();
+            }
+            else
+            {
+                triageToolModel.SelectedFilters = string.IsNullOrEmpty(viewModel.FilterAdviceGroupOptions) ? new List<string>() : viewModel.FilterAdviceGroupOptions.Split(",").ToList();
+            }
+
+            var filterQuery = new TriageFilterQuery { LevelOne = viewModel.LevelOne, LevelTwo = viewModel.LevelTwo, FilterAdviceGroup = triageToolModel.SelectedFilters };
+            ApplyFilters(filterQuery, triageToolModel);
+
+            return View(triageToolModel);
+        }
+
         [HttpGet]
         [Route("pages/body")]
         [Route("pages/{triage-select?}/body")]
         [Route("pages/{triage-level-one?}/{triage-level-two?}/body")]
-        public async Task<IActionResult> Body([ModelBinder(Name = "triage-level-one")] string levelOne, [ModelBinder(Name = "triage-level-two")] string levelTwo, [ModelBinder(Name = "triage-select")] string multiLevels)
+        public async Task<IActionResult> Body([ModelBinder(Name = "triage-level-one")] string levelOne, [ModelBinder(Name = "triage-level-two")] string levelTwo,
+            [ModelBinder(Name = "triage-select")] string multiLevels,
+            [ModelBinder(Name = "filterAdviceGroupOptions")] List<string> filterAdviceGroupOptions,
+            [ModelBinder(Name = "FilterAction")] TriageToolFilerAction? filterAction)
         {
             if (string.IsNullOrEmpty(levelOne) || string.IsNullOrEmpty(levelTwo))
             {
@@ -140,6 +166,17 @@ namespace DFC.App.Triagetool.Controllers
             }
 
             TriageToolOptionViewModel triageToolModel = await FilterResults(levelOne, levelTwo);
+            if (filterAction.HasValue && filterAction == TriageToolFilerAction.ApplyFilters)
+            {
+                triageToolModel.SelectedFilters = filterAdviceGroupOptions == null ? new List<string>() : filterAdviceGroupOptions;
+            }
+            else
+            {
+                triageToolModel.SelectedFilters = new List<string>();
+            }
+
+            var filterQuery = new TriageFilterQuery { LevelOne = levelOne, LevelTwo = levelTwo, FilterAdviceGroup = triageToolModel.SelectedFilters };
+            ApplyFilters(filterQuery, triageToolModel);
 
             return View(triageToolModel);
         }
@@ -220,12 +257,18 @@ namespace DFC.App.Triagetool.Controllers
 
             var filterQuery = System.Text.Json.JsonSerializer.Deserialize<TriageFilterQuery>(appData);
             var result = await FilterResults(filterQuery?.LevelOne, filterQuery?.LevelTwo);
+            ApplyFilters(filterQuery, result);
 
+            return PartialView("TriageToolPartialViews/TriageResult", result);
+        }
+
+        private static void ApplyFilters(TriageFilterQuery? filterQuery, TriageToolOptionViewModel? result)
+        {
             if (result != null &&
-                filterQuery != null &&
-                filterQuery.FilterAdviceGroup != null &&
-                result.FilterAdviceGroups != null &&
-                filterQuery.FilterAdviceGroup.Any())
+                            filterQuery != null &&
+                            filterQuery.FilterAdviceGroup != null &&
+                            result.FilterAdviceGroups != null &&
+                            filterQuery.FilterAdviceGroup.Any())
             {
                 result.Pages = result.Pages.Where(x => x.FilterAdviceGroup != null &&
                                                        x.FilterAdviceGroup.ContentItems != null &&
@@ -233,8 +276,6 @@ namespace DFC.App.Triagetool.Controllers
                                                                             filterQuery.FilterAdviceGroup.Contains(y.ContentItemId))).ToList();
                 result.FilterAdviceGroups = result.FilterAdviceGroups.Where(x => filterQuery.FilterAdviceGroup.Contains(x.ContentItemId)).ToList();
             }
-
-            return PartialView("TriageToolPartialViews/TriageResult", result);
         }
 
         private static void MatchFilterAdviceGroup(TriageLookupResponse? lookupResponse, TriageLevelTwo? levelTwo)
@@ -335,6 +376,7 @@ namespace DFC.App.Triagetool.Controllers
                     var selectedLevelOne = lookupResponse.TriageLevelOne.SingleOrDefault(l1 => l1.Value == levelOne);
                     var leveTwos = selectedLevelOne?.LevelTwo?.ContentItems;
                     triageToolModel.FilterAdviceGroups = leveTwos?.SingleOrDefault(x => x.Value == levelTwo)?.FilterAdviceGroup?.ContentItems;
+                    triageToolModel.AllFilterAdviceGroups = leveTwos?.SingleOrDefault(x => x.Value == levelTwo)?.FilterAdviceGroup?.ContentItems;
                     triageToolModel.TriageResultTiles = triageResultPages?.TriageResultTile;
                 }
             }

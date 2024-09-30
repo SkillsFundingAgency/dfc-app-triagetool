@@ -3,28 +3,38 @@
 @using System.Web
 @model TriageToolOptionViewModel
 
+<form method="get" novalidate="novalidate" action="/triagetool?triage-level-one=@Model.SelectedLevelOne&triage-level-two=@Model.SelectedLevelTwo" id="TriageToolFilters">
 <div class="triage-body">
-            <input  type="hidden"  id="selectedLevelOne" value="@Model.SelectedLevelOne"/>
-        <input type="hidden" id="selectedLevelTwo" value="@Model.SelectedLevelTwo" />
+            <input  type="hidden" name="triage-level-one"  id="selectedLevelOne" value="@Model.SelectedLevelOne"/>
+        <input type="hidden" name="triage-level-two" id="selectedLevelTwo" value="@Model.SelectedLevelTwo" />
             <div class="dfc-app-triage-search-header-panel">
             <div class="dfc-app-triage-filter-header">
                 <span>Select the advice you want to see</span>
             </div>
             </div>
         <div class="dfc-app-triage-search-panel">
-                    <div class="dfc-app-triage-filter-sub-header">
+                <div class="dfc-app-triage-filter-sub-header">
                         <span>Showing all</span>
-                    </div>
+                 </div>
 
           <div class="dfc-app-triage-filter-advice-group-container govuk-grid-row">
-                        @if(Model.FilterAdviceGroups != null )
+                @if (Model.AllFilterAdviceGroups != null)
                         {
-                            @foreach (var fac in Model.FilterAdviceGroups)
+                    @foreach (var fac in Model.AllFilterAdviceGroups)
                             {
                             <div class="govuk-grid-column-one-third dfc-app-triage-filter-item">
                                 <div class="govuk-checkboxes--small">
                                         <div class="govuk-checkboxes__item">
-                                            <input typeof="checkbox" class="govuk-checkboxes__input" name="filterAdviceGroupOptions" id="@fac.ContentItemId" type="checkbox" value="@fac.ContentItemId"/>
+                                    @if( (Model.SelectedFilters != null && Model.SelectedFilters.Contains(fac.ContentItemId)) )
+                                    {
+                                        <input typeof="checkbox" checked class="govuk-checkboxes__input" name="filterAdviceGroupOptions" id="@fac.ContentItemId" type="checkbox" value="@fac.ContentItemId" />
+
+                                    } 
+                                    else
+                                    {
+                                        <input  typeof= "checkbox" class="govuk-checkboxes__input" name="filterAdviceGroupOptions" id="@fac.ContentItemId" type="checkbox" value="@fac.ContentItemId" />
+
+                                    }
                                                         <label class="govuk-label govuk-checkboxes__label" for="@fac.ContentItemId">
                                                 @fac.Title
                                             </label>
@@ -36,8 +46,10 @@
                         }
                      </div>
                      <div>
-                         <button type="button" class="govuk-button dfc-app-triage-btn ncs-button__primary govuk-button--start"  id="applyFilters">Apply Filters</button>
-                         <button type="button"  class="govuk-button ncs-button__secondary triage-tool-clear-button" id="clearFilters">Clear Filters</button>
+                <button type="submit" class="govuk-button dfc-app-triage-btn ncs-button__primary govuk-button--start single-factor-select" id="applyFiltersJs" name="FilterAction" value="ApplyFilters">Apply Filters</button>
+                <button type="submit" class="govuk-button ncs-button__secondary triage-tool-clear-button single-factor-select" id="clearFiltersjs" name="FilterAction" value="ClearFilters">Clear Filters</button>
+                         <button type="button" class="govuk-button dfc-app-triage-btn ncs-button__primary govuk-button--start multi-factor-select"  id="applyFilters">Apply Filters</button>
+                <button type="button" class="govuk-button ncs-button__secondary triage-tool-clear-button multi-factor-select" id="clearFilters">Clear Filters</button>
                     </div>
 
          </div>
@@ -48,6 +60,7 @@
         @Html.Raw(Model.SharedContent)
     </div>
 </div>
+</form>
 @* <div>
     <form method="post" novalidate="novalidate" action="/triagetool" id="TriageToolFilters">
         <div class="govuk-grid-row govuk-!-margin-top-2 govuk-!-padding-top-5">

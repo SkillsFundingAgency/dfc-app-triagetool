@@ -26,7 +26,7 @@ namespace DFC.App.Triagetool.ViewModels
 
         public List<TriageToolResultGroupViewModel> ResultGroups { get; set; }
 
-        public List<string> SelectedFilters { get; set; }
+        public List<string>? SelectedFilters { get; set; }
 
         public List<TriageLevelOne>? TriageLevelOnes { get; set; }
 
@@ -42,8 +42,10 @@ namespace DFC.App.Triagetool.ViewModels
 
         public string? SharedContent { get; set; }
 
-        public string? LevelOneContentItemId { get;  set; }
+        public string? LevelOneContentItemId { get; set; }
 
         public List<TriageFilterAdviceGroupImage>? TriageFilterAdviceGroupImage { get;  set; }
+
+        public List<FilterAdviceGroup>? AllFilterAdviceGroups { get;  set; }
     }
 }
