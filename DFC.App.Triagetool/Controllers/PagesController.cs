@@ -113,14 +113,33 @@ namespace DFC.App.Triagetool.Controllers
         [Route("pages/body")]
         [Route("pages/{triage-select?}/body")]
         [Route("pages/{triage-level-one?}/{triage-level-two?}/body")]
-        public async Task<IActionResult> Body([ModelBinder(Name = "triage-level-one")] string levelOne, [ModelBinder(Name = "triage-level-two")] string levelTwo)
+        public async Task<IActionResult> Body([ModelBinder(Name = "triage-level-one")] string levelOne, [ModelBinder(Name = "triage-level-two")] string levelTwo, [ModelBinder(Name = "triage-select")] string multiLevels)
         {
-            TriageToolOptionViewModel triageToolModel = await FilterResults(levelOne, levelTwo);
-
             if (string.IsNullOrEmpty(levelOne) || string.IsNullOrEmpty(levelTwo))
             {
-                return NotFound();
+                if (string.IsNullOrEmpty(multiLevels))
+                {
+                    return View("Error");
+                }
+                else
+                {
+                    var selectedLevels = multiLevels.Split('|');
+                    if (selectedLevels == null || selectedLevels.Length != 2)
+                    {
+                        return View("Error");
+                    }
+
+                    levelOne = selectedLevels[0];
+                    levelTwo = selectedLevels[1];
+
+                    if (string.IsNullOrEmpty(levelOne) || string.IsNullOrEmpty(levelTwo))
+                    {
+                        return View("Error");
+                    }
+                }
             }
+
+            TriageToolOptionViewModel triageToolModel = await FilterResults(levelOne, levelTwo);
 
             return View(triageToolModel);
         }
@@ -140,8 +159,32 @@ namespace DFC.App.Triagetool.Controllers
         [Route("pages/herobanner")]
         [Route("pages/{triage-select?}/herobanner")]
         [Route("pages/{triage-level-one?}/{triage-level-two?}/herobanner")]
-        public IActionResult HeroBanner([ModelBinder(Name = "triage-level-one")] string? levelOne, [ModelBinder(Name = "triage-level-two")] string? levelTwo)
+        public IActionResult HeroBanner([ModelBinder(Name = "triage-level-one")] string? levelOne, [ModelBinder(Name = "triage-level-two")] string? levelTwo, [ModelBinder(Name = "triage-select")] string multiLevels)
         {
+            if (string.IsNullOrEmpty(levelOne) || string.IsNullOrEmpty(levelTwo))
+            {
+                if (string.IsNullOrEmpty(multiLevels))
+                {
+                    return NoContent();
+                }
+                else
+                {
+                    var selectedLevels = multiLevels.Split('|');
+                    if (selectedLevels == null || selectedLevels.Length != 2)
+                    {
+                        return NoContent();
+                    }
+
+                    levelOne = selectedLevels[0];
+                    levelTwo = selectedLevels[1];
+
+                    if (string.IsNullOrEmpty(levelOne) || string.IsNullOrEmpty(levelTwo))
+                    {
+                        return NoContent();
+                    }
+                }
+            }
+
             var viewModel = new HeroBannerViewModel
             {
                 SelectedLevelOne = levelOne,
