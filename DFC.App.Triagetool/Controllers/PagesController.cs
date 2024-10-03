@@ -110,28 +110,6 @@ namespace DFC.App.Triagetool.Controllers
             return NoContent();
         }
 
-        //[HttpPost]
-        //[Route("pages/body")]
-        //[Route("pages/{triage-select?}/body")]
-        //[Route("pages/{triage-level-one?}/{triage-level-two?}/body")]
-        //public async Task<IActionResult> Body(TriageToolFilterViewModel viewModel)
-        //{
-        //    TriageToolOptionViewModel triageToolModel = await FilterResults(viewModel.LevelOne, viewModel.LevelTwo);
-        //    if (viewModel.FilterAction == TriageToolFilerAction.ClearFilters)
-        //    {
-        //        triageToolModel.SelectedFilters = new List<string>();
-        //    }
-        //    else
-        //    {
-        //        triageToolModel.SelectedFilters = string.IsNullOrEmpty(viewModel.FilterAdviceGroupOptions) ? new List<string>() : viewModel.FilterAdviceGroupOptions.Split(",").ToList();
-        //    }
-
-        //    var filterQuery = new TriageFilterQuery { LevelOne = viewModel.LevelOne, LevelTwo = viewModel.LevelTwo, FilterAdviceGroup = triageToolModel.SelectedFilters };
-        //    ApplyFilters(filterQuery, triageToolModel);
-
-        //    return View(triageToolModel);
-        //}
-
         [HttpGet]
         [Route("pages/body")]
         [Route("pages/{triage-select?}/body")]
