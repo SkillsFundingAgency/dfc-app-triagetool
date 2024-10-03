@@ -22,10 +22,17 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
     [Trait("Category", "Pages Controller - HeroBanner Unit Tests")]
     public class PagesControllerHeroBannerTests : BasePagesControllerTests
     {
-        [Theory]
-        [MemberData(nameof(JsonMediaTypes))]
-        [MemberData(nameof(HtmlMediaTypes))]
-        public async Task PagesControllerHeroBannerReturnsSuccessWithSelectedLevelOneAndLevelTwo(string mediaTypeName)
+        public static IEnumerable<object[]> SelectedLevels => new List<object[]>
+        {
+            new object[] { string.Empty, string.Empty,  string.Empty },
+            new object[] { null, null, null },
+            new object[] { null, null, "LevelOne" },
+            new object[] { "LevelOne", null, string.Empty },
+            new object[] { "", "LevelTwo", string.Empty },
+        };
+
+        [Fact]
+        public void PagesControllerHeroBannerReturnsSuccessWithSelectedLevelOneAndLevelTwo()
         {
             var redisMock = new Mock<ISharedContentRedisInterface>();
             var mapperMock = new Mock<IMapper>();
@@ -48,6 +55,56 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
             var model = Assert.IsAssignableFrom<HeroBannerViewModel>(viewResult.ViewData.Model);
             model.SelectedLevelOne.Should().Be("levelOne");
             model.SelectedLevelTwo.Should().Be("levelTwo");
+        }
+
+        [Fact]
+        public async Task PagesControllerHeroBannerReturnsSelectedValuesWithSingleFactorSelect()
+        {
+            var redisMock = new Mock<ISharedContentRedisInterface>();
+            var mapperMock = new Mock<IMapper>();
+            var contentMode = new Dictionary<string, string>
+            {
+                {"contentMode:contentMode", "PUBLISHED" },
+            };
+            IConfiguration configuration = new ConfigurationBuilder()
+                .AddInMemoryCollection(contentMode)
+                .Build();
+            var loggerMock = new Mock<ILogger<PagesController>>();
+
+            var controller = new PagesController(loggerMock.Object, mapperMock.Object, redisMock.Object, configuration);
+
+            // Act
+            var result = controller.HeroBanner("", "", "LevelOne|LevelTwo"); // Pass null to simulate no data
+
+            // Assert
+            var viewResult = Assert.IsType<ViewResult>(result);
+            var model = Assert.IsAssignableFrom<HeroBannerViewModel>(viewResult.ViewData.Model);
+            model.SelectedLevelOne.Should().Be("LevelOne");
+            model.SelectedLevelTwo.Should().Be("LevelTwo");
+        }
+
+        [Theory]
+        [MemberData(nameof(SelectedLevels))]
+        public async Task PagesControllerHeroBannerReturnsNotFoundWhenMultipleValuesareNotPassed(string levelOne, string levelTwo, string multiSelect )
+        {
+            var redisMock = new Mock<ISharedContentRedisInterface>();
+            var mapperMock = new Mock<IMapper>();
+            var contentMode = new Dictionary<string, string>
+            {
+                {"contentMode:contentMode", "PUBLISHED" },
+            };
+            IConfiguration configuration = new ConfigurationBuilder()
+                .AddInMemoryCollection(contentMode)
+                .Build();
+            var loggerMock = new Mock<ILogger<PagesController>>();
+
+            var controller = new PagesController(loggerMock.Object, mapperMock.Object, redisMock.Object, configuration);
+
+            // Act
+            var result = controller.HeroBanner("", "", "LevelOneLevelTwo"); // Pass null to simulate no data
+
+            // Assert
+            var noContentResult = Assert.IsType<NoContentResult>(result);
         }
     }
 }

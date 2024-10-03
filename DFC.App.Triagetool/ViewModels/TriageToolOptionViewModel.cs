@@ -11,26 +11,13 @@ namespace DFC.App.Triagetool.ViewModels
     {
         public TriageToolOptionViewModel()
         {
-            Filters = new List<TriageToolFilterViewModel>();
             Pages = new List<TriageResultPage>();
             SelectedFilters = new List<string>();
         }
 
-        public string? Title { get; set; }
-
-        public string? DisplayText { get; set; }
-
-        public List<TriageToolFilterViewModel> Filters { get; set; }
-
         public List<TriageResultPage> Pages { get; set; }
 
-        public List<TriageToolResultGroupViewModel> ResultGroups { get; set; }
-
         public List<string>? SelectedFilters { get; set; }
-
-        public List<TriageLevelOne>? TriageLevelOnes { get; set; }
-
-        public List<TriageLevelTwo>? TriageLevelTwos { get; set; }
 
         public List<FilterAdviceGroup>? FilterAdviceGroups { get; set; }
 
