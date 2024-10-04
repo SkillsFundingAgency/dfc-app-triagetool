@@ -7,6 +7,7 @@ using DFC.Common.SharedContent.Pkg.Netcore.Interfaces;
 using DFC.Common.SharedContent.Pkg.Netcore.Model.Common;
 using DFC.Common.SharedContent.Pkg.Netcore.Model.ContentItems.SharedHtml;
 using DFC.Common.SharedContent.Pkg.Netcore.Model.Response;
+using Google.Protobuf.WellKnownTypes;
 using FluentNHibernate.Conventions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -31,12 +32,13 @@ namespace DFC.App.Triagetool.Controllers
         public const string DefaultPageTitleSuffix = BradcrumbTitle + " | National Careers Service";
         public const string PageTitleSuffix = " | " + DefaultPageTitleSuffix;
 
+        private const string ExpiryAppSettings = "Cms:Expiry";
         private readonly ILogger<PagesController> logger;
         private readonly IConfiguration configuration;
         private string status = string.Empty;
         private readonly AutoMapper.IMapper mapper;
         private readonly ISharedContentRedisInterface sharedContentRedis;
-        private double expiry = 4;
+        private double expiryInHours = 4;
 
         public PagesController(
             ILogger<PagesController> logger,
@@ -44,10 +46,19 @@ namespace DFC.App.Triagetool.Controllers
             ISharedContentRedisInterface sharedContentRedis,
             IConfiguration configuration)
         {
+            this.configuration = configuration;
             this.logger = logger;
             this.mapper = mapper;
             this.sharedContentRedis = sharedContentRedis;
             status = configuration.GetSection("contentMode:contentMode").Get<string>();
+            if (this.configuration != null)
+            {
+                string expiryAppString = this.configuration.GetSection(ExpiryAppSettings).Get<string>();
+                if (double.TryParse(expiryAppString, out var expiryAppStringParseResult))
+                {
+                    expiryInHours = expiryAppStringParseResult;
+                }
+            }
         }
 
         [HttpGet]
@@ -218,8 +229,8 @@ namespace DFC.App.Triagetool.Controllers
                 status = "PUBLISHED";
             }
 
-            var triagetooldocuments = await sharedContentRedis.GetDataAsyncWithExpiry<TriagePageResponse>(Constants.TriagePages, status);
-            var triageFilters = await sharedContentRedis.GetDataAsyncWithExpiry<TriageToolFilterResponse>(Constants.TriageToolFilters, status);
+            var triagetooldocuments = await sharedContentRedis.GetDataAsyncWithExpiry<TriagePageResponse>(Constants.TriagePages, status, expiryInHours);
+            var triageFilters = await sharedContentRedis.GetDataAsyncWithExpiry<TriageToolFilterResponse>(Constants.TriageToolFilters, status, expiryInHours);
             var sortedFilters = triageFilters.TriageToolFilter;
 
             List<TriageModelClass> modelClass = new List<TriageModelClass>();
@@ -295,8 +306,8 @@ namespace DFC.App.Triagetool.Controllers
 
             var triageToolModel = new TriageToolOptionViewModel();
 
-            var triageResultPages = await sharedContentRedis.GetDataAsyncWithExpiry<TriageResultPageResponse>(ApplicationKeys.TriageResults, status, expiry);
-            var lookupResponse = await sharedContentRedis.GetDataAsyncWithExpiry<TriageLookupResponse>(ApplicationKeys.TriageToolLookup, status, expiry);
+            var triageResultPages = await sharedContentRedis.GetDataAsyncWithExpiry<TriageResultPageResponse>(ApplicationKeys.TriageResults, status, expiryInHours);
+            var lookupResponse = await sharedContentRedis.GetDataAsyncWithExpiry<TriageLookupResponse>(ApplicationKeys.TriageToolLookup, status, expiryInHours);
 
             if (lookupResponse != null)
             {
@@ -360,6 +371,20 @@ namespace DFC.App.Triagetool.Controllers
             }
 
             return triageToolModel;
+        }
+
+        private string FormatFilterCase(string article, List<string> sortedFilters)
+        {
+            foreach (var option in sortedFilters)
+            {
+                if (string.Equals(option, article, StringComparison.CurrentCultureIgnoreCase))
+                {
+                    article = option;
+                    break;
+                }
+            }
+
+            return article;
         }
     }
 }
