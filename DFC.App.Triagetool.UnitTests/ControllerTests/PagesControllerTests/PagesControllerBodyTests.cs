@@ -12,6 +12,7 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using System.Net;
 using System.Net.Mime;
 using System.Threading.Tasks;
@@ -25,7 +26,55 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
     {
         public static IEnumerable<object[]> FilterTestData => new List<object[]>
         {
-            new object[] { "Education", "LevelTwo1" },
+            new object[] { "Education", "LevelTwo1",null,null,null,
+                new List<FilterAdviceGroup> { GetTriageLookupResponse().FilterAdviceGroup[0], GetTriageLookupResponse().FilterAdviceGroup[1], },
+                new List<FilterAdviceGroup>{ GetTriageLookupResponse().FilterAdviceGroup[0], GetTriageLookupResponse().FilterAdviceGroup[1], },
+                new List<TriageResultPage> { GetTriagePageResponse().Page[0], },
+                },
+            new object[] { null, null,"Education|LevelTwo1",null,null,
+                new List<FilterAdviceGroup> { GetTriageLookupResponse().FilterAdviceGroup[0], GetTriageLookupResponse().FilterAdviceGroup[1], },
+                new List<FilterAdviceGroup>{ GetTriageLookupResponse().FilterAdviceGroup[0], GetTriageLookupResponse().FilterAdviceGroup[1], },
+                new List<TriageResultPage> { GetTriagePageResponse().Page[0], },
+                },
+            new object[] { "Education", "LevelTwo1",null,new List<string> {GetTriageLookupResponse().FilterAdviceGroup[0].Title },TriageToolFilerAction.ClearFilters,
+                new List<FilterAdviceGroup> { GetTriageLookupResponse().FilterAdviceGroup[0], GetTriageLookupResponse().FilterAdviceGroup[1], },
+                new List<FilterAdviceGroup>{ GetTriageLookupResponse().FilterAdviceGroup[0], GetTriageLookupResponse().FilterAdviceGroup[1], },
+                new List<TriageResultPage> { GetTriagePageResponse().Page[0], },
+                },
+            new object[] { "Education", "LevelTwo1",null,new List<string> {GetTriageLookupResponse().FilterAdviceGroup[0].ContentItemId },TriageToolFilerAction.ApplyFilters,
+                new List<FilterAdviceGroup> { GetTriageLookupResponse().FilterAdviceGroup[0], GetTriageLookupResponse().FilterAdviceGroup[1], },
+                new List<FilterAdviceGroup>{ GetTriageLookupResponse().FilterAdviceGroup[0] },
+                new List<TriageResultPage> { GetTriagePageResponse().Page[0], },
+                },
+            new object[] { "Education", "LevelTwo4",null,null,null,
+                null,
+                null,
+                new List<TriageResultPage>(),
+                },
+            new object[] { "Education", "LevelTwo2",null,null,null,
+                new List<FilterAdviceGroup> { GetTriageLookupResponse().FilterAdviceGroup[0], GetTriageLookupResponse().FilterAdviceGroup[2], },
+                new List<FilterAdviceGroup>{ GetTriageLookupResponse().FilterAdviceGroup[0], GetTriageLookupResponse().FilterAdviceGroup[2], },
+                new List<TriageResultPage> { GetTriagePageResponse().Page[0], GetTriagePageResponse().Page[1], },
+                },
+            new object[] { "Employed", "LevelTwo4",null,null,null,
+                new List<FilterAdviceGroup> { GetTriageLookupResponse().FilterAdviceGroup[0], GetTriageLookupResponse().FilterAdviceGroup[2], },
+                new List<FilterAdviceGroup>{ GetTriageLookupResponse().FilterAdviceGroup[0], GetTriageLookupResponse().FilterAdviceGroup[2], },
+                new List<TriageResultPage> { GetTriagePageResponse().Page[2], GetTriagePageResponse().Page[3],GetTriagePageResponse().Page[4] },
+                },
+            new object[] { "Not In Work", "LevelTwo7",null,null,null,
+                new List<FilterAdviceGroup> { GetTriageLookupResponse().FilterAdviceGroup[2], GetTriageLookupResponse().FilterAdviceGroup[3], },
+                new List<FilterAdviceGroup>{ GetTriageLookupResponse().FilterAdviceGroup[2], GetTriageLookupResponse().FilterAdviceGroup[3], },
+                new List<TriageResultPage> { GetTriagePageResponse().Page[4], GetTriagePageResponse().Page[3] },
+                },
+        };
+
+        public static IEnumerable<object[]> SelectedLevels => new List<object[]>
+        {
+            new object[] { string.Empty, string.Empty, string.Empty },
+            new object[] { null, null, null },
+            new object[] { "levelOne", string.Empty, string.Empty },
+            new object[] { string.Empty, "levelTwo", string.Empty },
+            new object[] { string.Empty, string.Empty, "singleselect" },
         };
 
         [Theory]
@@ -46,15 +95,16 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
             redisMock.VerifyAll();
         }
 
-        [Fact]
-        public async Task PagesControllerBodyCalledWithNullFactorValuesShoutReturnError()
+        [Theory]
+        [MemberData(nameof(SelectedLevels))]
+        public async Task PagesControllerBodyCalledWithNullFactorValuesShoutReturnError(string levelOne, string levelTwo, string singleSelect)
         {
             IConfiguration configuration = SetupConfiguration();
             Mock<ISharedContentRedisInterface> redisMock;
             PagesController controller;
             SetupController(configuration, out redisMock, out controller);
 
-            var result = await controller.Body(null, null, null, null,null) as ViewResult;
+            var result = await controller.Body(levelOne, levelTwo, singleSelect, null,null) as ViewResult;
 
             // Assert
             result.ViewName.Should().Be("Error");
@@ -82,7 +132,12 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
 
         [Theory]
         [MemberData(nameof(FilterTestData))]
-        public async Task PagesControllerBodyReturnsArticlesAndProductsForSelectedLevelOneAndLevelTwo(string levelOne, string levelTwo)
+        public async Task PagesControllerBodyReturnsArticlesAndProductsForSelectedLevelOneAndLevelTwo(string levelOne, string levelTwo, string singleSelect,
+                                                                                                       List<string>? selectedFilters,
+                                                                                                       TriageToolFilerAction? action,
+                                                                                                       List<FilterAdviceGroup> expectedAllAdviceGroups,
+                                                                                                       List<FilterAdviceGroup> expectedSelectedFilterAdviceGroup,
+                                                                                                       List<TriageResultPage> expectedResults)
         {
             IConfiguration configuration = SetupConfiguration();
             Mock<ISharedContentRedisInterface> redisMock;
@@ -90,13 +145,16 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
             SetupController(configuration, out redisMock, out controller);
 
             // Act
-            var result = await controller.Body(levelOne, levelTwo, null, null, null);
+            var result = await controller.Body(levelOne, levelTwo, singleSelect, selectedFilters, action);
             redisMock.VerifyAll();
             var viewResult = result as ViewResult;
             var model = viewResult.Model as TriageToolOptionViewModel;
 
             // Assert
             Assert.IsType<ViewResult>(result);
+            model.Pages.Should().BeEquivalentTo(expectedResults);
+            model.AllFilterAdviceGroups.Should().BeEquivalentTo(expectedAllAdviceGroups);
+            model.FilterAdviceGroups.Should().BeEquivalentTo(expectedSelectedFilterAdviceGroup);
         }
 
         private void SetupController(IConfiguration configuration, out Mock<ISharedContentRedisInterface> redisMock, out PagesController controller)
@@ -125,7 +183,7 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
             return configuration;
         }
 
-        private TriageLookupResponse GetTriageLookupResponse()
+        private static TriageLookupResponse GetTriageLookupResponse()
         {
             var response = new TriageLookupResponse();
             response.TriageLevelOne = new List<TriageLevelOne>
@@ -185,7 +243,7 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
                     ContentItemId = "3",
                     Title = "Not In Work",
                     Ordinal = 1,
-                    Value = "not in work",
+                    Value = "Not In Work",
                     LevelTwo = new TriageLevelTwo
                     {
                         ContentItems = new List<TriageLevelTwo>
@@ -351,7 +409,7 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
             return response;
         }
 
-        private TriageResultPageResponse GetTriagePageResponse()
+        private static TriageResultPageResponse GetTriagePageResponse()
         {
             var response = new TriageResultPageResponse
             {
@@ -378,6 +436,10 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
                                new TriageLevelTwo
                                {
                                    ContentItemId = "LevelTwo1",
+                               },
+                               new TriageLevelTwo
+                               {
+                                   ContentItemId = "LevelTwo2",
                                },
                            },
                        },
@@ -455,6 +517,96 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
                        {
                            ContentItems = new List<FilterAdviceGroup>
                            {
+                               new FilterAdviceGroup
+                               {
+                                   ContentItemId = "3",
+                               },
+                           },
+                       },
+                   },
+                   new TriageResultPage
+                   {
+                       TriageOrdinal = 4,
+                       DisplayText = "page 4",
+                       TriageLevelOne = new TriageLevelOne
+                       {
+                           ContentItems = new List<TriageLevelOne>
+                           {
+                               new TriageLevelOne
+                               {
+                                   ContentItemId = "2",
+                               },
+                               new TriageLevelOne
+                               {
+                                   ContentItemId = "3",
+                               },
+                           },
+                       },
+                       TriageLevelTwo = new TriageLevelTwo
+                       {
+                           ContentItems = new List<TriageLevelTwo>
+                           {
+                               new TriageLevelTwo
+                               {
+                                   ContentItemId = "LevelTwo4",
+                               },
+                               new TriageLevelTwo
+                               {
+                                   ContentItemId = "LevelTwo7",
+                               },
+                           },
+                       },
+                       FilterAdviceGroup = new FilterAdviceGroup
+                       {
+                           ContentItems = new List<FilterAdviceGroup>
+                           {
+                               new FilterAdviceGroup
+                               {
+                                   ContentItemId = "3",
+                               },
+                           },
+                       },
+                   },
+                    new TriageResultPage
+                   {
+                       TriageOrdinal = 5,
+                       DisplayText = "page 5",
+                       TriageLevelOne = new TriageLevelOne
+                       {
+                           ContentItems = new List<TriageLevelOne>
+                           {
+                               new TriageLevelOne
+                               {
+                                   ContentItemId = "2",
+                               },
+                               new TriageLevelOne
+                               {
+                                   ContentItemId = "3",
+                               },
+                           },
+                       },
+                       TriageLevelTwo = new TriageLevelTwo
+                       {
+                           ContentItems = new List<TriageLevelTwo>
+                           {
+                               new TriageLevelTwo
+                               {
+                                   ContentItemId = "LevelTwo4",
+                               },
+                               new TriageLevelTwo
+                               {
+                                   ContentItemId = "LevelTwo7",
+                               },
+                           },
+                       },
+                       FilterAdviceGroup = new FilterAdviceGroup
+                       {
+                           ContentItems = new List<FilterAdviceGroup>
+                           {
+                               new FilterAdviceGroup
+                               {
+                                   ContentItemId = "1",
+                               },
                                new FilterAdviceGroup
                                {
                                    ContentItemId = "3",
