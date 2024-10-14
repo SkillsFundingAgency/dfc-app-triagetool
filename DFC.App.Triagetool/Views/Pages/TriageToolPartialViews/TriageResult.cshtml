@@ -30,7 +30,9 @@
                 x.TriageResult.ContentItems.Any(y => y.ResultContentItemId == resultPage.ContentItemId)
                 && x.TriageLevelOne?.ContentItems != null && x.TriageLevelOne.ContentItems.Any(z => z.ContentItemId == Model.LevelOneContentItemId));
                 if (tile != null && tile.TriageTileHtml != null && !string.IsNullOrEmpty(tile.TriageTileHtml.Html))
+                {
                     @Html.Raw(tile.TriageTileHtml.Html);
+                }
             }
         </div>
     </div>

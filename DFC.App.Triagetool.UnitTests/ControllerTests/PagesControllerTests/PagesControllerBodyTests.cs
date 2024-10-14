@@ -26,10 +26,10 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
     {
         public static IEnumerable<object[]> FilterTestData => new List<object[]>
         {
-            new object[] { "Education", "LevelTwo1",null,null,null,
-                new List<FilterAdviceGroup> { GetTriageLookupResponse().FilterAdviceGroup[0], GetTriageLookupResponse().FilterAdviceGroup[1], },
-                new List<FilterAdviceGroup>{ GetTriageLookupResponse().FilterAdviceGroup[0], GetTriageLookupResponse().FilterAdviceGroup[1], },
-                new List<TriageResultPage> { GetTriagePageResponse().Page[0], },
+            new object[] { "Education", "LevelTwo1", null, null, null,
+                new List<FilterAdviceGroup> { GetTriageLookupResponse().FilterAdviceGroup[0], GetTriageLookupResponse()?.FilterAdviceGroup[1], },
+                new List<FilterAdviceGroup>{ GetTriageLookupResponse()?.FilterAdviceGroup[0], GetTriageLookupResponse()?.FilterAdviceGroup[1], },
+                new List<TriageResultPage> { GetTriagePageResponse()?.Page[0], },
                 },
             new object[] { null, null,"Education|LevelTwo1",null,null,
                 new List<FilterAdviceGroup> { GetTriageLookupResponse().FilterAdviceGroup[0], GetTriageLookupResponse().FilterAdviceGroup[1], },
@@ -183,7 +183,7 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
             return configuration;
         }
 
-        private static TriageLookupResponse GetTriageLookupResponse()
+        private static TriageLookupResponse? GetTriageLookupResponse()
         {
             var response = new TriageLookupResponse();
             response.TriageLevelOne = new List<TriageLevelOne>
@@ -409,7 +409,7 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
             return response;
         }
 
-        private static TriageResultPageResponse GetTriagePageResponse()
+        private static TriageResultPageResponse? GetTriagePageResponse()
         {
             var response = new TriageResultPageResponse
             {

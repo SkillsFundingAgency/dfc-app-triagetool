@@ -76,7 +76,7 @@ namespace DFC.App.Triagetool.Controllers
                 Description = "Get relevant careers advice",
             };
 
-            logger.LogInformation($"{nameof(Head)} has returned content for: /{levelOne} and {levelTwo}");
+            logger.LogInformation($"{nameof(Head)} has returned content");
 
             return this.NegotiateContentResult(viewModel);
         }
@@ -106,7 +106,7 @@ namespace DFC.App.Triagetool.Controllers
                     },
                 },
             };
-            logger.LogInformation($"{nameof(Breadcrumb)} has returned content with {levelOne} and {levelTwo}");
+            logger.LogInformation($"{nameof(Breadcrumb)} has returned content");
 
             return View(viewModel);
         }
@@ -117,7 +117,7 @@ namespace DFC.App.Triagetool.Controllers
         [Route("pages/{triage-level-one?}/{triage-level-two?}/bodytop")]
         public IActionResult BodyTop([ModelBinder(Name = "triage-level-one")] string levelOne, [ModelBinder(Name = "triage-level-two")] string levelTwo)
         {
-            logger.LogWarning($"{nameof(BodyTop)} has returned no content for: {levelOne} and {levelTwo}");
+            logger.LogWarning($"{nameof(BodyTop)} has returned no content");
             return NoContent();
         }
 
@@ -176,7 +176,7 @@ namespace DFC.App.Triagetool.Controllers
         [Route("pages/{triage-level-one?}/{triage-level-two?}/bodyfooter")]
         public IActionResult BodyFooter([ModelBinder(Name = "triage-level-one")] string levelOne, [ModelBinder(Name = "triage-level-two")] string levelTwo)
         {
-            logger.LogWarning($"{nameof(BodyFooter)} has returned no content for: {levelOne} and {levelTwo}");
+            logger.LogWarning($"{nameof(BodyFooter)} has returned no content");
 
             return NoContent();
         }
@@ -332,29 +332,9 @@ namespace DFC.App.Triagetool.Controllers
                 var levelTwoIds = lookupResponse?.TriageLevelOne?.SingleOrDefault(x => x.Value == levelOne)?.LevelTwo?.ContentItems?.Select(x => x.ContentItemId).ToList();
                 var levelTwoContentItemId = lookupResponse?.TriageLevelTwo?.SingleOrDefault(x => x.Value == levelTwo && levelTwoIds != null && levelTwoIds.Contains(x.ContentItemId))?.ContentItemId;
 
-                if (triageResultPages?.Page != null)
-                {
-                    //Filter triage pages based on selected level one and level two content Item ids
-                    triageToolModel.Pages = triageResultPages.Page.Where(x => x.TriageLevelTwo?.ContentItems != null &&
-                                                                              x.TriageLevelTwo.ContentItems.Any(x => x.ContentItemId == levelTwoContentItemId) &&
-                                                                              x.TriageLevelOne?.ContentItems != null &&
-                                                                              x.TriageLevelOne.ContentItems.Any(x => x.ContentItemId == levelOneContentItemId)).ToList();
-                    triageToolModel.SharedContent = triageResultPages.SharedContent?.FirstOrDefault()?.Content.Html;
-                }
-
-                if (triageResultPages?.ApplicationView != null)
-                {
-                        //Filter triage application views based on selected level one and level two content Item ids
-                     triageToolModel.Pages.AddRange(triageResultPages.ApplicationView.Where(x => x.TriageLevelTwo?.ContentItems != null &&
-                                                                                                x.TriageLevelTwo.ContentItems.Any(x => x.ContentItemId == levelTwoContentItemId)));
-                }
-
-                if (triageResultPages?.ApprenticeshipLink != null)
-                {
-                        //Filter triage ApprenticeshipLink based on selected level one and level two content Item ids
-                     triageToolModel.Pages.AddRange(triageResultPages.ApprenticeshipLink.Where(x => x.TriageLevelTwo?.ContentItems != null &&
-                                                                                                   x.TriageLevelTwo.ContentItems.Any(x => x.ContentItemId == levelTwoContentItemId)));
-                }
+                FilterPages(triageToolModel, triageResultPages, levelOneContentItemId, levelTwoContentItemId);
+                FilterApplicationView(triageToolModel, triageResultPages, levelTwoContentItemId);
+                FilterApprenticeshipLink(triageToolModel, triageResultPages, levelTwoContentItemId);
 
                 triageToolModel.Pages = triageToolModel.Pages.OrderBy(x => x.TriageOrdinal).ToList();
                 triageToolModel.TriageFilterAdviceGroupImage = triageResultPages?.TriageFilterAdviceGroupImage;
@@ -371,6 +351,39 @@ namespace DFC.App.Triagetool.Controllers
             }
 
             return triageToolModel;
+        }
+
+        private void FilterApprenticeshipLink(TriageToolOptionViewModel triageToolModel, TriageResultPageResponse? triageResultPages, string? levelTwoContentItemId)
+        {
+            if (triageResultPages?.ApprenticeshipLink != null)
+            {
+                //Filter triage ApprenticeshipLink based on selected level one and level two content Item ids
+                triageToolModel.Pages.AddRange(triageResultPages.ApprenticeshipLink.Where(x => x.TriageLevelTwo?.ContentItems != null &&
+                                                                                              x.TriageLevelTwo.ContentItems.Any(x => x.ContentItemId == levelTwoContentItemId)));
+            }
+        }
+
+        private void FilterApplicationView(TriageToolOptionViewModel triageToolModel, TriageResultPageResponse? triageResultPages, string? levelTwoContentItemId)
+        {
+            if (triageResultPages?.ApplicationView != null)
+            {
+                //Filter triage application views based on selected level one and level two content Item ids
+                triageToolModel.Pages.AddRange(triageResultPages.ApplicationView.Where(x => x.TriageLevelTwo?.ContentItems != null &&
+                                                                                           x.TriageLevelTwo.ContentItems.Any(x => x.ContentItemId == levelTwoContentItemId)));
+            }
+        }
+
+        private void FilterPages(TriageToolOptionViewModel triageToolModel, TriageResultPageResponse? triageResultPages, string? levelOneContentItemId, string? levelTwoContentItemId)
+        {
+            if (triageResultPages?.Page != null)
+            {
+                //Filter triage pages based on selected level one and level two content Item ids
+                triageToolModel.Pages = triageResultPages.Page.Where(x => x.TriageLevelTwo?.ContentItems != null &&
+                                                                          x.TriageLevelTwo.ContentItems.Any(x => x.ContentItemId == levelTwoContentItemId) &&
+                                                                          x.TriageLevelOne?.ContentItems != null &&
+                                                                          x.TriageLevelOne.ContentItems.Any(x => x.ContentItemId == levelOneContentItemId)).ToList();
+                triageToolModel.SharedContent = triageResultPages.SharedContent?.FirstOrDefault()?.Content.Html;
+            }
         }
 
         private string FormatFilterCase(string article, List<string> sortedFilters)
