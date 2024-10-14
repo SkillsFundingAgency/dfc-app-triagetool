@@ -87,7 +87,7 @@ namespace DFC.App.Triagetool.Controllers
         [Route("pages/{triage-level-one?}/{triage-level-two?}/breadcrumb")]
         public IActionResult Breadcrumb([ModelBinder(Name = "triage-level-one")] string levelOne, [ModelBinder(Name = "triage-level-two")] string levelTwo)
         {
-            logger.LogInformation($"{nameof(Breadcrumb)} has been called with {levelOne} and {levelTwo}");
+            logger.LogInformation($"{nameof(Breadcrumb)} has been called");
 
             const string slash = "/";
             var viewModel = new BreadcrumbViewModel
