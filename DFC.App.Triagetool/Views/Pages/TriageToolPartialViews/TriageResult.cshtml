@@ -26,7 +26,6 @@
             @foreach (var resultPage in Model.Pages.
            Where(x => x.FilterAdviceGroup?.ContentItems != null && x.FilterAdviceGroup.ContentItems.Any(x => x.ContentItemId == filterAdviceGroup.ContentItemId)).OrderBy(x => x.TriageOrdinal))
             {
-                Console.WriteLine(resultPage.ContentItemId);
                 var tile = Model.TriageResultTiles?.SingleOrDefault(x => x.TriageResult?.ContentItems != null &&
                 x.TriageResult.ContentItems.Any(y => y.ResultContentItemId == resultPage.ContentItemId)
                 && x.TriageLevelOne?.ContentItems != null && x.TriageLevelOne.ContentItems.Any(z => z.ContentItemId == Model.LevelOneContentItemId));
