@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using DFC.Common.SharedContent.Pkg.Netcore.Model.Common;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
 namespace DFC.App.Triagetool.ViewModels
@@ -6,13 +7,8 @@ namespace DFC.App.Triagetool.ViewModels
     [ExcludeFromCodeCoverage]
     public class HeroBannerViewModel
     {
-        public HeroBannerViewModel()
-        {
-            Options = new List<string>();
-        }
+        public string? SelectedLevelOne { get; set; }
 
-        public List<string> Options { get; set; }
-
-        public string? Selected { get; set; }
+        public string? SelectedLevelTwo { get; set; }
     }
 }

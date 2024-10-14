@@ -48,7 +48,7 @@
         "RegionEndpoint": "https://__AppServiceName__.__appServiceDomain__/pages/{0}/herobanner",
         "IsHealthy": true
       }
-    ],	
+    ],
     "AjaxRequests": [
       {
         "Name": "Ajax",
@@ -56,8 +56,17 @@
         "AjaxEndpoint": "https://__AppServiceName__.__appServiceDomain__/api/TriageToolOption/GetOptions/ajax",
         "HealthCheckRequired": true,
         "OfflineHtml": "<div class=\"govuk-width-container\"><H3>Service Unavailable</H3></div>"
+      },
+      {
+        "Name": "triageresult",
+        "IsHealthy": true,
+        "AjaxEndpoint": "https://__AppServiceName__.__appServiceDomain__/api/triageresult/{0}/ajax",
+        "HealthCheckRequired": true,
+        "OfflineHtml": "<div class=\"govuk-width-container\"><H3>Service Unavailable</H3></div>",
+        "DateOfRegistration": "2021-05-18T07:18:48.5926665Z",
+        "LastModifiedDate": "2024-09-06T17:39:52.290391Z"
       }
-      ],
+    ],
       "JavaScriptNames": {
         "/js/dfc-app-triagetool.min.js": null
       }

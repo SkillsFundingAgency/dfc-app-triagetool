@@ -1,6 +1,7 @@
 using DFC.App.Triagetool.ViewModels;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
+using NuGet.ContentModel;
 using Xunit;
 
 namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
@@ -16,13 +17,15 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
             using var controller = BuildPagesController(mediaTypeName);
 
             // Act
-            var result = controller.Head("an-article");
+            var result = controller.Head("levelOne", "levelTwo");
 
             // Assert
             var viewResult = Assert.IsType<ViewResult>(result);
             var model = Assert.IsAssignableFrom<HeadViewModel>(viewResult.ViewData.Model);
 
             model.CanonicalUrl.Should().NotBeNull();
+            model.Description.Should().BeEquivalentTo("Get relevant careers advice");
+            model.Title.Should().BeEquivalentTo("Triage | National Careers Service");
         }
 
         [Theory]
@@ -33,13 +36,15 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
             using var controller = BuildPagesController(mediaTypeName);
 
             // Act
-            var result = controller.Head("an-article");
+            var result = controller.Head("levelOne", "levelTwo");
 
             // Assert
             var jsonResult = Assert.IsType<OkObjectResult>(result);
             var model = Assert.IsAssignableFrom<HeadViewModel>(jsonResult.Value);
 
             model.CanonicalUrl.Should().NotBeNull();
+            model.Description.Should().BeEquivalentTo("Get relevant careers advice");
+            model.Title.Should().BeEquivalentTo("Triage | National Careers Service");
         }
     }
 }

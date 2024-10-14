@@ -22,6 +22,7 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
             FakeMapper = A.Fake<AutoMapper.IMapper>();
             FakeConfiguration = A.Fake<IConfiguration>();
         }
+
         public static IEnumerable<object[]> HtmlMediaTypes => new List<object[]>
         {
             new string[] { "*/*" },

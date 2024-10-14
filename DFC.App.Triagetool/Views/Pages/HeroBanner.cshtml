@@ -1,37 +1,12 @@
 ﻿@model HeroBannerViewModel
 
-<section aria-label="Search" class="dfc-app-triage-panel-banner">
-    <form action="/triagetool" method="get" id="triage-search-form" class="triage-panel-search-form triage-page">
-        <section id="triage-search-banner" class="primary-hero">
-            <div class="govuk-width-container">
-                <div class="govuk-grid-row">
-                    <div class="govuk-grid-column-two-thirds">
-                        <h1 class="govuk-heading-xl">Personalised careers advice and information</h1> 
-                    </div>
-                    <div class="govuk-grid-column-full">
-                        <div class="triage-search-item-wrapper">
-                            <div class="govuk-form-group govuk-!-margin-bottom-3">
-                                <label class="govuk-label triage-select-label" for="triageSelect"> Showing advice for </label>
-                                <select class="govuk-select triage-select" id="triageSelect" name="triage-select">
-                                    @for (int i = 0; i < Model.Options.Count; i++)
-                                    {
-                                        var id = $"option{i}";
-                                        if (Model.Selected != null && Model.Selected.Equals(@Model.Options[i], StringComparison.OrdinalIgnoreCase))
-                                        {
-                                            <option value="@Model.Options[i]" id="@id" selected>@Model.Options[i]</option>
-                                        }
-                                        else
-                                        {
-                                            <option value="@Model.Options[i]" id="@id">@Model.Options[i]</option>
-                                        }
-                                    }
-                                </select>
-                                <button draggable="false" class="govuk-button triage-start-btn app-button--inverted govuk-!-margin-bottom-0 ncs-button__primary ncs-branding-margin-left-15" data-module="govuk-button"> See suggestions</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </form>
+<section aria-label="header" class="dfc-app-triage-panel-banner">
+    <div class="govuk-width-container">
+        <h1 class="heading">
+            You’ve told us that you’re @Model.SelectedLevelOne and @Model.SelectedLevelTwo
+        </h1>
+        <h1 class="sub-heading">
+            We've selected a range of relevant careers advice resources to help you
+        </h1>
+     </div>
 </section>

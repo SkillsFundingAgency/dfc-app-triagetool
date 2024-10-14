@@ -105,6 +105,8 @@ namespace DFC.App.Triagetool
             services.AddSingleton<ISharedContentRedisInterfaceStrategyWithRedisExpiry<TriageToolFilterResponse>, TriageToolAllQueryStrategy>();
             services.AddSingleton<ISharedContentRedisInterfaceStrategyWithRedisExpiry<TriagePageResponse>, PagesByTriageToolFilterStrategy>();
             services.AddSingleton<ISharedContentRedisInterfaceStrategyFactory, SharedContentRedisStrategyFactory>();
+            services.AddSingleton<ISharedContentRedisInterfaceStrategyWithRedisExpiry<TriageLookupResponse>, TriageLookupQueryStrategy>();
+            services.AddSingleton<ISharedContentRedisInterfaceStrategyWithRedisExpiry<TriageResultPageResponse>, TriageResultPageQueryStrategy>();
             services.AddScoped<ISharedContentRedisInterface, SharedContentRedis>();
 
             services.AddApplicationInsightsTelemetry();
