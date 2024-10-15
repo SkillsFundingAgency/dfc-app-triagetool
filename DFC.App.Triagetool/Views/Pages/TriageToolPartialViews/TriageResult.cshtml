@@ -1,0 +1,39 @@
+﻿@model TriageToolOptionViewModel
+
+
+ <div class="dfc-app-triage-page-number-panel">
+
+    <span>Showing @Model.Pages.Count() career resources </span>
+</div>
+@foreach (var filterAdviceGroup in Model.FilterAdviceGroups)
+{
+    var facImage = Model.TriageFilterAdviceGroupImage?.SingleOrDefault(x => x.FilterAdviceGroup?.ContentItems != null &&
+                x.FilterAdviceGroup.ContentItems.Any(x => x.ContentItemId == filterAdviceGroup.ContentItemId) &&
+                x.TriageLevelOne?.ContentItems != null && x.TriageLevelOne.ContentItems.Any(z => z.ContentItemId == Model.LevelOneContentItemId)
+            );
+    <div class="dfc-app-filter-advice-group-result-container">
+        <span class="heading">
+            @filterAdviceGroup.Title
+        </span>
+        
+        <div class="product-tile-container">
+
+            @if (facImage?.ImageHtml != null && !string.IsNullOrEmpty(facImage.ImageHtml.Html))
+            {
+                @Html.Raw(facImage.ImageHtml.Html);
+            }
+                
+            @foreach (var resultPage in Model.Pages.
+           Where(x => x.FilterAdviceGroup?.ContentItems != null && x.FilterAdviceGroup.ContentItems.Any(x => x.ContentItemId == filterAdviceGroup.ContentItemId)).OrderBy(x => x.TriageOrdinal))
+            {
+                var tile = Model.TriageResultTiles?.SingleOrDefault(x => x.TriageResult?.ContentItems != null &&
+                x.TriageResult.ContentItems.Any(y => y.ResultContentItemId == resultPage.ContentItemId)
+                && x.TriageLevelOne?.ContentItems != null && x.TriageLevelOne.ContentItems.Any(z => z.ContentItemId == Model.LevelOneContentItemId));
+                if (tile != null && tile.TriageTileHtml != null && !string.IsNullOrEmpty(tile.TriageTileHtml.Html))
+                {
+                    @Html.Raw(tile.TriageTileHtml.Html);
+                }
+            }
+        </div>
+    </div>
+}
