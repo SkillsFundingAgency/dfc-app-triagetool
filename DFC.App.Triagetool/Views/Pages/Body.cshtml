@@ -2,7 +2,7 @@
 @using System.Web
 @model TriageToolOptionViewModel
 
-<form method="get" novalidate="novalidate" action="/triagetool?triage-level-one=@Model.SelectedLevelOne&triage-level-two=@Model.SelectedLevelTwo" id="TriageToolFilters">
+<form method="get" novalidate="novalidate" action="/triagetool" id="TriageToolFilters">
     <div class="triage-body">
         <input type="hidden" name="triage-level-one" id="selectedLevelOne" value="@Model.SelectedLevelOne" />
         <input type="hidden" name="triage-level-two" id="selectedLevelTwo" value="@Model.SelectedLevelTwo" />
