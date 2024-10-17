@@ -25,7 +25,7 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
 
             model.CanonicalUrl.Should().NotBeNull();
             model.Description.Should().BeEquivalentTo("Get relevant careers advice");
-            model.Title.Should().BeEquivalentTo("Triage | National Careers Service");
+            model.Title.Should().BeEquivalentTo("Get relevant careers advice");
         }
 
         [Theory]
@@ -44,7 +44,7 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
 
             model.CanonicalUrl.Should().NotBeNull();
             model.Description.Should().BeEquivalentTo("Get relevant careers advice");
-            model.Title.Should().BeEquivalentTo("Triage | National Careers Service");
+            model.Title.Should().BeEquivalentTo("Get relevant careers advice");
         }
     }
 }
