@@ -3,7 +3,7 @@
 
  <div class="dfc-app-triage-page-number-panel">
 
-    <span>Showing @Model.Pages.Count() career resources </span>
+    <p>Showing @Model.Pages.Count() career resources </p>
 </div>
 @foreach (var filterAdviceGroup in Model.FilterAdviceGroups)
 {
@@ -12,9 +12,9 @@
                 x.TriageLevelOne?.ContentItems != null && x.TriageLevelOne.ContentItems.Any(z => z.ContentItemId == Model.LevelOneContentItemId)
             );
     <div class="dfc-app-filter-advice-group-result-container">
-        <span class="heading">
+        <h2 class="heading">
             <strong>  @filterAdviceGroup.Title </strong>
-        </span>
+        </h2>
         
         <div class="product-tile-container">
 
