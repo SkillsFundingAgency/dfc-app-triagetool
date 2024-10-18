@@ -71,7 +71,7 @@ namespace DFC.App.Triagetool.Controllers
 
             var viewModel = new HeadViewModel
             {
-                Title = "Get relevant careers advice",
+                Title = "Get relevant careers advice | National Careers Service",
                 CanonicalUrl = new Uri($"{Request.GetBaseAddress()}{RegistrationPath}", UriKind.RelativeOrAbsolute),
                 Description = "Get relevant careers advice",
             };
