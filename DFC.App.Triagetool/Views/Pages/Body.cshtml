@@ -1,74 +1,62 @@
-﻿
-@using Microsoft.Extensions.Configuration
+﻿@using Microsoft.Extensions.Configuration
+@using System.Web
 @model TriageToolOptionViewModel
 
-<div>
-    <form method="post" novalidate="novalidate" action="/triagetool" id="TriageToolFilters">
-        <div class="govuk-grid-row govuk-!-margin-top-2 govuk-!-padding-top-5">
-            <div class="govuk-grid-column-one-third triage-filter-hide">
-                <button class="govuk-button filters-button" id="show-filters-button">Show filters</button>
-                <div class="filters" id="allSecondaryFilterAccordions">
-                    <div id="allSecondaryFilterAccordions">
-                        <div class="secondaryFilters" id="secondaryFilters1">
-                            <div id="secondaryFiltersSet1">
-                                <div class="govuk-form-group">
-                                    <fieldset class="govuk-fieldset">
-                                        <legend class="govuk-label govuk-!-font-weight-bold" id="secondaryFiltersHeading1">
-                                            Filter results
-                                        </legend>
-
-                                        <p class="govuk-body filters-count" id="secondaryFiltersSelected1">
-                                            @Model.SelectedFilters.Count() selected
-                                        </p>
-                                        <div class="govuk-checkboxes govuk-checkboxes--small govuk-radios govuk-radios--small" id="filterCheckboxes">
-                                            @foreach (var filter in Model.Filters)
-                                            {
-                                                @(await @Html.PartialAsync("TriageToolPartialViews/TriageFilterItem", filter).ConfigureAwait(false))
-                                            }
-                                        </div>
-
-                                    </fieldset>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-                    <noscript>
-                        <button data-module="govuk-button" class="govuk-button" type="submit">Apply filters</button>
-                    </noscript>
-                    <input id="SelectedOption" name="triage-select" type="hidden" value="@Model.Title">
-                    <p class="clear-filters"><a id="clearFilters" href="/triagetool/@Model.Title">Clear filters</a></p>
-                    <div class="triage-tool-sidebar">
-                        @Html.Raw(Model.SharedContent)
-                    </div>
-                    <select class="govuk-select ncs-triage-select" id="pocSelect" name="poc-select">
-                        <option value="union">original</option>
-                        <option value="intersection">option 3</option>
-                        <option value="filters" selected>option 4</option>
-                        <option value="radio">option 5</option>
-                        <option value="disable">option 6</option>
-                    </select>
-                </div>
-            </div>
-            <div class="govuk-grid-column-two-thirds">
-                <p class="govuk-body">Showing <span class="fac-result-count triage-result-count" id="totalArticles">@Model.Pages.Count @(Model.Pages.Count == 1 ? "suggestion": "suggestions")</span> for "<span class="govuk-!-font-weight-bold" id="primaryFiltersSelectedValue">@Model.Title</span>"</p>
-                <hr class="govuk-section-break govuk-section-break--visible govuk-!-margin-bottom-6 govuk-!-margin-top-2">
-                <div class="triage-opt2 results" id="allArticles">
-                    <div class="results-block">
-                        <div class="inner-block">
-                            @(await Html.PartialAsync("TriageToolPartialViews/TriageToolPage", Model))
-                        </div>
-                    </div>
-                </div>
-                <div class="triage-tool-results app-related-items">
-                    @Html.Raw(Model.SharedContent)
-                </div>
-            </div>
-            <div class="govuk-grid-column-one-third triage-filter-show">
-                <div class="triage-tool-sidebar app-related-items">
-                    @Html.Raw(Model.SharedContent)
-                </div>
+<form method="get" novalidate="novalidate" action="/triagetool" id="TriageToolFilters">
+    <div class="triage-body">
+        <input type="hidden" name="triage-level-one" id="selectedLevelOne" value="@Model.SelectedLevelOne" />
+        <input type="hidden" name="triage-level-two" id="selectedLevelTwo" value="@Model.SelectedLevelTwo" />
+        <div class="dfc-app-triage-search-header-panel">
+            <div class="dfc-app-triage-filter-header">
+                <h2>Select the advice you want to see</h2>
             </div>
         </div>
-    </form>
-</div>
+        <div class="dfc-app-triage-search-panel">
+            <div class="dfc-app-triage-filter-sub-header">
+                <span>Showing all</span>
+            </div>
+
+            <div class="dfc-app-triage-filter-advice-group-container govuk-grid-row">
+                @if (Model.AllFilterAdviceGroups != null)
+                {
+                    @foreach (var fac in Model.AllFilterAdviceGroups)
+                    {
+                        <div class="govuk-grid-column-one-third dfc-app-triage-filter-item">
+                            <div class="govuk-checkboxes--small">
+                                <div class="govuk-checkboxes__item">
+                                    @if ((Model.SelectedFilters != null && Model.SelectedFilters.Contains(fac.ContentItemId)))
+                                    {
+                                        <input typeof="checkbox" checked class="govuk-checkboxes__input" name="filterAdviceGroupOptions" id="@fac.ContentItemId" type="checkbox" value="@fac.ContentItemId" />
+
+                                    }
+                                    else
+                                    {
+                                        <input typeof="checkbox" class="govuk-checkboxes__input" name="filterAdviceGroupOptions" id="@fac.ContentItemId" type="checkbox" value="@fac.ContentItemId" />
+
+                                    }
+                                    <label class="govuk-label govuk-checkboxes__label" for="@fac.ContentItemId">
+                                        @fac.Title
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                    }
+                }
+            </div>
+            <div>
+                <button type="submit" class="govuk-button dfc-app-triage-btn ncs-button__primary govuk-button--start jscript-disabled-btn" id="applyFiltersJs" name="FilterAction" value="ApplyFilters">Apply Filters</button>
+                <button type="submit" class="govuk-button ncs-button__secondary triage-tool-clear-button jscript-disabled-btn" id="clearFiltersjs" name="FilterAction" value="ClearFilters">Clear Filters</button>
+                <button type="button" class="govuk-button dfc-app-triage-btn ncs-button__primary govuk-button--start jscript-enabled-btn" id="applyFilters">Apply Filters</button>
+                <button type="button" class="govuk-button ncs-button__secondary triage-tool-clear-button jscript-enabled-btn" id="clearFilters">Clear Filters</button>
+            </div>
+
+        </div>
+        <div id="triageResultPanel">
+            @(await Html.PartialAsync("TriageToolPartialViews/TriageResult", Model))
+        </div>
+        <div class="speak-to-adviser-container">
+            @Html.Raw(Model.SharedContent)
+        </div>
+    </div>
+</form>

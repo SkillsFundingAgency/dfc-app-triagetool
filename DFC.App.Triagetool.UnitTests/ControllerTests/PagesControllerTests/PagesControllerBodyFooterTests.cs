@@ -17,7 +17,7 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
             using var controller = BuildPagesController(mediaTypeName);
 
             // Act
-            var result = controller.BodyFooter("an-article");
+            var result = controller.BodyFooter("levelOne", "levelTwo");
 
             // Assert
             var statusResult = Assert.IsType<NoContentResult>(result);

@@ -7,10 +7,6 @@
         <li class="dfc-code-search-resultitem triage-search-result-item info-card" id="@pageItem.">
             <div class="info-card-content">
                 <h2 class="govuk-heading-m"><a class="govuk-link" href="@pageItem.PageLocation.FullUrl">@pageItem.DisplayText</a></h2>
-                @if (!string.IsNullOrWhiteSpace(pageItem.TriageToolSummary.Html))
-                {
-                    @Html.Raw(pageItem.TriageToolSummary.Html)
-                }
             </div>
         </li>
     }
