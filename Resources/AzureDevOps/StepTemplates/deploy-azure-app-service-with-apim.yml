@@ -66,14 +66,6 @@ steps:
     ResourceGroupName: '${{ parameters.ResourceGroup }}'
     Slot: staging
 
-- task: AzurePowerShell@4	
-  displayName: 'Import OpenAPI specification'	
-  inputs:	
-    azureSubscription: '${{ parameters.AzureSubscription }}'	
-    ScriptPath: '${{ parameters.ApimImportScript }}'	
-    ScriptArguments: "-ApimResourceGroup '${{ parameters.SharedResourceGroupName }}' -InstanceName '${{ parameters.ApimServiceName }}' -ApiName '${{ parameters.ApimProductInstanceName }}-${{ parameters.ApiName }}' -OpenApiSpecificationFile '${{ parameters.SpecificationPath }}/WebhookReceiver.txt' -ApiPath '${{ parameters.ApimProductInstanceName }}/${{ parameters.ApiName }}'"	
-    azurePowerShellVersion: LatestVersion
-
 - task: AzurePowerShell@5
   displayName: 'Apply EventGrid APIM Policy'
   inputs:
