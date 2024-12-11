@@ -51,10 +51,4 @@
     </Content>
   </ItemGroup>
 
-
-
-  <ItemGroup>
-    <Folder Include="OpenAPIDocs\" />
-  </ItemGroup>
-
 </Project>
