@@ -51,12 +51,6 @@ stages:
         artifactName: ${{ variables.SolutionBaseName }}.ApimPolicies
 
     - task: PublishPipelineArtifact@1
-      displayName: Publish OpenAPI docs to Pipeline Artifact
-      inputs:
-        targetPath: "$(Build.SourcesDirectory)/DFC.App.Triagetool/OpenAPIDocs"
-        artifactName: ${{ variables.SolutionBaseName }}.OpenAPIDocs
-
-    - task: PublishPipelineArtifact@1
       displayName: Publish API import script to Pipeline Artifact
       inputs:
         targetPath: "$(System.DefaultWorkingDirectory)/Resources/Scripts"
@@ -139,8 +133,6 @@ stages:
       FunctionAppDomain: $(FunctionAppDomain)
       ApiDefinitionPath: $(ApiDefinitionPath)
       APIMPolicyPath: "$(Pipeline.Workspace)/${{ variables.SolutionBaseName }}.ApimPolicies/"
-      ApimImportScript: "$(Pipeline.Workspace)/${{ variables.SolutionBaseName }}.Scripts/Import-ApimOpenApiDefinitionFromFile.ps1"
-      SpecificationPath: "$(Pipeline.Workspace)/${{ variables.SolutionBaseName }}.OpenApiDocs"
       UIFunctionalTestEnabled: true
       UIFunctionalTestPackage: "$(Pipeline.Workspace)/${{ variables.SolutionBaseName }}.UI.FunctionalTests.DeploymentPackages/DFC.App.Triagetool.zip"
       UIFunctionalTestProjectFolder: "$(Pipeline.Workspace)/${{ variables.SolutionBaseName }}.UI.FunctionalTests"
@@ -198,8 +190,6 @@ stages:
       FunctionAppDomain: $(FunctionAppDomain)
       ApiDefinitionPath: $(ApiDefinitionPath)
       APIMPolicyPath: "$(Pipeline.Workspace)/${{ variables.SolutionBaseName }}.ApimPolicies/"
-      ApimImportScript: "$(Pipeline.Workspace)/${{ variables.SolutionBaseName }}.Scripts/Import-ApimOpenApiDefinitionFromFile.ps1"
-      SpecificationPath: "$(Pipeline.Workspace)/${{ variables.SolutionBaseName }}.OpenApiDocs"
       UIFunctionalTestEnabled: true
       UIFunctionalTestPackage: "$(Pipeline.Workspace)/${{ variables.SolutionBaseName }}.UI.FunctionalTests.DeploymentPackages/DFC.App.Triagetool.zip"
       UIFunctionalTestProjectFolder: "$(Pipeline.Workspace)/${{ variables.SolutionBaseName }}.UI.FunctionalTests"
@@ -256,8 +246,6 @@ stages:
       FunctionAppDomain: $(FunctionAppDomain)
       ApiDefinitionPath: $(ApiDefinitionPath)
       APIMPolicyPath: "$(Pipeline.Workspace)/${{ variables.SolutionBaseName }}.ApimPolicies/"
-      ApimImportScript: "$(Pipeline.Workspace)/${{ variables.SolutionBaseName }}.Scripts/Import-ApimOpenApiDefinitionFromFile.ps1"
-      SpecificationPath: "$(Pipeline.Workspace)/${{ variables.SolutionBaseName }}.OpenApiDocs"
       UIFunctionalTestEnabled: false
       UIFunctionalTestPackage: "$(Pipeline.Workspace)/${{ variables.SolutionBaseName }}.UI.FunctionalTests.DeploymentPackages/DFC.App.Triagetool.zip"
       UIFunctionalTestProjectFolder: "$(Pipeline.Workspace)/${{ variables.SolutionBaseName }}.UI.FunctionalTests"
@@ -315,8 +303,6 @@ stages:
       FunctionAppDomain: $(FunctionAppDomain)
       ApiDefinitionPath: $(ApiDefinitionPath)
       APIMPolicyPath: "$(Pipeline.Workspace)/${{ variables.SolutionBaseName }}.ApimPolicies/"
-      ApimImportScript: "$(Pipeline.Workspace)/${{ variables.SolutionBaseName }}.Scripts/Import-ApimOpenApiDefinitionFromFile.ps1"
-      SpecificationPath: "$(Pipeline.Workspace)/${{ variables.SolutionBaseName }}.OpenApiDocs"
       UIFunctionalTestEnabled: false
       UIFunctionalTestPackage: "$(Pipeline.Workspace)/${{ variables.SolutionBaseName }}.UI.FunctionalTests.DeploymentPackages/DFC.App.Triagetool.zip"
       UIFunctionalTestProjectFolder: "$(Pipeline.Workspace)/${{ variables.SolutionBaseName }}.UI.FunctionalTests"
@@ -373,8 +359,6 @@ stages:
       FunctionAppDomain: $(FunctionAppDomain)
       ApiDefinitionPath: $(ApiDefinitionPath)
       APIMPolicyPath: "$(Pipeline.Workspace)/${{ variables.SolutionBaseName }}.ApimPolicies/"
-      ApimImportScript: "$(Pipeline.Workspace)/${{ variables.SolutionBaseName }}.Scripts/Import-ApimOpenApiDefinitionFromFile.ps1"
-      SpecificationPath: "$(Pipeline.Workspace)/${{ variables.SolutionBaseName }}.OpenApiDocs"
       UIFunctionalTestEnabled: true
       UIFunctionalTestPackage: "$(Pipeline.Workspace)/${{ variables.SolutionBaseName }}.UI.FunctionalTests.DeploymentPackages/DFC.App.Triagetool.zip"
       UIFunctionalTestProjectFolder: "$(Pipeline.Workspace)/${{ variables.SolutionBaseName }}.UI.FunctionalTests"
@@ -432,8 +416,6 @@ stages:
       FunctionAppDomain: $(FunctionAppDomain)
       ApiDefinitionPath: $(ApiDefinitionPath)
       APIMPolicyPath: "$(Pipeline.Workspace)/${{ variables.SolutionBaseName }}.ApimPolicies/"
-      ApimImportScript: "$(Pipeline.Workspace)/${{ variables.SolutionBaseName }}.Scripts/Import-ApimOpenApiDefinitionFromFile.ps1"
-      SpecificationPath: "$(Pipeline.Workspace)/${{ variables.SolutionBaseName }}.OpenApiDocs"
       UIFunctionalTestEnabled: true
       UIFunctionalTestPackage: "$(Pipeline.Workspace)/${{ variables.SolutionBaseName }}.UI.FunctionalTests.DeploymentPackages/DFC.App.Triagetool.zip"
       UIFunctionalTestProjectFolder: "$(Pipeline.Workspace)/${{ variables.SolutionBaseName }}.UI.FunctionalTests"
@@ -490,8 +472,6 @@ stages:
       FunctionAppDomain: $(FunctionAppDomain)
       ApiDefinitionPath: $(ApiDefinitionPath)
       APIMPolicyPath: "$(Pipeline.Workspace)/${{ variables.SolutionBaseName }}.ApimPolicies/"
-      ApimImportScript: "$(Pipeline.Workspace)/${{ variables.SolutionBaseName }}.Scripts/Import-ApimOpenApiDefinitionFromFile.ps1"
-      SpecificationPath: "$(Pipeline.Workspace)/${{ variables.SolutionBaseName }}.OpenApiDocs"
       UIFunctionalTestEnabled: true
       UIFunctionalTestPackage: "$(Pipeline.Workspace)/${{ variables.SolutionBaseName }}.UI.FunctionalTests.DeploymentPackages/DFC.App.Triagetool.zip"
       UIFunctionalTestProjectFolder: "$(Pipeline.Workspace)/${{ variables.SolutionBaseName }}.UI.FunctionalTests"
@@ -549,8 +529,6 @@ stages:
       FunctionAppDomain: $(FunctionAppDomain)
       ApiDefinitionPath: $(ApiDefinitionPath)
       APIMPolicyPath: "$(Pipeline.Workspace)/${{ variables.SolutionBaseName }}.ApimPolicies/"
-      ApimImportScript: "$(Pipeline.Workspace)/${{ variables.SolutionBaseName }}.Scripts/Import-ApimOpenApiDefinitionFromFile.ps1"
-      SpecificationPath: "$(Pipeline.Workspace)/${{ variables.SolutionBaseName }}.OpenApiDocs"
       UIFunctionalTestEnabled: true
       UIFunctionalTestPackage: "$(Pipeline.Workspace)/${{ variables.SolutionBaseName }}.UI.FunctionalTests.DeploymentPackages/DFC.App.Triagetool.zip"
       UIFunctionalTestProjectFolder: "$(Pipeline.Workspace)/${{ variables.SolutionBaseName }}.UI.FunctionalTests"
@@ -607,8 +585,6 @@ stages:
       FunctionAppDomain: $(FunctionAppDomain)
       ApiDefinitionPath: $(ApiDefinitionPath)
       APIMPolicyPath: "$(Pipeline.Workspace)/${{ variables.SolutionBaseName }}.ApimPolicies/"
-      ApimImportScript: "$(Pipeline.Workspace)/${{ variables.SolutionBaseName }}.Scripts/Import-ApimOpenApiDefinitionFromFile.ps1"
-      SpecificationPath: "$(Pipeline.Workspace)/${{ variables.SolutionBaseName }}.OpenApiDocs"
       UIFunctionalTestEnabled: true
       UIFunctionalTestPackage: "$(Pipeline.Workspace)/${{ variables.SolutionBaseName }}.UI.FunctionalTests.DeploymentPackages/DFC.App.Triagetool.zip"
       UIFunctionalTestProjectFolder: "$(Pipeline.Workspace)/${{ variables.SolutionBaseName }}.UI.FunctionalTests"
@@ -666,8 +642,6 @@ stages:
       FunctionAppDomain: $(FunctionAppDomain)
       ApiDefinitionPath: $(ApiDefinitionPath)
       APIMPolicyPath: "$(Pipeline.Workspace)/${{ variables.SolutionBaseName }}.ApimPolicies/"
-      ApimImportScript: "$(Pipeline.Workspace)/${{ variables.SolutionBaseName }}.Scripts/Import-ApimOpenApiDefinitionFromFile.ps1"
-      SpecificationPath: "$(Pipeline.Workspace)/${{ variables.SolutionBaseName }}.OpenApiDocs"
       UIFunctionalTestEnabled: true
       UIFunctionalTestPackage: "$(Pipeline.Workspace)/${{ variables.SolutionBaseName }}.UI.FunctionalTests.DeploymentPackages/DFC.App.Triagetool.zip"
       UIFunctionalTestProjectFolder: "$(Pipeline.Workspace)/${{ variables.SolutionBaseName }}.UI.FunctionalTests"
