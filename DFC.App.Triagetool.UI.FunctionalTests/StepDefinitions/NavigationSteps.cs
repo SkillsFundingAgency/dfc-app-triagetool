@@ -32,9 +32,14 @@ namespace DFC.App.Triagetool.UI.FunctionalTests.StepDefinitions
             switch (pageName.ToLower(CultureInfo.CurrentCulture))
             {
                 case "home":
+                    var levelOne = By.Id("triageLevelOne");
+                    var levelTwo = By.Id("triageLevelTwo");
                     var homePage = new TriagetoolPage(this.Context);
                     homePage.NavigateToHomepage();
                     this.Context.GetHelperLibrary<AppSettings>().WebDriverWaitHelper.WaitForElementToContainText(pageHeadingLocator, "National Careers Service");
+                    this.Context.GetHelperLibrary<AppSettings>().WebDriverWaitHelper.WaitForElementToBePresent(levelTwo);
+                    this.Context.GetHelperLibrary<AppSettings>().WebDriverWaitHelper.WaitForElementToBePresent(levelOne);
+
                     break;
 
                 case "triagetool":

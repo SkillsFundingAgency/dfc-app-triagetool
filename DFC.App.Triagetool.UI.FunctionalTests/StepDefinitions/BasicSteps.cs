@@ -5,6 +5,7 @@
 
 using DFC.TestAutomation.UI.Extension;
 using OpenQA.Selenium;
+using OpenQA.Selenium.Interactions;
 using OpenQA.Selenium.Support.UI;
 using System;
 using System.Linq;
@@ -38,6 +39,22 @@ namespace DFC.App.Triagetool.UI.FunctionalTests.StepDefinitions
             }
 
             throw new NotFoundException($"Unable to perform the step: {this.Context.StepContext.StepInfo.Text}. The button could not be found.");
+        }
+
+        [When(@"I select (.*) from the list")]
+        public void WhenISelectLevelOne(string levelOne)
+        {
+            var levelOneSelect = this.Context.GetWebDriver().FindElement(By.Id("triageLevelOne"));
+
+            if (!levelOneSelect.Displayed)
+            {
+                throw new NotFoundException($"Unable to perform the step: {this.Context.StepContext.StepInfo.Text}. The sort by filter could not be located.");
+            }
+
+            var selectElement = new SelectElement(levelOneSelect);
+            selectElement.SelectByValue(levelOne);
+            levelOneSelect.SendKeys(Keys.Tab);
+            Thread.Sleep(1000);
         }
 
         [When(@"I select (.*) in the options filter")]

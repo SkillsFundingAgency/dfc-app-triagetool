@@ -5,9 +5,12 @@
 
 using DFC.App.Triagetool.Model;
 using DFC.TestAutomation.UI.Extension;
+using FluentAssertions;
 using OpenQA.Selenium;
+using OpenQA.Selenium.Support.UI;
 using System.Globalization;
 using System.Linq;
+using System.Threading;
 using TechTalk.SpecFlow;
 
 namespace DFC.App.Triagetool.UI.FunctionalTests
@@ -21,6 +24,17 @@ namespace DFC.App.Triagetool.UI.FunctionalTests
         }
 
         private ScenarioContext Context { get; set; }
+
+        [Then(@"(.*) is loaded for the selected (.*)")]
+        public void ThenLevelTwoIsLoadedForTheSelectedLevelOne(string levelTwo, string levelOne)
+        {
+            var levelTwoSelect = this.Context.GetWebDriver().FindElement(By.Id("triageLevelTwo"));
+            var selectElement = new SelectElement(levelTwoSelect);
+
+            selectElement.Options.Count.Should().Be(4);
+            selectElement.Options.Any(x => x.GetAttribute("value") == levelTwo).Should().BeTrue();
+            Thread.Sleep(1000);
+        }
 
         [Then(@"I am taken to the (.*) page")]
         public void ThenIAmTakenToThePage(string pageName)
