@@ -80,7 +80,7 @@ namespace DFC.App.Triagetool.UI.FunctionalTests.Features
             this.TestTearDown();
         }
         
-        public virtual void SelectTriageOptions(string levelOne, string levelTwo, string results, string[] exampleTags)
+        public virtual void VerifyTwoFactorSelection(string levelOne, string levelTwo, string[] exampleTags)
         {
             string[] @__tags = new string[] {
                     "Triagetool",
@@ -93,8 +93,7 @@ namespace DFC.App.Triagetool.UI.FunctionalTests.Features
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             argumentsOfScenario.Add("levelOne", levelOne);
             argumentsOfScenario.Add("levelTwo", levelTwo);
-            argumentsOfScenario.Add("results", results);
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Select Triage options", null, tagsOfScenario, argumentsOfScenario, featureTags);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Verify two factor selection", null, tagsOfScenario, argumentsOfScenario, featureTags);
 #line 5
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
@@ -114,127 +113,363 @@ this.ScenarioInitialize(scenarioInfo);
 #line 8
  testRunner.Then(string.Format("{0} is loaded for the selected {1}", levelTwo, levelOne), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
-#line 10
- testRunner.Given("I am on the triagetool page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+            }
+            this.ScenarioCleanup();
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify two factor selection: Variant 0")]
+        [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
+        [Xunit.TraitAttribute("Description", "Verify two factor selection: Variant 0")]
+        [Xunit.TraitAttribute("Category", "Triagetool")]
+        [Xunit.TraitAttribute("Category", "Smoke")]
+        public void VerifyTwoFactorSelection_Variant0()
+        {
+#line 5
+this.VerifyTwoFactorSelection("in education", "in university", ((string[])(null)));
 #line hidden
-#line 11
- testRunner.When("I select <option> in the options filter", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify two factor selection: Variant 1")]
+        [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
+        [Xunit.TraitAttribute("Description", "Verify two factor selection: Variant 1")]
+        [Xunit.TraitAttribute("Category", "Triagetool")]
+        [Xunit.TraitAttribute("Category", "Smoke")]
+        public void VerifyTwoFactorSelection_Variant1()
+        {
+#line 5
+this.VerifyTwoFactorSelection("in education", "in college or sixth form", ((string[])(null)));
 #line hidden
-#line 12
- testRunner.Then("I am shown the results for <option>", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify two factor selection: Variant 2")]
+        [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
+        [Xunit.TraitAttribute("Description", "Verify two factor selection: Variant 2")]
+        [Xunit.TraitAttribute("Category", "Triagetool")]
+        [Xunit.TraitAttribute("Category", "Smoke")]
+        public void VerifyTwoFactorSelection_Variant2()
+        {
+#line 5
+this.VerifyTwoFactorSelection("in education", "in secondary school", ((string[])(null)));
 #line hidden
-#line 13
- testRunner.And(string.Format("I am shown a result count of {0}", results), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify two factor selection: Variant 3")]
+        [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
+        [Xunit.TraitAttribute("Description", "Verify two factor selection: Variant 3")]
+        [Xunit.TraitAttribute("Category", "Triagetool")]
+        [Xunit.TraitAttribute("Category", "Smoke")]
+        public void VerifyTwoFactorSelection_Variant3()
+        {
+#line 5
+this.VerifyTwoFactorSelection("employed", "want to change career", ((string[])(null)));
+#line hidden
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify two factor selection: Variant 4")]
+        [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
+        [Xunit.TraitAttribute("Description", "Verify two factor selection: Variant 4")]
+        [Xunit.TraitAttribute("Category", "Triagetool")]
+        [Xunit.TraitAttribute("Category", "Smoke")]
+        public void VerifyTwoFactorSelection_Variant4()
+        {
+#line 5
+this.VerifyTwoFactorSelection("employed", "want to progress in my career", ((string[])(null)));
+#line hidden
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify two factor selection: Variant 5")]
+        [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
+        [Xunit.TraitAttribute("Description", "Verify two factor selection: Variant 5")]
+        [Xunit.TraitAttribute("Category", "Triagetool")]
+        [Xunit.TraitAttribute("Category", "Smoke")]
+        public void VerifyTwoFactorSelection_Variant5()
+        {
+#line 5
+this.VerifyTwoFactorSelection("employed", "at risk of redundancy", ((string[])(null)));
+#line hidden
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify two factor selection: Variant 6")]
+        [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
+        [Xunit.TraitAttribute("Description", "Verify two factor selection: Variant 6")]
+        [Xunit.TraitAttribute("Category", "Triagetool")]
+        [Xunit.TraitAttribute("Category", "Smoke")]
+        public void VerifyTwoFactorSelection_Variant6()
+        {
+#line 5
+this.VerifyTwoFactorSelection("not in work", "want to return to work after a break", ((string[])(null)));
+#line hidden
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify two factor selection: Variant 7")]
+        [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
+        [Xunit.TraitAttribute("Description", "Verify two factor selection: Variant 7")]
+        [Xunit.TraitAttribute("Category", "Triagetool")]
+        [Xunit.TraitAttribute("Category", "Smoke")]
+        public void VerifyTwoFactorSelection_Variant7()
+        {
+#line 5
+this.VerifyTwoFactorSelection("not in work", "want to prepare to get a job", ((string[])(null)));
+#line hidden
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify two factor selection: Variant 8")]
+        [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
+        [Xunit.TraitAttribute("Description", "Verify two factor selection: Variant 8")]
+        [Xunit.TraitAttribute("Category", "Triagetool")]
+        [Xunit.TraitAttribute("Category", "Smoke")]
+        public void VerifyTwoFactorSelection_Variant8()
+        {
+#line 5
+this.VerifyTwoFactorSelection("not in work", "want to change career", ((string[])(null)));
+#line hidden
+        }
+        
+        public virtual void VerifyResultsForTwoFactorSelection(string levelOne, string levelTwo, string results, string[] exampleTags)
+        {
+            string[] tagsOfScenario = exampleTags;
+            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
+            argumentsOfScenario.Add("levelOne", levelOne);
+            argumentsOfScenario.Add("levelTwo", levelTwo);
+            argumentsOfScenario.Add("results", results);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Verify results for two factor selection", null, tagsOfScenario, argumentsOfScenario, featureTags);
+#line 22
+this.ScenarioInitialize(scenarioInfo);
+#line hidden
+            if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
+            {
+                testRunner.SkipScenario();
+            }
+            else
+            {
+                this.ScenarioStart();
+#line 23
+ testRunner.Given("I am on the home page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line hidden
+#line 24
+ testRunner.When(string.Format("I choose {0} and {1} from the list", levelOne, levelTwo), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line hidden
+#line 25
+ testRunner.When("I click on see advice button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line hidden
+#line 26
+ testRunner.Then(string.Format("the result count should be {0}", results), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
             this.ScenarioCleanup();
         }
         
-        [Xunit.SkippableFactAttribute(DisplayName="Select Triage options: Variant 0")]
+        [Xunit.SkippableFactAttribute(DisplayName="Verify results for two factor selection: Variant 0")]
         [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
-        [Xunit.TraitAttribute("Description", "Select Triage options: Variant 0")]
-        [Xunit.TraitAttribute("Category", "Triagetool")]
-        [Xunit.TraitAttribute("Category", "Smoke")]
-        public void SelectTriageOptions_Variant0()
+        [Xunit.TraitAttribute("Description", "Verify results for two factor selection: Variant 0")]
+        public void VerifyResultsForTwoFactorSelection_Variant0()
         {
-#line 5
-this.SelectTriageOptions("in education", "in university", "13", ((string[])(null)));
+#line 22
+this.VerifyResultsForTwoFactorSelection("in education", "in university", "30", ((string[])(null)));
 #line hidden
         }
         
-        [Xunit.SkippableFactAttribute(DisplayName="Select Triage options: Variant 1")]
+        [Xunit.SkippableFactAttribute(DisplayName="Verify results for two factor selection: Variant 1")]
         [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
-        [Xunit.TraitAttribute("Description", "Select Triage options: Variant 1")]
-        [Xunit.TraitAttribute("Category", "Triagetool")]
-        [Xunit.TraitAttribute("Category", "Smoke")]
-        public void SelectTriageOptions_Variant1()
+        [Xunit.TraitAttribute("Description", "Verify results for two factor selection: Variant 1")]
+        public void VerifyResultsForTwoFactorSelection_Variant1()
         {
-#line 5
-this.SelectTriageOptions("in education", "in college or sixth form", "12", ((string[])(null)));
+#line 22
+this.VerifyResultsForTwoFactorSelection("in education", "in college or sixth form", "28", ((string[])(null)));
 #line hidden
         }
         
-        [Xunit.SkippableFactAttribute(DisplayName="Select Triage options: Variant 2")]
+        [Xunit.SkippableFactAttribute(DisplayName="Verify results for two factor selection: Variant 2")]
         [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
-        [Xunit.TraitAttribute("Description", "Select Triage options: Variant 2")]
-        [Xunit.TraitAttribute("Category", "Triagetool")]
-        [Xunit.TraitAttribute("Category", "Smoke")]
-        public void SelectTriageOptions_Variant2()
+        [Xunit.TraitAttribute("Description", "Verify results for two factor selection: Variant 2")]
+        public void VerifyResultsForTwoFactorSelection_Variant2()
         {
-#line 5
-this.SelectTriageOptions("in education", "in secondary school", "10", ((string[])(null)));
+#line 22
+this.VerifyResultsForTwoFactorSelection("in education", "in secondary school", "23", ((string[])(null)));
 #line hidden
         }
         
-        [Xunit.SkippableFactAttribute(DisplayName="Select Triage options: Variant 3")]
+        [Xunit.SkippableFactAttribute(DisplayName="Verify results for two factor selection: Variant 3")]
         [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
-        [Xunit.TraitAttribute("Description", "Select Triage options: Variant 3")]
-        [Xunit.TraitAttribute("Category", "Triagetool")]
-        [Xunit.TraitAttribute("Category", "Smoke")]
-        public void SelectTriageOptions_Variant3()
+        [Xunit.TraitAttribute("Description", "Verify results for two factor selection: Variant 3")]
+        public void VerifyResultsForTwoFactorSelection_Variant3()
         {
-#line 5
-this.SelectTriageOptions("employed", "want to change career", "17", ((string[])(null)));
+#line 22
+this.VerifyResultsForTwoFactorSelection("employed", "want to change career", "25", ((string[])(null)));
 #line hidden
         }
         
-        [Xunit.SkippableFactAttribute(DisplayName="Select Triage options: Variant 4")]
+        [Xunit.SkippableFactAttribute(DisplayName="Verify results for two factor selection: Variant 4")]
         [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
-        [Xunit.TraitAttribute("Description", "Select Triage options: Variant 4")]
-        [Xunit.TraitAttribute("Category", "Triagetool")]
-        [Xunit.TraitAttribute("Category", "Smoke")]
-        public void SelectTriageOptions_Variant4()
+        [Xunit.TraitAttribute("Description", "Verify results for two factor selection: Variant 4")]
+        public void VerifyResultsForTwoFactorSelection_Variant4()
         {
-#line 5
-this.SelectTriageOptions("employed", "want to progress in my career", "15", ((string[])(null)));
+#line 22
+this.VerifyResultsForTwoFactorSelection("employed", "want to progress in my career", "28", ((string[])(null)));
 #line hidden
         }
         
-        [Xunit.SkippableFactAttribute(DisplayName="Select Triage options: Variant 5")]
+        [Xunit.SkippableFactAttribute(DisplayName="Verify results for two factor selection: Variant 5")]
         [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
-        [Xunit.TraitAttribute("Description", "Select Triage options: Variant 5")]
-        [Xunit.TraitAttribute("Category", "Triagetool")]
-        [Xunit.TraitAttribute("Category", "Smoke")]
-        public void SelectTriageOptions_Variant5()
+        [Xunit.TraitAttribute("Description", "Verify results for two factor selection: Variant 5")]
+        public void VerifyResultsForTwoFactorSelection_Variant5()
         {
-#line 5
-this.SelectTriageOptions("employed", "at risk of redundancy", "14", ((string[])(null)));
+#line 22
+this.VerifyResultsForTwoFactorSelection("employed", "at risk of redundancy", "30", ((string[])(null)));
 #line hidden
         }
         
-        [Xunit.SkippableFactAttribute(DisplayName="Select Triage options: Variant 6")]
+        [Xunit.SkippableFactAttribute(DisplayName="Verify results for two factor selection: Variant 6")]
         [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
-        [Xunit.TraitAttribute("Description", "Select Triage options: Variant 6")]
-        [Xunit.TraitAttribute("Category", "Triagetool")]
-        [Xunit.TraitAttribute("Category", "Smoke")]
-        public void SelectTriageOptions_Variant6()
+        [Xunit.TraitAttribute("Description", "Verify results for two factor selection: Variant 6")]
+        public void VerifyResultsForTwoFactorSelection_Variant6()
         {
-#line 5
-this.SelectTriageOptions("not in work", "want to return to work after a break", "11", ((string[])(null)));
+#line 22
+this.VerifyResultsForTwoFactorSelection("not in work", "want to return to work after a break", "29", ((string[])(null)));
 #line hidden
         }
         
-        [Xunit.SkippableFactAttribute(DisplayName="Select Triage options: Variant 7")]
+        [Xunit.SkippableFactAttribute(DisplayName="Verify results for two factor selection: Variant 7")]
         [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
-        [Xunit.TraitAttribute("Description", "Select Triage options: Variant 7")]
-        [Xunit.TraitAttribute("Category", "Triagetool")]
-        [Xunit.TraitAttribute("Category", "Smoke")]
-        public void SelectTriageOptions_Variant7()
+        [Xunit.TraitAttribute("Description", "Verify results for two factor selection: Variant 7")]
+        public void VerifyResultsForTwoFactorSelection_Variant7()
         {
-#line 5
-this.SelectTriageOptions("not in work", "want to prepare to get a job", "2", ((string[])(null)));
+#line 22
+this.VerifyResultsForTwoFactorSelection("not in work", "want to prepare to get a job", "29", ((string[])(null)));
 #line hidden
         }
         
-        [Xunit.SkippableFactAttribute(DisplayName="Select Triage options: Variant 8")]
+        [Xunit.SkippableFactAttribute(DisplayName="Verify results for two factor selection: Variant 8")]
         [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
-        [Xunit.TraitAttribute("Description", "Select Triage options: Variant 8")]
-        [Xunit.TraitAttribute("Category", "Triagetool")]
-        [Xunit.TraitAttribute("Category", "Smoke")]
-        public void SelectTriageOptions_Variant8()
+        [Xunit.TraitAttribute("Description", "Verify results for two factor selection: Variant 8")]
+        public void VerifyResultsForTwoFactorSelection_Variant8()
         {
-#line 5
-this.SelectTriageOptions("not in work", "want to change career", "2", ((string[])(null)));
+#line 22
+this.VerifyResultsForTwoFactorSelection("not in work", "want to change career", "29", ((string[])(null)));
+#line hidden
+        }
+        
+        public virtual void VerifyResultsForSelectedFilters(string levelOne, string levelTwo, string results, string[] exampleTags)
+        {
+            string[] tagsOfScenario = exampleTags;
+            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
+            argumentsOfScenario.Add("levelOne", levelOne);
+            argumentsOfScenario.Add("levelTwo", levelTwo);
+            argumentsOfScenario.Add("results", results);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Verify results for selected filters", null, tagsOfScenario, argumentsOfScenario, featureTags);
+#line 40
+this.ScenarioInitialize(scenarioInfo);
+#line hidden
+            if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
+            {
+                testRunner.SkipScenario();
+            }
+            else
+            {
+                this.ScenarioStart();
+#line 41
+ testRunner.Given("I am on the home page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line hidden
+#line 42
+ testRunner.When(string.Format("I choose {0} and {1} from the list", levelOne, levelTwo), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line hidden
+#line 43
+ testRunner.When("I click on see advice button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line hidden
+#line 44
+ testRunner.And("apply the filters", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+            }
+            this.ScenarioCleanup();
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify results for selected filters: Variant 0")]
+        [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
+        [Xunit.TraitAttribute("Description", "Verify results for selected filters: Variant 0")]
+        public void VerifyResultsForSelectedFilters_Variant0()
+        {
+#line 40
+this.VerifyResultsForSelectedFilters("in education", "in university", "30", ((string[])(null)));
+#line hidden
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify results for selected filters: Variant 1")]
+        [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
+        [Xunit.TraitAttribute("Description", "Verify results for selected filters: Variant 1")]
+        public void VerifyResultsForSelectedFilters_Variant1()
+        {
+#line 40
+this.VerifyResultsForSelectedFilters("in education", "in college or sixth form", "28", ((string[])(null)));
+#line hidden
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify results for selected filters: Variant 2")]
+        [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
+        [Xunit.TraitAttribute("Description", "Verify results for selected filters: Variant 2")]
+        public void VerifyResultsForSelectedFilters_Variant2()
+        {
+#line 40
+this.VerifyResultsForSelectedFilters("in education", "in secondary school", "23", ((string[])(null)));
+#line hidden
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify results for selected filters: Variant 3")]
+        [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
+        [Xunit.TraitAttribute("Description", "Verify results for selected filters: Variant 3")]
+        public void VerifyResultsForSelectedFilters_Variant3()
+        {
+#line 40
+this.VerifyResultsForSelectedFilters("employed", "want to change career", "25", ((string[])(null)));
+#line hidden
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify results for selected filters: Variant 4")]
+        [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
+        [Xunit.TraitAttribute("Description", "Verify results for selected filters: Variant 4")]
+        public void VerifyResultsForSelectedFilters_Variant4()
+        {
+#line 40
+this.VerifyResultsForSelectedFilters("employed", "want to progress in my career", "28", ((string[])(null)));
+#line hidden
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify results for selected filters: Variant 5")]
+        [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
+        [Xunit.TraitAttribute("Description", "Verify results for selected filters: Variant 5")]
+        public void VerifyResultsForSelectedFilters_Variant5()
+        {
+#line 40
+this.VerifyResultsForSelectedFilters("employed", "at risk of redundancy", "30", ((string[])(null)));
+#line hidden
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify results for selected filters: Variant 6")]
+        [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
+        [Xunit.TraitAttribute("Description", "Verify results for selected filters: Variant 6")]
+        public void VerifyResultsForSelectedFilters_Variant6()
+        {
+#line 40
+this.VerifyResultsForSelectedFilters("not in work", "want to return to work after a break", "29", ((string[])(null)));
+#line hidden
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify results for selected filters: Variant 7")]
+        [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
+        [Xunit.TraitAttribute("Description", "Verify results for selected filters: Variant 7")]
+        public void VerifyResultsForSelectedFilters_Variant7()
+        {
+#line 40
+this.VerifyResultsForSelectedFilters("not in work", "want to prepare to get a job", "29", ((string[])(null)));
+#line hidden
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify results for selected filters: Variant 8")]
+        [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
+        [Xunit.TraitAttribute("Description", "Verify results for selected filters: Variant 8")]
+        public void VerifyResultsForSelectedFilters_Variant8()
+        {
+#line 40
+this.VerifyResultsForSelectedFilters("not in work", "want to change career", "29", ((string[])(null)));
 #line hidden
         }
         

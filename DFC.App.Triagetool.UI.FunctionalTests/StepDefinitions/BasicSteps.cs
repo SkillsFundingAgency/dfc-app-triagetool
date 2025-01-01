@@ -44,6 +44,7 @@ namespace DFC.App.Triagetool.UI.FunctionalTests.StepDefinitions
         [When(@"I select (.*) from the list")]
         public void WhenISelectLevelOne(string levelOne)
         {
+            Thread.Sleep(4000);
             var levelOneSelect = this.Context.GetWebDriver().FindElement(By.Id("triageLevelOne"));
 
             if (!levelOneSelect.Displayed)
@@ -54,7 +55,30 @@ namespace DFC.App.Triagetool.UI.FunctionalTests.StepDefinitions
             var selectElement = new SelectElement(levelOneSelect);
             selectElement.SelectByValue(levelOne);
             levelOneSelect.SendKeys(Keys.Tab);
-            Thread.Sleep(1000);
+            Thread.Sleep(4000);
+        }
+
+        [When(@"I choose (.*) and (.*) from the list")]
+        public void WhenIChooseLevelOneAndLevelTwo(string levelOne, string levelTwo)
+        {
+            var levelOneSelect = this.Context.GetWebDriver().FindElement(By.Id("triageLevelOne"));
+            var levelTwoSelect = this.Context.GetWebDriver().FindElement(By.Id("triageLevelTwo"));
+
+
+            if (!levelOneSelect.Displayed)
+            {
+                throw new NotFoundException($"Unable to perform the step: {this.Context.StepContext.StepInfo.Text}. The sort by filter could not be located.");
+            }
+
+            var selectElement = new SelectElement(levelOneSelect);
+            selectElement.SelectByValue(levelOne);
+            levelOneSelect.SendKeys(Keys.Tab);
+            Thread.Sleep(6000);
+
+            selectElement = new SelectElement(levelTwoSelect);
+            selectElement.SelectByValue(levelTwo);
+            levelTwoSelect.SendKeys(Keys.Tab);
+            Thread.Sleep(4000);
         }
 
         [When(@"I select (.*) in the options filter")]
@@ -71,6 +95,14 @@ namespace DFC.App.Triagetool.UI.FunctionalTests.StepDefinitions
             selectElement.SelectByValue(options);
             optionsFilter.SendKeys(Keys.Tab);
             Thread.Sleep(1000);
+        }
+
+        [When(@"I click on see advice button")]
+        public void WhenIClickOnSeeAdvieButton()
+        {
+            var submitButton = this.Context.GetWebDriver().FindElement(By.Id("triage-tool-submit-button"));
+            submitButton.Click();
+            Thread.Sleep(4000);
         }
 
         [When(@"I select the (.*) filter")]

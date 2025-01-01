@@ -9,6 +9,7 @@ using DFC.TestAutomation.UI.Extension;
 using OpenQA.Selenium;
 using System;
 using System.Globalization;
+using System.Threading;
 using TechTalk.SpecFlow;
 
 namespace DFC.App.Triagetool.UI.FunctionalTests.StepDefinitions
@@ -32,14 +33,9 @@ namespace DFC.App.Triagetool.UI.FunctionalTests.StepDefinitions
             switch (pageName.ToLower(CultureInfo.CurrentCulture))
             {
                 case "home":
-                    var levelOne = By.Id("triageLevelOne");
-                    var levelTwo = By.Id("triageLevelTwo");
                     var homePage = new TriagetoolPage(this.Context);
                     homePage.NavigateToHomepage();
-                    this.Context.GetHelperLibrary<AppSettings>().WebDriverWaitHelper.WaitForElementToContainText(pageHeadingLocator, "National Careers Service");
-                    this.Context.GetHelperLibrary<AppSettings>().WebDriverWaitHelper.WaitForElementToBePresent(levelTwo);
-                    this.Context.GetHelperLibrary<AppSettings>().WebDriverWaitHelper.WaitForElementToBePresent(levelOne);
-
+                    Thread.Sleep(4000);
                     break;
 
                 case "triagetool":

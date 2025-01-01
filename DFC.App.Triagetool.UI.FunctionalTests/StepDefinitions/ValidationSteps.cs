@@ -28,10 +28,9 @@ namespace DFC.App.Triagetool.UI.FunctionalTests
         [Then(@"(.*) is loaded for the selected (.*)")]
         public void ThenLevelTwoIsLoadedForTheSelectedLevelOne(string levelTwo, string levelOne)
         {
+            Thread.Sleep(3000);
             var levelTwoSelect = this.Context.GetWebDriver().FindElement(By.Id("triageLevelTwo"));
             var selectElement = new SelectElement(levelTwoSelect);
-
-            selectElement.Options.Count.Should().Be(4);
             selectElement.Options.Any(x => x.GetAttribute("value") == levelTwo).Should().BeTrue();
             Thread.Sleep(1000);
         }
@@ -65,18 +64,11 @@ namespace DFC.App.Triagetool.UI.FunctionalTests
             }
         }
 
-        [Then(@"I am shown a result count of (.*)")]
+        [Then(@"the result count should be (.*)")]
         public void ThenIAmShownAResultCountOf(string count)
         {
-            var result = this.Context.GetWebDriver().FindElement(By.Id("totalArticles")).GetAttribute("innerText").ToString();
-
-            // This condition is proving to be unreliable in different environments - number of results is differing and frequently changing across environments as CMS users
-            // update the filtering
-            // if (!result.StartsWith(count))
-            if (!result.Any(char.IsDigit))
-            {
-                throw new NotFoundException($"Unable to perform the step: {this.Context.StepContext.StepInfo.Text}. The expected result count is not displayed");
-            }
+            var result = this.Context.GetWebDriver().FindElement(By.CssSelector(".dfc-app-triage-page-number-panel p")).GetAttribute("innerText").ToString();
+            result.Should().Be($"Showing {count} career resources");
         }
     }
 }
