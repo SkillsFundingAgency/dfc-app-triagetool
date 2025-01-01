@@ -3,6 +3,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 // </copyright>
 
+using DFC.App.Triagetool.Model;
 using DFC.TestAutomation.UI.Extension;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Interactions;
@@ -102,6 +103,39 @@ namespace DFC.App.Triagetool.UI.FunctionalTests.StepDefinitions
         {
             var submitButton = this.Context.GetWebDriver().FindElement(By.Id("triage-tool-submit-button"));
             submitButton.Click();
+            Thread.Sleep(4000);
+        }
+
+        [When(@"I click apply filters")]
+        public void WhenIClickApplyFiltersButton()
+        {
+            var submitButton = this.Context.GetWebDriver().FindElement(By.Id("applyFilters"));
+            submitButton.Click();
+            Thread.Sleep(4000);
+        }
+
+        [When(@"I select the filters with the (.*)")]
+        public void WhenISelectTheFilters(string filterOptions)
+        {
+            var filters = filterOptions.Split(',');
+            foreach (var filter in filters)
+            {
+                var allLabels = this.Context.GetWebDriver().FindElements(By.TagName("label"));
+                foreach (var label in allLabels)
+                {
+                    if (label.Text.Trim().Equals(filter, System.StringComparison.OrdinalIgnoreCase))
+                    {
+                        var parentNode = this.Context.GetHelperLibrary<AppSettings>().JavaScriptHelper.GetParentElement(label);
+                        var input = parentNode.FindElement(By.TagName("input"));
+                        input.Click();
+                        break;
+                    }
+                }
+ 
+                //var checkBox = this.Context.GetWebDriver().FindElement(By.Id(""));
+                //checkBox.Click();
+            }
+
             Thread.Sleep(4000);
         }
 
