@@ -5,9 +5,12 @@
 
 using DFC.App.Triagetool.Model;
 using DFC.TestAutomation.UI.Extension;
+using FluentAssertions;
 using OpenQA.Selenium;
+using OpenQA.Selenium.Support.UI;
 using System.Globalization;
 using System.Linq;
+using System.Threading;
 using TechTalk.SpecFlow;
 
 namespace DFC.App.Triagetool.UI.FunctionalTests
@@ -21,6 +24,16 @@ namespace DFC.App.Triagetool.UI.FunctionalTests
         }
 
         private ScenarioContext Context { get; set; }
+
+        [Then(@"(.*) is loaded for the selected (.*)")]
+        public void ThenLevelTwoIsLoadedForTheSelectedLevelOne(string levelTwo, string levelOne)
+        {
+            Thread.Sleep(3000);
+            var levelTwoSelect = this.Context.GetWebDriver().FindElement(By.Id("triageLevelTwo"));
+            var selectElement = new SelectElement(levelTwoSelect);
+            selectElement.Options.Any(x => x.GetAttribute("value") == levelTwo).Should().BeTrue();
+            Thread.Sleep(1000);
+        }
 
         [Then(@"I am taken to the (.*) page")]
         public void ThenIAmTakenToThePage(string pageName)
@@ -51,18 +64,11 @@ namespace DFC.App.Triagetool.UI.FunctionalTests
             }
         }
 
-        [Then(@"I am shown a result count of (.*)")]
+        [Then(@"the result count should be (.*)")]
         public void ThenIAmShownAResultCountOf(string count)
         {
-            var result = this.Context.GetWebDriver().FindElement(By.Id("totalArticles")).GetAttribute("innerText").ToString();
-
-            // This condition is proving to be unreliable in different environments - number of results is differing and frequently changing across environments as CMS users
-            // update the filtering
-            // if (!result.StartsWith(count))
-            if (!result.Any(char.IsDigit))
-            {
-                throw new NotFoundException($"Unable to perform the step: {this.Context.StepContext.StepInfo.Text}. The expected result count is not displayed");
-            }
+            var result = this.Context.GetWebDriver().FindElement(By.CssSelector(".dfc-app-triage-page-number-panel p")).GetAttribute("innerText").ToString();
+            result.Should().Be($"Showing {count} career resources");
         }
     }
 }

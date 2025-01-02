@@ -3,8 +3,10 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 // </copyright>
 
+using DFC.App.Triagetool.Model;
 using DFC.TestAutomation.UI.Extension;
 using OpenQA.Selenium;
+using OpenQA.Selenium.Interactions;
 using OpenQA.Selenium.Support.UI;
 using System;
 using System.Linq;
@@ -40,6 +42,46 @@ namespace DFC.App.Triagetool.UI.FunctionalTests.StepDefinitions
             throw new NotFoundException($"Unable to perform the step: {this.Context.StepContext.StepInfo.Text}. The button could not be found.");
         }
 
+        [When(@"I select (.*) from the list")]
+        public void WhenISelectLevelOne(string levelOne)
+        {
+            Thread.Sleep(4000);
+            var levelOneSelect = this.Context.GetWebDriver().FindElement(By.Id("triageLevelOne"));
+
+            if (!levelOneSelect.Displayed)
+            {
+                throw new NotFoundException($"Unable to perform the step: {this.Context.StepContext.StepInfo.Text}. The sort by filter could not be located.");
+            }
+
+            var selectElement = new SelectElement(levelOneSelect);
+            selectElement.SelectByValue(levelOne);
+            levelOneSelect.SendKeys(Keys.Tab);
+            Thread.Sleep(4000);
+        }
+
+        [When(@"I choose (.*) and (.*) from the list")]
+        public void WhenIChooseLevelOneAndLevelTwo(string levelOne, string levelTwo)
+        {
+            var levelOneSelect = this.Context.GetWebDriver().FindElement(By.Id("triageLevelOne"));
+            var levelTwoSelect = this.Context.GetWebDriver().FindElement(By.Id("triageLevelTwo"));
+
+
+            if (!levelOneSelect.Displayed)
+            {
+                throw new NotFoundException($"Unable to perform the step: {this.Context.StepContext.StepInfo.Text}. The sort by filter could not be located.");
+            }
+
+            var selectElement = new SelectElement(levelOneSelect);
+            selectElement.SelectByValue(levelOne);
+            levelOneSelect.SendKeys(Keys.Tab);
+            Thread.Sleep(6000);
+
+            selectElement = new SelectElement(levelTwoSelect);
+            selectElement.SelectByValue(levelTwo);
+            levelTwoSelect.SendKeys(Keys.Tab);
+            Thread.Sleep(4000);
+        }
+
         [When(@"I select (.*) in the options filter")]
         public void WhenISelectSortFilter(string options)
         {
@@ -54,6 +96,47 @@ namespace DFC.App.Triagetool.UI.FunctionalTests.StepDefinitions
             selectElement.SelectByValue(options);
             optionsFilter.SendKeys(Keys.Tab);
             Thread.Sleep(1000);
+        }
+
+        [When(@"I click on see advice button")]
+        public void WhenIClickOnSeeAdvieButton()
+        {
+            var submitButton = this.Context.GetWebDriver().FindElement(By.Id("triage-tool-submit-button"));
+            submitButton.Click();
+            Thread.Sleep(4000);
+        }
+
+        [When(@"I click apply filters")]
+        public void WhenIClickApplyFiltersButton()
+        {
+            var submitButton = this.Context.GetWebDriver().FindElement(By.Id("applyFilters"));
+            submitButton.Click();
+            Thread.Sleep(4000);
+        }
+
+        [When(@"I select the filters with the (.*)")]
+        public void WhenISelectTheFilters(string filterOptions)
+        {
+            var filters = filterOptions.Split(',');
+            foreach (var filter in filters)
+            {
+                var allLabels = this.Context.GetWebDriver().FindElements(By.TagName("label"));
+                foreach (var label in allLabels)
+                {
+                    if (label.Text.Trim().Equals(filter, System.StringComparison.OrdinalIgnoreCase))
+                    {
+                        var parentNode = this.Context.GetHelperLibrary<AppSettings>().JavaScriptHelper.GetParentElement(label);
+                        var input = parentNode.FindElement(By.TagName("input"));
+                        input.Click();
+                        break;
+                    }
+                }
+ 
+                //var checkBox = this.Context.GetWebDriver().FindElement(By.Id(""));
+                //checkBox.Click();
+            }
+
+            Thread.Sleep(4000);
         }
 
         [When(@"I select the (.*) filter")]
