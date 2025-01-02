@@ -80,7 +80,7 @@ namespace DFC.App.Triagetool.UI.FunctionalTests.Features
             this.TestTearDown();
         }
         
-        public virtual void SelectTriageOptions(string option, string results, string[] exampleTags)
+        public virtual void VerifyTwoFactorSelection(string levelOne, string levelTwo, string[] exampleTags)
         {
             string[] @__tags = new string[] {
                     "Triagetool",
@@ -91,9 +91,9 @@ namespace DFC.App.Triagetool.UI.FunctionalTests.Features
             }
             string[] tagsOfScenario = @__tags;
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            argumentsOfScenario.Add("option", option);
-            argumentsOfScenario.Add("results", results);
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Select Triage options", null, tagsOfScenario, argumentsOfScenario, featureTags);
+            argumentsOfScenario.Add("levelOne", levelOne);
+            argumentsOfScenario.Add("levelTwo", levelTwo);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Verify two factor selection", null, tagsOfScenario, argumentsOfScenario, featureTags);
 #line 5
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
@@ -104,115 +104,1076 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
+#line 6
+ testRunner.Given("I am on the home page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line hidden
+#line 7
+ testRunner.When(string.Format("I select {0} from the list", levelOne), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line hidden
 #line 8
- testRunner.Given("I am on the triagetool page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line hidden
-#line 9
- testRunner.When(string.Format("I select {0} in the options filter", option), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line hidden
-#line 10
- testRunner.Then(string.Format("I am shown the results for {0}", option), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line hidden
-#line 11
- testRunner.And(string.Format("I am shown a result count of {0}", results), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.Then(string.Format("{0} is loaded for the selected {1}", levelTwo, levelOne), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
             this.ScenarioCleanup();
         }
         
-        [Xunit.SkippableFactAttribute(DisplayName="Select Triage options: Changing your career")]
+        [Xunit.SkippableFactAttribute(DisplayName="Verify two factor selection: Variant 0")]
         [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
-        [Xunit.TraitAttribute("Description", "Select Triage options: Changing your career")]
+        [Xunit.TraitAttribute("Description", "Verify two factor selection: Variant 0")]
         [Xunit.TraitAttribute("Category", "Triagetool")]
         [Xunit.TraitAttribute("Category", "Smoke")]
-        public void SelectTriageOptions_ChangingYourCareer()
+        public void VerifyTwoFactorSelection_Variant0()
         {
 #line 5
-this.SelectTriageOptions("Changing your career", "13", ((string[])(null)));
+this.VerifyTwoFactorSelection("in education", "in university", ((string[])(null)));
 #line hidden
         }
         
-        [Xunit.SkippableFactAttribute(DisplayName="Select Triage options: Identifying and building your skills")]
+        [Xunit.SkippableFactAttribute(DisplayName="Verify two factor selection: Variant 1")]
         [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
-        [Xunit.TraitAttribute("Description", "Select Triage options: Identifying and building your skills")]
+        [Xunit.TraitAttribute("Description", "Verify two factor selection: Variant 1")]
         [Xunit.TraitAttribute("Category", "Triagetool")]
         [Xunit.TraitAttribute("Category", "Smoke")]
-        public void SelectTriageOptions_IdentifyingAndBuildingYourSkills()
+        public void VerifyTwoFactorSelection_Variant1()
         {
 #line 5
-this.SelectTriageOptions("Identifying and building your skills", "12", ((string[])(null)));
+this.VerifyTwoFactorSelection("in education", "in college or sixth form", ((string[])(null)));
 #line hidden
         }
         
-        [Xunit.SkippableFactAttribute(DisplayName="Select Triage options: Moving up in your career")]
+        [Xunit.SkippableFactAttribute(DisplayName="Verify two factor selection: Variant 2")]
         [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
-        [Xunit.TraitAttribute("Description", "Select Triage options: Moving up in your career")]
+        [Xunit.TraitAttribute("Description", "Verify two factor selection: Variant 2")]
         [Xunit.TraitAttribute("Category", "Triagetool")]
         [Xunit.TraitAttribute("Category", "Smoke")]
-        public void SelectTriageOptions_MovingUpInYourCareer()
+        public void VerifyTwoFactorSelection_Variant2()
         {
 #line 5
-this.SelectTriageOptions("Moving up in your career", "10", ((string[])(null)));
+this.VerifyTwoFactorSelection("in education", "in secondary school", ((string[])(null)));
 #line hidden
         }
         
-        [Xunit.SkippableFactAttribute(DisplayName="Select Triage options: Planning or starting your career")]
+        [Xunit.SkippableFactAttribute(DisplayName="Verify two factor selection: Variant 3")]
         [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
-        [Xunit.TraitAttribute("Description", "Select Triage options: Planning or starting your career")]
+        [Xunit.TraitAttribute("Description", "Verify two factor selection: Variant 3")]
         [Xunit.TraitAttribute("Category", "Triagetool")]
         [Xunit.TraitAttribute("Category", "Smoke")]
-        public void SelectTriageOptions_PlanningOrStartingYourCareer()
+        public void VerifyTwoFactorSelection_Variant3()
         {
 #line 5
-this.SelectTriageOptions("Planning or starting your career", "17", ((string[])(null)));
+this.VerifyTwoFactorSelection("employed", "want to change career", ((string[])(null)));
 #line hidden
         }
         
-        [Xunit.SkippableFactAttribute(DisplayName="Select Triage options: Returning to work")]
+        [Xunit.SkippableFactAttribute(DisplayName="Verify two factor selection: Variant 4")]
         [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
-        [Xunit.TraitAttribute("Description", "Select Triage options: Returning to work")]
+        [Xunit.TraitAttribute("Description", "Verify two factor selection: Variant 4")]
         [Xunit.TraitAttribute("Category", "Triagetool")]
         [Xunit.TraitAttribute("Category", "Smoke")]
-        public void SelectTriageOptions_ReturningToWork()
+        public void VerifyTwoFactorSelection_Variant4()
         {
 #line 5
-this.SelectTriageOptions("Returning to work", "15", ((string[])(null)));
+this.VerifyTwoFactorSelection("employed", "want to progress in my career", ((string[])(null)));
 #line hidden
         }
         
-        [Xunit.SkippableFactAttribute(DisplayName="Select Triage options: Understanding the recruitment process")]
+        [Xunit.SkippableFactAttribute(DisplayName="Verify two factor selection: Variant 5")]
         [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
-        [Xunit.TraitAttribute("Description", "Select Triage options: Understanding the recruitment process")]
+        [Xunit.TraitAttribute("Description", "Verify two factor selection: Variant 5")]
         [Xunit.TraitAttribute("Category", "Triagetool")]
         [Xunit.TraitAttribute("Category", "Smoke")]
-        public void SelectTriageOptions_UnderstandingTheRecruitmentProcess()
+        public void VerifyTwoFactorSelection_Variant5()
         {
 #line 5
-this.SelectTriageOptions("Understanding the recruitment process", "14", ((string[])(null)));
+this.VerifyTwoFactorSelection("employed", "at risk of redundancy", ((string[])(null)));
 #line hidden
         }
         
-        [Xunit.SkippableFactAttribute(DisplayName="Select Triage options: Understanding your options")]
+        [Xunit.SkippableFactAttribute(DisplayName="Verify two factor selection: Variant 6")]
         [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
-        [Xunit.TraitAttribute("Description", "Select Triage options: Understanding your options")]
+        [Xunit.TraitAttribute("Description", "Verify two factor selection: Variant 6")]
         [Xunit.TraitAttribute("Category", "Triagetool")]
         [Xunit.TraitAttribute("Category", "Smoke")]
-        public void SelectTriageOptions_UnderstandingYourOptions()
+        public void VerifyTwoFactorSelection_Variant6()
         {
 #line 5
-this.SelectTriageOptions("Understanding your options", "11", ((string[])(null)));
+this.VerifyTwoFactorSelection("not in work", "want to return to work after a break", ((string[])(null)));
 #line hidden
         }
         
-        [Xunit.SkippableFactAttribute(DisplayName="Select Triage options: Working with a health condition or disability")]
+        [Xunit.SkippableFactAttribute(DisplayName="Verify two factor selection: Variant 7")]
         [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
-        [Xunit.TraitAttribute("Description", "Select Triage options: Working with a health condition or disability")]
+        [Xunit.TraitAttribute("Description", "Verify two factor selection: Variant 7")]
         [Xunit.TraitAttribute("Category", "Triagetool")]
         [Xunit.TraitAttribute("Category", "Smoke")]
-        public void SelectTriageOptions_WorkingWithAHealthConditionOrDisability()
+        public void VerifyTwoFactorSelection_Variant7()
         {
 #line 5
-this.SelectTriageOptions("Working with a health condition or disability", "2", ((string[])(null)));
+this.VerifyTwoFactorSelection("not in work", "want to prepare to get a job", ((string[])(null)));
+#line hidden
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify two factor selection: Variant 8")]
+        [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
+        [Xunit.TraitAttribute("Description", "Verify two factor selection: Variant 8")]
+        [Xunit.TraitAttribute("Category", "Triagetool")]
+        [Xunit.TraitAttribute("Category", "Smoke")]
+        public void VerifyTwoFactorSelection_Variant8()
+        {
+#line 5
+this.VerifyTwoFactorSelection("not in work", "want to change career", ((string[])(null)));
+#line hidden
+        }
+        
+        public virtual void VerifyResultsForTwoFactorSelection(string levelOne, string levelTwo, string results, string[] exampleTags)
+        {
+            string[] tagsOfScenario = exampleTags;
+            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
+            argumentsOfScenario.Add("levelOne", levelOne);
+            argumentsOfScenario.Add("levelTwo", levelTwo);
+            argumentsOfScenario.Add("results", results);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Verify results for two factor selection", null, tagsOfScenario, argumentsOfScenario, featureTags);
+#line 22
+this.ScenarioInitialize(scenarioInfo);
+#line hidden
+            if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
+            {
+                testRunner.SkipScenario();
+            }
+            else
+            {
+                this.ScenarioStart();
+#line 23
+ testRunner.Given("I am on the home page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line hidden
+#line 24
+ testRunner.When(string.Format("I choose {0} and {1} from the list", levelOne, levelTwo), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line hidden
+#line 25
+ testRunner.When("I click on see advice button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line hidden
+#line 26
+ testRunner.Then(string.Format("the result count should be {0}", results), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+            }
+            this.ScenarioCleanup();
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify results for two factor selection: Variant 0")]
+        [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
+        [Xunit.TraitAttribute("Description", "Verify results for two factor selection: Variant 0")]
+        public void VerifyResultsForTwoFactorSelection_Variant0()
+        {
+#line 22
+this.VerifyResultsForTwoFactorSelection("in education", "in university", "30", ((string[])(null)));
+#line hidden
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify results for two factor selection: Variant 1")]
+        [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
+        [Xunit.TraitAttribute("Description", "Verify results for two factor selection: Variant 1")]
+        public void VerifyResultsForTwoFactorSelection_Variant1()
+        {
+#line 22
+this.VerifyResultsForTwoFactorSelection("in education", "in college or sixth form", "28", ((string[])(null)));
+#line hidden
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify results for two factor selection: Variant 2")]
+        [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
+        [Xunit.TraitAttribute("Description", "Verify results for two factor selection: Variant 2")]
+        public void VerifyResultsForTwoFactorSelection_Variant2()
+        {
+#line 22
+this.VerifyResultsForTwoFactorSelection("in education", "in secondary school", "23", ((string[])(null)));
+#line hidden
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify results for two factor selection: Variant 3")]
+        [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
+        [Xunit.TraitAttribute("Description", "Verify results for two factor selection: Variant 3")]
+        public void VerifyResultsForTwoFactorSelection_Variant3()
+        {
+#line 22
+this.VerifyResultsForTwoFactorSelection("employed", "want to change career", "25", ((string[])(null)));
+#line hidden
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify results for two factor selection: Variant 4")]
+        [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
+        [Xunit.TraitAttribute("Description", "Verify results for two factor selection: Variant 4")]
+        public void VerifyResultsForTwoFactorSelection_Variant4()
+        {
+#line 22
+this.VerifyResultsForTwoFactorSelection("employed", "want to progress in my career", "28", ((string[])(null)));
+#line hidden
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify results for two factor selection: Variant 5")]
+        [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
+        [Xunit.TraitAttribute("Description", "Verify results for two factor selection: Variant 5")]
+        public void VerifyResultsForTwoFactorSelection_Variant5()
+        {
+#line 22
+this.VerifyResultsForTwoFactorSelection("employed", "at risk of redundancy", "30", ((string[])(null)));
+#line hidden
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify results for two factor selection: Variant 6")]
+        [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
+        [Xunit.TraitAttribute("Description", "Verify results for two factor selection: Variant 6")]
+        public void VerifyResultsForTwoFactorSelection_Variant6()
+        {
+#line 22
+this.VerifyResultsForTwoFactorSelection("not in work", "want to return to work after a break", "29", ((string[])(null)));
+#line hidden
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify results for two factor selection: Variant 7")]
+        [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
+        [Xunit.TraitAttribute("Description", "Verify results for two factor selection: Variant 7")]
+        public void VerifyResultsForTwoFactorSelection_Variant7()
+        {
+#line 22
+this.VerifyResultsForTwoFactorSelection("not in work", "want to prepare to get a job", "29", ((string[])(null)));
+#line hidden
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify results for two factor selection: Variant 8")]
+        [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
+        [Xunit.TraitAttribute("Description", "Verify results for two factor selection: Variant 8")]
+        public void VerifyResultsForTwoFactorSelection_Variant8()
+        {
+#line 22
+this.VerifyResultsForTwoFactorSelection("not in work", "want to change career", "29", ((string[])(null)));
+#line hidden
+        }
+        
+        public virtual void VerifyResultsForSelectedFilters(string levelOne, string levelTwo, string filterOptions, string results, string[] exampleTags)
+        {
+            string[] tagsOfScenario = exampleTags;
+            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
+            argumentsOfScenario.Add("levelOne", levelOne);
+            argumentsOfScenario.Add("levelTwo", levelTwo);
+            argumentsOfScenario.Add("filterOptions", filterOptions);
+            argumentsOfScenario.Add("results", results);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Verify results for selected filters", null, tagsOfScenario, argumentsOfScenario, featureTags);
+#line 40
+this.ScenarioInitialize(scenarioInfo);
+#line hidden
+            if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
+            {
+                testRunner.SkipScenario();
+            }
+            else
+            {
+                this.ScenarioStart();
+#line 41
+ testRunner.Given("I am on the home page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line hidden
+#line 42
+ testRunner.When(string.Format("I choose {0} and {1} from the list", levelOne, levelTwo), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line hidden
+#line 43
+ testRunner.When("I click on see advice button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line hidden
+#line 44
+ testRunner.And(string.Format("I select the filters with the {0}", filterOptions), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+#line 45
+ testRunner.And("I click apply filters", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+#line 46
+ testRunner.Then(string.Format("the result count should be {0}", results), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+            }
+            this.ScenarioCleanup();
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify results for selected filters: Variant 0")]
+        [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
+        [Xunit.TraitAttribute("Description", "Verify results for selected filters: Variant 0")]
+        public void VerifyResultsForSelectedFilters_Variant0()
+        {
+#line 40
+this.VerifyResultsForSelectedFilters("in education", "in university", "Options for work,Developing or assessing your skills", "10", ((string[])(null)));
+#line hidden
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify results for selected filters: Variant 1")]
+        [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
+        [Xunit.TraitAttribute("Description", "Verify results for selected filters: Variant 1")]
+        public void VerifyResultsForSelectedFilters_Variant1()
+        {
+#line 40
+this.VerifyResultsForSelectedFilters("in education", "in university", "Options for work", "6", ((string[])(null)));
+#line hidden
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify results for selected filters: Variant 2")]
+        [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
+        [Xunit.TraitAttribute("Description", "Verify results for selected filters: Variant 2")]
+        public void VerifyResultsForSelectedFilters_Variant2()
+        {
+#line 40
+this.VerifyResultsForSelectedFilters("in education", "in university", "Options for work,Developing or assessing your skills,Disability support,CVs and a" +
+                    "pplications,Further study options,Taking a gap year,Support you can get from oth" +
+                    "ers,Interview tips", "30", ((string[])(null)));
+#line hidden
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify results for selected filters: Variant 3")]
+        [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
+        [Xunit.TraitAttribute("Description", "Verify results for selected filters: Variant 3")]
+        public void VerifyResultsForSelectedFilters_Variant3()
+        {
+#line 40
+this.VerifyResultsForSelectedFilters("in education", "in university", "Options for work,,CVs and applications,Disability support", "14", ((string[])(null)));
+#line hidden
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify results for selected filters: Variant 4")]
+        [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
+        [Xunit.TraitAttribute("Description", "Verify results for selected filters: Variant 4")]
+        public void VerifyResultsForSelectedFilters_Variant4()
+        {
+#line 40
+this.VerifyResultsForSelectedFilters("in education", "in university", "Further study options", "3", ((string[])(null)));
+#line hidden
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify results for selected filters: Variant 5")]
+        [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
+        [Xunit.TraitAttribute("Description", "Verify results for selected filters: Variant 5")]
+        public void VerifyResultsForSelectedFilters_Variant5()
+        {
+#line 40
+this.VerifyResultsForSelectedFilters("in education", "in university", "CVs and applications,Further study options,Taking a gap year", "11", ((string[])(null)));
+#line hidden
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify results for selected filters: Variant 6")]
+        [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
+        [Xunit.TraitAttribute("Description", "Verify results for selected filters: Variant 6")]
+        public void VerifyResultsForSelectedFilters_Variant6()
+        {
+#line 40
+this.VerifyResultsForSelectedFilters("in education", "in university", "Support you can get from others,Interview tips", "7", ((string[])(null)));
+#line hidden
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify results for selected filters: Variant 7")]
+        [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
+        [Xunit.TraitAttribute("Description", "Verify results for selected filters: Variant 7")]
+        public void VerifyResultsForSelectedFilters_Variant7()
+        {
+#line 40
+this.VerifyResultsForSelectedFilters("in education", "in college or sixth form", "Further study options,Developing or assessing your skills,Options for work,Taking" +
+                    " a gap year,CVs and applications,Support you can get from others,Interview tips," +
+                    "Disability support", "28", ((string[])(null)));
+#line hidden
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify results for selected filters: Variant 8")]
+        [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
+        [Xunit.TraitAttribute("Description", "Verify results for selected filters: Variant 8")]
+        public void VerifyResultsForSelectedFilters_Variant8()
+        {
+#line 40
+this.VerifyResultsForSelectedFilters("in education", "in college or sixth form", "CVs and applications,Support you can get from others,Interview tips,Disability su" +
+                    "pport", "15", ((string[])(null)));
+#line hidden
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify results for selected filters: Variant 9")]
+        [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
+        [Xunit.TraitAttribute("Description", "Verify results for selected filters: Variant 9")]
+        public void VerifyResultsForSelectedFilters_Variant9()
+        {
+#line 40
+this.VerifyResultsForSelectedFilters("in education", "in college or sixth form", "Further study options", "2", ((string[])(null)));
+#line hidden
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify results for selected filters: Variant 10")]
+        [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
+        [Xunit.TraitAttribute("Description", "Verify results for selected filters: Variant 10")]
+        public void VerifyResultsForSelectedFilters_Variant10()
+        {
+#line 40
+this.VerifyResultsForSelectedFilters("in education", "in college or sixth form", "Support you can get from others", "2", ((string[])(null)));
+#line hidden
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify results for selected filters: Variant 11")]
+        [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
+        [Xunit.TraitAttribute("Description", "Verify results for selected filters: Variant 11")]
+        public void VerifyResultsForSelectedFilters_Variant11()
+        {
+#line 40
+this.VerifyResultsForSelectedFilters("in education", "in college or sixth form", "Interview tips,Disability support", "7", ((string[])(null)));
+#line hidden
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify results for selected filters: Variant 12")]
+        [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
+        [Xunit.TraitAttribute("Description", "Verify results for selected filters: Variant 12")]
+        public void VerifyResultsForSelectedFilters_Variant12()
+        {
+#line 40
+this.VerifyResultsForSelectedFilters("in education", "in college or sixth form", "Taking a gap year,CVs and applications,Support you can get from others,Interview " +
+                    "tips,Disability support", "17", ((string[])(null)));
+#line hidden
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify results for selected filters: Variant 13")]
+        [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
+        [Xunit.TraitAttribute("Description", "Verify results for selected filters: Variant 13")]
+        public void VerifyResultsForSelectedFilters_Variant13()
+        {
+#line 40
+this.VerifyResultsForSelectedFilters("in education", "in college or sixth form", "Developing or assessing your skills,Options for work,Taking a gap year,CVs and ap" +
+                    "plications", "17", ((string[])(null)));
+#line hidden
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify results for selected filters: Variant 14")]
+        [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
+        [Xunit.TraitAttribute("Description", "Verify results for selected filters: Variant 14")]
+        public void VerifyResultsForSelectedFilters_Variant14()
+        {
+#line 40
+this.VerifyResultsForSelectedFilters("in education", "in college or sixth form", "Developing or assessing your skills,Options for work,Taking a gap year,CVs and ap" +
+                    "plications,Support you can get from others,Interview tips,Disability support", "26", ((string[])(null)));
+#line hidden
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify results for selected filters: Variant 15")]
+        [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
+        [Xunit.TraitAttribute("Description", "Verify results for selected filters: Variant 15")]
+        public void VerifyResultsForSelectedFilters_Variant15()
+        {
+#line 40
+this.VerifyResultsForSelectedFilters("in education", "in secondary school", "Options after finishing school,Interview tips,Support you can get from others,Dis" +
+                    "ability support,Developing or assessing your skills,CVs and applications", "23", ((string[])(null)));
+#line hidden
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify results for selected filters: Variant 16")]
+        [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
+        [Xunit.TraitAttribute("Description", "Verify results for selected filters: Variant 16")]
+        public void VerifyResultsForSelectedFilters_Variant16()
+        {
+#line 40
+this.VerifyResultsForSelectedFilters("in education", "in secondary school", "Options after finishing school,Interview tips,Support you can get from others,Dis" +
+                    "ability support", "13", ((string[])(null)));
+#line hidden
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify results for selected filters: Variant 17")]
+        [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
+        [Xunit.TraitAttribute("Description", "Verify results for selected filters: Variant 17")]
+        public void VerifyResultsForSelectedFilters_Variant17()
+        {
+#line 40
+this.VerifyResultsForSelectedFilters("in education", "in secondary school", "Options after finishing school,Interview tips", "9", ((string[])(null)));
+#line hidden
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify results for selected filters: Variant 18")]
+        [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
+        [Xunit.TraitAttribute("Description", "Verify results for selected filters: Variant 18")]
+        public void VerifyResultsForSelectedFilters_Variant18()
+        {
+#line 40
+this.VerifyResultsForSelectedFilters("in education", "in secondary school", "Options after finishing school,Interview tips,Support you can get from others,Dis" +
+                    "ability support,CVs and applications", "18", ((string[])(null)));
+#line hidden
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify results for selected filters: Variant 19")]
+        [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
+        [Xunit.TraitAttribute("Description", "Verify results for selected filters: Variant 19")]
+        public void VerifyResultsForSelectedFilters_Variant19()
+        {
+#line 40
+this.VerifyResultsForSelectedFilters("in education", "in secondary school", "Support you can get from others,Disability support,Developing or assessing your s" +
+                    "kills,CVs and applications", "14", ((string[])(null)));
+#line hidden
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify results for selected filters: Variant 20")]
+        [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
+        [Xunit.TraitAttribute("Description", "Verify results for selected filters: Variant 20")]
+        public void VerifyResultsForSelectedFilters_Variant20()
+        {
+#line 40
+this.VerifyResultsForSelectedFilters("in education", "in secondary school", "Options after finishing school,Interview tips,Support you can get from others,Dis" +
+                    "ability support,Developing or assessing your skills,CVs and applications", "23", ((string[])(null)));
+#line hidden
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify results for selected filters: Variant 21")]
+        [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
+        [Xunit.TraitAttribute("Description", "Verify results for selected filters: Variant 21")]
+        public void VerifyResultsForSelectedFilters_Variant21()
+        {
+#line 40
+this.VerifyResultsForSelectedFilters("in education", "in secondary school", "CVs and applications", "5", ((string[])(null)));
+#line hidden
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify results for selected filters: Variant 22")]
+        [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
+        [Xunit.TraitAttribute("Description", "Verify results for selected filters: Variant 22")]
+        public void VerifyResultsForSelectedFilters_Variant22()
+        {
+#line 40
+this.VerifyResultsForSelectedFilters("in education", "in secondary school", "Interview tips,Support you can get from others,Disability support,Developing or a" +
+                    "ssessing your skills,CVs and applications", "19", ((string[])(null)));
+#line hidden
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify results for selected filters: Variant 23")]
+        [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
+        [Xunit.TraitAttribute("Description", "Verify results for selected filters: Variant 23")]
+        public void VerifyResultsForSelectedFilters_Variant23()
+        {
+#line 40
+this.VerifyResultsForSelectedFilters("in education", "in secondary school", "Support you can get from others,Disability support,Developing or assessing your s" +
+                    "kills,CVs and applications", "14", ((string[])(null)));
+#line hidden
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify results for selected filters: Variant 24")]
+        [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
+        [Xunit.TraitAttribute("Description", "Verify results for selected filters: Variant 24")]
+        public void VerifyResultsForSelectedFilters_Variant24()
+        {
+#line 40
+this.VerifyResultsForSelectedFilters("employed", "want to change career", "Options for work", "6", ((string[])(null)));
+#line hidden
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify results for selected filters: Variant 25")]
+        [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
+        [Xunit.TraitAttribute("Description", "Verify results for selected filters: Variant 25")]
+        public void VerifyResultsForSelectedFilters_Variant25()
+        {
+#line 40
+this.VerifyResultsForSelectedFilters("employed", "want to change career", "Support you can get from others", "2", ((string[])(null)));
+#line hidden
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify results for selected filters: Variant 26")]
+        [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
+        [Xunit.TraitAttribute("Description", "Verify results for selected filters: Variant 26")]
+        public void VerifyResultsForSelectedFilters_Variant26()
+        {
+#line 40
+this.VerifyResultsForSelectedFilters("employed", "want to change career", "Options for work,CVs and applications,Developing or assessing your skills", "16", ((string[])(null)));
+#line hidden
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify results for selected filters: Variant 27")]
+        [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
+        [Xunit.TraitAttribute("Description", "Verify results for selected filters: Variant 27")]
+        public void VerifyResultsForSelectedFilters_Variant27()
+        {
+#line 40
+this.VerifyResultsForSelectedFilters("employed", "want to change career", "Disability support,Interview tips,Support you can get from others", "9", ((string[])(null)));
+#line hidden
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify results for selected filters: Variant 28")]
+        [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
+        [Xunit.TraitAttribute("Description", "Verify results for selected filters: Variant 28")]
+        public void VerifyResultsForSelectedFilters_Variant28()
+        {
+#line 40
+this.VerifyResultsForSelectedFilters("employed", "want to change career", "Options for work,CVs and applications,Developing or assessing your skills,Disabil" +
+                    "ity support,Interview tips", "23", ((string[])(null)));
+#line hidden
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify results for selected filters: Variant 29")]
+        [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
+        [Xunit.TraitAttribute("Description", "Verify results for selected filters: Variant 29")]
+        public void VerifyResultsForSelectedFilters_Variant29()
+        {
+#line 40
+this.VerifyResultsForSelectedFilters("employed", "want to change career", "Options for work,CVs and applications,Developing or assessing your skills,Support" +
+                    " you can get from others", "18", ((string[])(null)));
+#line hidden
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify results for selected filters: Variant 30")]
+        [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
+        [Xunit.TraitAttribute("Description", "Verify results for selected filters: Variant 30")]
+        public void VerifyResultsForSelectedFilters_Variant30()
+        {
+#line 40
+this.VerifyResultsForSelectedFilters("employed", "want to change career", "Options for work,CVs and applications,Developing or assessing your skills,Disabil" +
+                    "ity support,Interview tips,Support you can get from others", "25", ((string[])(null)));
+#line hidden
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify results for selected filters: Variant 31")]
+        [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
+        [Xunit.TraitAttribute("Description", "Verify results for selected filters: Variant 31")]
+        public void VerifyResultsForSelectedFilters_Variant31()
+        {
+#line 40
+this.VerifyResultsForSelectedFilters("employed", "want to change career", "Options for work,CVs and applications,Disability support,Interview tips,Support y" +
+                    "ou can get from others", "21", ((string[])(null)));
+#line hidden
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify results for selected filters: Variant 32")]
+        [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
+        [Xunit.TraitAttribute("Description", "Verify results for selected filters: Variant 32")]
+        public void VerifyResultsForSelectedFilters_Variant32()
+        {
+#line 40
+this.VerifyResultsForSelectedFilters("employed", "want to change career", "Options for work,Developing or assessing your skills,Disability support,Interview" +
+                    " tips,Support you can get from others", "19", ((string[])(null)));
+#line hidden
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify results for selected filters: Variant 33")]
+        [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
+        [Xunit.TraitAttribute("Description", "Verify results for selected filters: Variant 33")]
+        public void VerifyResultsForSelectedFilters_Variant33()
+        {
+#line 40
+this.VerifyResultsForSelectedFilters("employed", "want to change career", "CVs and applications,Developing or assessing your skills,Disability support,Inter" +
+                    "view tips,Support you can get from others", "19", ((string[])(null)));
+#line hidden
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify results for selected filters: Variant 34")]
+        [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
+        [Xunit.TraitAttribute("Description", "Verify results for selected filters: Variant 34")]
+        public void VerifyResultsForSelectedFilters_Variant34()
+        {
+#line 40
+this.VerifyResultsForSelectedFilters("employed", "want to change career", "Interview tips", "5", ((string[])(null)));
+#line hidden
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify results for selected filters: Variant 35")]
+        [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
+        [Xunit.TraitAttribute("Description", "Verify results for selected filters: Variant 35")]
+        public void VerifyResultsForSelectedFilters_Variant35()
+        {
+#line 40
+this.VerifyResultsForSelectedFilters("employed", "want to change career", "Developing or assessing your skills", "4", ((string[])(null)));
+#line hidden
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify results for selected filters: Variant 36")]
+        [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
+        [Xunit.TraitAttribute("Description", "Verify results for selected filters: Variant 36")]
+        public void VerifyResultsForSelectedFilters_Variant36()
+        {
+#line 40
+this.VerifyResultsForSelectedFilters("employed", "want to change career", "CVs and applications,Support you can get from others", "8", ((string[])(null)));
+#line hidden
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify results for selected filters: Variant 37")]
+        [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
+        [Xunit.TraitAttribute("Description", "Verify results for selected filters: Variant 37")]
+        public void VerifyResultsForSelectedFilters_Variant37()
+        {
+#line 40
+this.VerifyResultsForSelectedFilters("employed", "want to change career", "Options for work,Interview tips,Support you can get from others", "13", ((string[])(null)));
+#line hidden
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify results for selected filters: Variant 38")]
+        [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
+        [Xunit.TraitAttribute("Description", "Verify results for selected filters: Variant 38")]
+        public void VerifyResultsForSelectedFilters_Variant38()
+        {
+#line 40
+this.VerifyResultsForSelectedFilters("employed", "want to progress in my career", "Options for work,Developing or assessing your skills", "13", ((string[])(null)));
+#line hidden
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify results for selected filters: Variant 39")]
+        [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
+        [Xunit.TraitAttribute("Description", "Verify results for selected filters: Variant 39")]
+        public void VerifyResultsForSelectedFilters_Variant39()
+        {
+#line 40
+this.VerifyResultsForSelectedFilters("employed", "at risk of redundancy", "Options for work,Developing or assessing your skills,Support you can get from oth" +
+                    "ers,CVs and applications,Interview tips,Disability support", "30", ((string[])(null)));
+#line hidden
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify results for selected filters: Variant 40")]
+        [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
+        [Xunit.TraitAttribute("Description", "Verify results for selected filters: Variant 40")]
+        public void VerifyResultsForSelectedFilters_Variant40()
+        {
+#line 40
+this.VerifyResultsForSelectedFilters("employed", "at risk of redundancy", "Options for work,Developing or assessing your skills", "14", ((string[])(null)));
+#line hidden
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify results for selected filters: Variant 41")]
+        [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
+        [Xunit.TraitAttribute("Description", "Verify results for selected filters: Variant 41")]
+        public void VerifyResultsForSelectedFilters_Variant41()
+        {
+#line 40
+this.VerifyResultsForSelectedFilters("employed", "at risk of redundancy", "Options for work,Developing or assessing your skills,Support you can get from oth" +
+                    "ers", "16", ((string[])(null)));
+#line hidden
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify results for selected filters: Variant 42")]
+        [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
+        [Xunit.TraitAttribute("Description", "Verify results for selected filters: Variant 42")]
+        public void VerifyResultsForSelectedFilters_Variant42()
+        {
+#line 40
+this.VerifyResultsForSelectedFilters("employed", "at risk of redundancy", "CVs and applications,Interview tips,Disability support", "14", ((string[])(null)));
+#line hidden
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify results for selected filters: Variant 43")]
+        [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
+        [Xunit.TraitAttribute("Description", "Verify results for selected filters: Variant 43")]
+        public void VerifyResultsForSelectedFilters_Variant43()
+        {
+#line 40
+this.VerifyResultsForSelectedFilters("employed", "at risk of redundancy", "Support you can get from others,CVs and applications,Interview tips,Disability su" +
+                    "pport", "16", ((string[])(null)));
+#line hidden
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify results for selected filters: Variant 44")]
+        [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
+        [Xunit.TraitAttribute("Description", "Verify results for selected filters: Variant 44")]
+        public void VerifyResultsForSelectedFilters_Variant44()
+        {
+#line 40
+this.VerifyResultsForSelectedFilters("employed", "at risk of redundancy", "Options for work,Developing or assessing your skills,Support you can get from oth" +
+                    "ers,CVs and applications,Interview tips,Disability support", "30", ((string[])(null)));
+#line hidden
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify results for selected filters: Variant 45")]
+        [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
+        [Xunit.TraitAttribute("Description", "Verify results for selected filters: Variant 45")]
+        public void VerifyResultsForSelectedFilters_Variant45()
+        {
+#line 40
+this.VerifyResultsForSelectedFilters("employed", "at risk of redundancy", "Developing or assessing your skills,Support you can get from others", "7", ((string[])(null)));
+#line hidden
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify results for selected filters: Variant 46")]
+        [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
+        [Xunit.TraitAttribute("Description", "Verify results for selected filters: Variant 46")]
+        public void VerifyResultsForSelectedFilters_Variant46()
+        {
+#line 40
+this.VerifyResultsForSelectedFilters("employed", "at risk of redundancy", "Interview tips", "5", ((string[])(null)));
+#line hidden
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify results for selected filters: Variant 47")]
+        [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
+        [Xunit.TraitAttribute("Description", "Verify results for selected filters: Variant 47")]
+        public void VerifyResultsForSelectedFilters_Variant47()
+        {
+#line 40
+this.VerifyResultsForSelectedFilters("employed", "at risk of redundancy", "Disability support", "2", ((string[])(null)));
+#line hidden
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify results for selected filters: Variant 48")]
+        [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
+        [Xunit.TraitAttribute("Description", "Verify results for selected filters: Variant 48")]
+        public void VerifyResultsForSelectedFilters_Variant48()
+        {
+#line 40
+this.VerifyResultsForSelectedFilters("not in work", "want to return to work after a break", "Options for work,Developing or assessing your skills,Support you can get from oth" +
+                    "ers,CVs and applications,Interview tips,Disability support", "29", ((string[])(null)));
+#line hidden
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify results for selected filters: Variant 49")]
+        [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
+        [Xunit.TraitAttribute("Description", "Verify results for selected filters: Variant 49")]
+        public void VerifyResultsForSelectedFilters_Variant49()
+        {
+#line 40
+this.VerifyResultsForSelectedFilters("not in work", "want to return to work after a break", "Options for work,Developing or assessing your skills", "13", ((string[])(null)));
+#line hidden
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify results for selected filters: Variant 50")]
+        [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
+        [Xunit.TraitAttribute("Description", "Verify results for selected filters: Variant 50")]
+        public void VerifyResultsForSelectedFilters_Variant50()
+        {
+#line 40
+this.VerifyResultsForSelectedFilters("not in work", "want to return to work after a break", "Options for work,Developing or assessing your skills,Support you can get from oth" +
+                    "ers", "15", ((string[])(null)));
+#line hidden
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify results for selected filters: Variant 51")]
+        [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
+        [Xunit.TraitAttribute("Description", "Verify results for selected filters: Variant 51")]
+        public void VerifyResultsForSelectedFilters_Variant51()
+        {
+#line 40
+this.VerifyResultsForSelectedFilters("not in work", "want to return to work after a break", "CVs and applications,Interview tips,Disability support", "14", ((string[])(null)));
+#line hidden
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify results for selected filters: Variant 52")]
+        [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
+        [Xunit.TraitAttribute("Description", "Verify results for selected filters: Variant 52")]
+        public void VerifyResultsForSelectedFilters_Variant52()
+        {
+#line 40
+this.VerifyResultsForSelectedFilters("not in work", "want to return to work after a break", "Support you can get from others,CVs and applications,Interview tips,Disability su" +
+                    "pport", "16", ((string[])(null)));
+#line hidden
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify results for selected filters: Variant 53")]
+        [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
+        [Xunit.TraitAttribute("Description", "Verify results for selected filters: Variant 53")]
+        public void VerifyResultsForSelectedFilters_Variant53()
+        {
+#line 40
+this.VerifyResultsForSelectedFilters("not in work", "want to return to work after a break", "Options for work,Developing or assessing your skills,Support you can get from oth" +
+                    "ers,CVs and applications,Interview tips,Disability support", "29", ((string[])(null)));
+#line hidden
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify results for selected filters: Variant 54")]
+        [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
+        [Xunit.TraitAttribute("Description", "Verify results for selected filters: Variant 54")]
+        public void VerifyResultsForSelectedFilters_Variant54()
+        {
+#line 40
+this.VerifyResultsForSelectedFilters("not in work", "want to return to work after a break", "Developing or assessing your skills,Support you can get from others", "7", ((string[])(null)));
+#line hidden
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify results for selected filters: Variant 55")]
+        [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
+        [Xunit.TraitAttribute("Description", "Verify results for selected filters: Variant 55")]
+        public void VerifyResultsForSelectedFilters_Variant55()
+        {
+#line 40
+this.VerifyResultsForSelectedFilters("not in work", "want to return to work after a break", "Interview tips", "5", ((string[])(null)));
+#line hidden
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify results for selected filters: Variant 56")]
+        [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
+        [Xunit.TraitAttribute("Description", "Verify results for selected filters: Variant 56")]
+        public void VerifyResultsForSelectedFilters_Variant56()
+        {
+#line 40
+this.VerifyResultsForSelectedFilters("not in work", "want to return to work after a break", "Disability support", "2", ((string[])(null)));
+#line hidden
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify results for selected filters: Variant 57")]
+        [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
+        [Xunit.TraitAttribute("Description", "Verify results for selected filters: Variant 57")]
+        public void VerifyResultsForSelectedFilters_Variant57()
+        {
+#line 40
+this.VerifyResultsForSelectedFilters("not in work", "want to prepare to get a job", "Options for work,Developing or assessing your skills,Support you can get from oth" +
+                    "ers,CVs and applications,Interview tips,Disability support", "29", ((string[])(null)));
+#line hidden
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify results for selected filters: Variant 58")]
+        [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
+        [Xunit.TraitAttribute("Description", "Verify results for selected filters: Variant 58")]
+        public void VerifyResultsForSelectedFilters_Variant58()
+        {
+#line 40
+this.VerifyResultsForSelectedFilters("not in work", "want to prepare to get a job", "Options for work,Developing or assessing your skills", "13", ((string[])(null)));
+#line hidden
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify results for selected filters: Variant 59")]
+        [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
+        [Xunit.TraitAttribute("Description", "Verify results for selected filters: Variant 59")]
+        public void VerifyResultsForSelectedFilters_Variant59()
+        {
+#line 40
+this.VerifyResultsForSelectedFilters("not in work", "want to prepare to get a job", "Options for work,Developing or assessing your skills,Support you can get from oth" +
+                    "ers", "15", ((string[])(null)));
+#line hidden
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify results for selected filters: Variant 60")]
+        [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
+        [Xunit.TraitAttribute("Description", "Verify results for selected filters: Variant 60")]
+        public void VerifyResultsForSelectedFilters_Variant60()
+        {
+#line 40
+this.VerifyResultsForSelectedFilters("not in work", "want to prepare to get a job", "CVs and applications,Interview tips,Disability support", "14", ((string[])(null)));
+#line hidden
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify results for selected filters: Variant 61")]
+        [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
+        [Xunit.TraitAttribute("Description", "Verify results for selected filters: Variant 61")]
+        public void VerifyResultsForSelectedFilters_Variant61()
+        {
+#line 40
+this.VerifyResultsForSelectedFilters("not in work", "want to prepare to get a job", "Support you can get from others,CVs and applications,Interview tips,Disability su" +
+                    "pport", "16", ((string[])(null)));
+#line hidden
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify results for selected filters: Variant 62")]
+        [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
+        [Xunit.TraitAttribute("Description", "Verify results for selected filters: Variant 62")]
+        public void VerifyResultsForSelectedFilters_Variant62()
+        {
+#line 40
+this.VerifyResultsForSelectedFilters("not in work", "want to prepare to get a job", "Options for work,Developing or assessing your skills,Support you can get from oth" +
+                    "ers,CVs and applications,Interview tips,Disability support", "29", ((string[])(null)));
+#line hidden
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify results for selected filters: Variant 63")]
+        [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
+        [Xunit.TraitAttribute("Description", "Verify results for selected filters: Variant 63")]
+        public void VerifyResultsForSelectedFilters_Variant63()
+        {
+#line 40
+this.VerifyResultsForSelectedFilters("not in work", "want to prepare to get a job", "Developing or assessing your skills,Support you can get from others", "7", ((string[])(null)));
+#line hidden
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify results for selected filters: Variant 64")]
+        [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
+        [Xunit.TraitAttribute("Description", "Verify results for selected filters: Variant 64")]
+        public void VerifyResultsForSelectedFilters_Variant64()
+        {
+#line 40
+this.VerifyResultsForSelectedFilters("not in work", "want to prepare to get a job", "Interview tips", "5", ((string[])(null)));
+#line hidden
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify results for selected filters: Variant 65")]
+        [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
+        [Xunit.TraitAttribute("Description", "Verify results for selected filters: Variant 65")]
+        public void VerifyResultsForSelectedFilters_Variant65()
+        {
+#line 40
+this.VerifyResultsForSelectedFilters("not in work", "want to prepare to get a job", "Disability support", "2", ((string[])(null)));
+#line hidden
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify results for selected filters: Variant 66")]
+        [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
+        [Xunit.TraitAttribute("Description", "Verify results for selected filters: Variant 66")]
+        public void VerifyResultsForSelectedFilters_Variant66()
+        {
+#line 40
+this.VerifyResultsForSelectedFilters("not in work", "want to change career", "Options for work,Developing or assessing your skills,Support you can get from oth" +
+                    "ers,CVs and applications,Interview tips,Disability support", "29", ((string[])(null)));
+#line hidden
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify results for selected filters: Variant 67")]
+        [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
+        [Xunit.TraitAttribute("Description", "Verify results for selected filters: Variant 67")]
+        public void VerifyResultsForSelectedFilters_Variant67()
+        {
+#line 40
+this.VerifyResultsForSelectedFilters("not in work", "want to change career", "Options for work,Developing or assessing your skills", "13", ((string[])(null)));
+#line hidden
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify results for selected filters: Variant 68")]
+        [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
+        [Xunit.TraitAttribute("Description", "Verify results for selected filters: Variant 68")]
+        public void VerifyResultsForSelectedFilters_Variant68()
+        {
+#line 40
+this.VerifyResultsForSelectedFilters("not in work", "want to change career", "Options for work,Developing or assessing your skills,Support you can get from oth" +
+                    "ers", "15", ((string[])(null)));
+#line hidden
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify results for selected filters: Variant 69")]
+        [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
+        [Xunit.TraitAttribute("Description", "Verify results for selected filters: Variant 69")]
+        public void VerifyResultsForSelectedFilters_Variant69()
+        {
+#line 40
+this.VerifyResultsForSelectedFilters("not in work", "want to change career", "CVs and applications,Interview tips,Disability support", "14", ((string[])(null)));
+#line hidden
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify results for selected filters: Variant 70")]
+        [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
+        [Xunit.TraitAttribute("Description", "Verify results for selected filters: Variant 70")]
+        public void VerifyResultsForSelectedFilters_Variant70()
+        {
+#line 40
+this.VerifyResultsForSelectedFilters("not in work", "want to change career", "Support you can get from others,CVs and applications,Interview tips,Disability su" +
+                    "pport", "16", ((string[])(null)));
+#line hidden
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify results for selected filters: Variant 71")]
+        [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
+        [Xunit.TraitAttribute("Description", "Verify results for selected filters: Variant 71")]
+        public void VerifyResultsForSelectedFilters_Variant71()
+        {
+#line 40
+this.VerifyResultsForSelectedFilters("not in work", "want to change career", "Options for work,Developing or assessing your skills,Support you can get from oth" +
+                    "ers,CVs and applications,Interview tips,Disability support", "29", ((string[])(null)));
+#line hidden
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify results for selected filters: Variant 72")]
+        [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
+        [Xunit.TraitAttribute("Description", "Verify results for selected filters: Variant 72")]
+        public void VerifyResultsForSelectedFilters_Variant72()
+        {
+#line 40
+this.VerifyResultsForSelectedFilters("not in work", "want to change career", "Developing or assessing your skills,Support you can get from others", "7", ((string[])(null)));
+#line hidden
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify results for selected filters: Variant 73")]
+        [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
+        [Xunit.TraitAttribute("Description", "Verify results for selected filters: Variant 73")]
+        public void VerifyResultsForSelectedFilters_Variant73()
+        {
+#line 40
+this.VerifyResultsForSelectedFilters("not in work", "want to change career", "Interview tips", "5", ((string[])(null)));
+#line hidden
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify results for selected filters: Variant 74")]
+        [Xunit.TraitAttribute("FeatureTitle", "Get personalised careers advice and information")]
+        [Xunit.TraitAttribute("Description", "Verify results for selected filters: Variant 74")]
+        public void VerifyResultsForSelectedFilters_Variant74()
+        {
+#line 40
+this.VerifyResultsForSelectedFilters("not in work", "want to change career", "Disability support", "2", ((string[])(null)));
 #line hidden
         }
         
