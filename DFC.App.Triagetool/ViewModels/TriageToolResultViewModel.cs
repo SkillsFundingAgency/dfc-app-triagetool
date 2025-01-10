@@ -7,9 +7,9 @@ namespace DFC.App.Triagetool.ViewModels
 {
 
     [ExcludeFromCodeCoverage]
-    public class TriageToolOptionViewModel
+    public class TriageToolResultViewModel
     {
-        public TriageToolOptionViewModel()
+        public TriageToolResultViewModel()
         {
             Pages = new List<TriageResultPage>();
             SelectedFilters = new List<string>();

@@ -7,7 +7,7 @@ namespace DFC.App.Triagetool.ViewModels
 {
     [ExcludeFromCodeCoverage]
     public class TriageToolResultGroupViewModel
-    { 
+    {
         public string? FilterAdviceGroup { get; set; }
 
         public List<TriageResultPage>? ResultPages { get; set; }
