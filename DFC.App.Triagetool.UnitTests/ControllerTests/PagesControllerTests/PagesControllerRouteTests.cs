@@ -33,18 +33,6 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
             using var controller = BuildController(route);
             var levelOne = "Test";
             var levelTwo = "Test";
-            var expected = new TriageToolFilterResponse()
-            {
-                TriageToolFilter = new List<TriageToolFilters>
-                {
-                    new ()
-                    {
-                        DisplayText = "Test",
-                    },
-                },
-            };
-
-            A.CallTo(() => FakeSharedContentRedisInterface.GetDataAsync<TriagePageResponse>("Test", "PUBLISHED", 4)).Returns(new TriagePageResponse());
             A.CallTo(() => FakeSharedContentRedisInterface.GetDataAsync<TriageLookupResponse>("Test", "PUBLISHED", 4)).Returns(new TriageLookupResponse());
 
             // Act
