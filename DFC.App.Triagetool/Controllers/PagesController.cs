@@ -154,7 +154,7 @@ namespace DFC.App.Triagetool.Controllers
                 }
             }
 
-            TriageToolOptionViewModel triageToolModel = await FilterResults(levelOne, levelTwo);
+            TriageToolResultViewModel triageToolModel = await FilterResults(levelOne, levelTwo);
             if (filterAction.HasValue && filterAction == TriageToolFilerAction.ApplyFilters)
             {
                 triageToolModel.SelectedFilters = filterAdviceGroupOptions == null ? new List<string>() : filterAdviceGroupOptions;
@@ -221,24 +221,6 @@ namespace DFC.App.Triagetool.Controllers
         }
 
         [HttpGet]
-        [Route("api/TriageToolOption/GetOptions/ajax")]
-        public async Task<IActionResult> Data()
-        {
-            if (string.IsNullOrEmpty(status))
-            {
-                status = "PUBLISHED";
-            }
-
-            var triagetooldocuments = await sharedContentRedis.GetDataAsyncWithExpiry<TriagePageResponse>(Constants.TriagePages, status, expiryInHours);
-            var triageFilters = await sharedContentRedis.GetDataAsyncWithExpiry<TriageToolFilterResponse>(Constants.TriageToolFilters, status, expiryInHours);
-            var sortedFilters = triageFilters.TriageToolFilter;
-
-            List<TriageModelClass> modelClass = new List<TriageModelClass>();
-
-            return Json(modelClass);
-        }
-
-        [HttpGet]
         [Route("api/triageresult/{appData}/ajax")]
         public async Task<IActionResult> TriageResult(string appData)
         {
@@ -251,7 +233,7 @@ namespace DFC.App.Triagetool.Controllers
             return PartialView("TriageToolPartialViews/TriageResult", result);
         }
 
-        private static void ApplyFilters(TriageFilterQuery? filterQuery, TriageToolOptionViewModel? result)
+        private static void ApplyFilters(TriageFilterQuery? filterQuery, TriageToolResultViewModel? result)
         {
             if (result != null &&
                             filterQuery != null &&
@@ -297,14 +279,14 @@ namespace DFC.App.Triagetool.Controllers
             }
         }
 
-        private async Task<TriageToolOptionViewModel> FilterResults(string? levelOne, string? levelTwo)
+        private async Task<TriageToolResultViewModel> FilterResults(string? levelOne, string? levelTwo)
         {
             if (string.IsNullOrEmpty(status))
             {
                 status = "PUBLISHED";
             }
 
-            var triageToolModel = new TriageToolOptionViewModel();
+            var triageToolModel = new TriageToolResultViewModel();
 
             var triageResultPages = await sharedContentRedis.GetDataAsyncWithExpiry<TriageResultPageResponse>(ApplicationKeys.TriageResults, status, expiryInHours);
             var lookupResponse = await sharedContentRedis.GetDataAsyncWithExpiry<TriageLookupResponse>(ApplicationKeys.TriageToolLookup, status, expiryInHours);
@@ -353,7 +335,7 @@ namespace DFC.App.Triagetool.Controllers
             return triageToolModel;
         }
 
-        private void FilterApprenticeshipLink(TriageToolOptionViewModel triageToolModel, TriageResultPageResponse? triageResultPages, string? levelTwoContentItemId)
+        private void FilterApprenticeshipLink(TriageToolResultViewModel triageToolModel, TriageResultPageResponse? triageResultPages, string? levelTwoContentItemId)
         {
             if (triageResultPages?.ApprenticeshipLink != null)
             {
@@ -363,7 +345,7 @@ namespace DFC.App.Triagetool.Controllers
             }
         }
 
-        private void FilterApplicationView(TriageToolOptionViewModel triageToolModel, TriageResultPageResponse? triageResultPages, string? levelTwoContentItemId)
+        private void FilterApplicationView(TriageToolResultViewModel triageToolModel, TriageResultPageResponse? triageResultPages, string? levelTwoContentItemId)
         {
             if (triageResultPages?.ApplicationView != null)
             {
@@ -373,7 +355,7 @@ namespace DFC.App.Triagetool.Controllers
             }
         }
 
-        private void FilterPages(TriageToolOptionViewModel triageToolModel, TriageResultPageResponse? triageResultPages, string? levelOneContentItemId, string? levelTwoContentItemId)
+        private void FilterPages(TriageToolResultViewModel triageToolModel, TriageResultPageResponse? triageResultPages, string? levelOneContentItemId, string? levelTwoContentItemId)
         {
             if (triageResultPages?.Page != null)
             {

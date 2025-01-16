@@ -125,7 +125,7 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
             Assert.IsType<ViewResult>(result);
             var viewResult = result as ViewResult;
 
-            var model = viewResult.Model as TriageToolOptionViewModel;
+            var model = viewResult.Model as TriageToolResultViewModel;
             Assert.Equal("levelOne", model.SelectedLevelOne);
             Assert.Equal("levelTwo", model.SelectedLevelTwo);
         }
@@ -148,7 +148,7 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.PagesControllerTests
             var result = await controller.Body(levelOne, levelTwo, singleSelect, selectedFilters, action);
             redisMock.VerifyAll();
             var viewResult = result as ViewResult;
-            var model = viewResult.Model as TriageToolOptionViewModel;
+            var model = viewResult.Model as TriageToolResultViewModel;
 
             // Assert
             Assert.IsType<ViewResult>(result);
