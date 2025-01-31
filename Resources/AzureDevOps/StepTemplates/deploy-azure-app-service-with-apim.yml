@@ -65,31 +65,3 @@ steps:
     SpecifySlotOrASE: true
     ResourceGroupName: '${{ parameters.ResourceGroup }}'
     Slot: staging
-
-- task: esfadevops.Tokenization.custom-build-task.Tokenization@0
-  displayName: 'Tokenization: Transform OpenAPI specification'
-  inputs:
-    SourcePath: '${{ parameters.SpecificationPath }}'
-    TargetFileNames: 'WebhookReceiver.txt'
-
-- task: AzurePowerShell@4	
-  displayName: 'Import OpenAPI specification'	
-  inputs:	
-    azureSubscription: '${{ parameters.AzureSubscription }}'	
-    ScriptPath: '${{ parameters.ApimImportScript }}'	
-    ScriptArguments: "-ApimResourceGroup '${{ parameters.SharedResourceGroupName }}' -InstanceName '${{ parameters.ApimServiceName }}' -ApiName '${{ parameters.ApimProductInstanceName }}-${{ parameters.ApiName }}' -OpenApiSpecificationFile '${{ parameters.SpecificationPath }}/WebhookReceiver.txt' -ApiPath '${{ parameters.ApimProductInstanceName }}/${{ parameters.ApiName }}'"	
-    azurePowerShellVersion: LatestVersion
-
-- task: esfadevops.Tokenization.custom-build-task.Tokenization@0
-  displayName: 'Tokenization: Transform file APIM Policy File'
-  inputs:
-    SourcePath: '${{ parameters.APIMPolicyPath }}'
-    TargetFileNames: 'ApimPolicy-IsolatedAppServiceAsEventGridWebhookEndpoint.xml'
-
-- task: AzurePowerShell@5
-  displayName: 'Apply EventGrid APIM Policy'
-  inputs:
-    azureSubscription: '${{ parameters.AzureSubscription }}'
-    ScriptPath: '$(Agent.BuildDirectory)/s/dfc-devops/PSCoreScripts/Set-ApimPolicy.ps1'
-    ScriptArguments: '-PolicyScope operation -ApimResourceGroup ${{ parameters.SharedResourceGroupName }} -ApimServiceName ${{ parameters.ApimServiceName }} -PolicyFilePath "$(Agent.BuildDirectory)/dfc.app.triagetool.apimpolicies/ApimPolicy-IsolatedAppServiceAsEventGridWebhookEndpoint.xml" -ApiId ${{ parameters.ApiId }} -OperationId post-api-webhook-receiveevents'
-    azurePowerShellVersion: LatestVersion
