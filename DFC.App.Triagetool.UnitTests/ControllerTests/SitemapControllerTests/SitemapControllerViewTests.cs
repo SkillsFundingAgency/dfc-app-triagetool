@@ -67,21 +67,8 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.SitemapControllerTests
             httpContextMock.Setup(c => c.Request).Returns(requestMock.Object);
 
             var sharedContentRedisMock = new Mock<ISharedContentRedisInterface>();
-            var triageToolFilterResponse = new TriageToolFilterResponse
-            {
-                TriageToolFilter = new List<TriageToolFilters>
-                {
-                    new ()
-                    {
-                        DisplayText = "Test",
-                        GraphSync = new()
-                        {
-                            NodeId = "test",
-                        },
-                    },
-                },
-            };
-            sharedContentRedisMock.Setup(m => m.GetDataAsyncWithExpiry<TriageToolFilterResponse>(AppConstants.TriageToolFilters, "PUBLISHED", 4)).ReturnsAsync(triageToolFilterResponse);
+            var triageToolFilterResponse = GetTriageLookupResponse();
+            sharedContentRedisMock.Setup(m => m.GetDataAsyncWithExpiry<TriageLookupResponse>(AppConstants.TriageToolLookup, "PUBLISHED", 4)).ReturnsAsync(triageToolFilterResponse);
 
             var controller = new SitemapController(loggerMock.Object, sharedContentRedisMock.Object, configuration);
 
@@ -94,6 +81,92 @@ namespace DFC.App.Triagetool.UnitTests.ControllerTests.SitemapControllerTests
             contentResult.ContentType.Should().Be(MediaTypeNames.Application.Xml);
             Assert.NotNull(contentResult.Content);
             // Add more assertions as needed based on the expected content
+        }
+
+        private static TriageLookupResponse? GetTriageLookupResponse()
+        {
+            var response = new TriageLookupResponse();
+            response.TriageLevelOne = new List<TriageLevelOne>
+            {
+                new TriageLevelOne
+                {
+                    ContentItemId = "1",
+                    Title = "Education",
+                    Ordinal = 3,
+                    Value = "Education",
+                    LevelTwo = new TriageLevelTwo
+                    {
+                        ContentItems = new List<TriageLevelTwo>
+                        {
+                                new TriageLevelTwo
+                                {
+                                     ContentItemId = "LevelTwo1"
+                                },
+                                new TriageLevelTwo
+                                {
+                                     ContentItemId = "LevelTwo2"
+                                },
+                                new TriageLevelTwo
+                                {
+                                     ContentItemId = "LevelTwo3"
+                                },
+                        },
+                    },
+                },
+            };
+            response.TriageLevelTwo = new List<TriageLevelTwo>
+            {
+                new TriageLevelTwo
+                {
+                    ContentItemId = "LevelTwo1",
+                    Title = "LevelTwo1",
+                    Value = "LevelTwo1",
+                    FilterAdviceGroup = new FilterAdviceGroup
+                    {
+                        ContentItems = new List<FilterAdviceGroup>
+                        {
+                            new FilterAdviceGroup { ContentItemId = "1" },
+                            new FilterAdviceGroup { ContentItemId = "2" },
+                        },
+                    },
+                },
+                new TriageLevelTwo
+                {
+                    ContentItemId = "LevelTwo2",
+                    Title = "LevelTwo2",
+                    Value = "LevelTwo2",
+                    FilterAdviceGroup = new FilterAdviceGroup
+                    {
+                        ContentItems = new List<FilterAdviceGroup>
+                        {
+                            new FilterAdviceGroup { ContentItemId = "1" },
+                            new FilterAdviceGroup { ContentItemId = "3" },
+                        },
+                    },
+                },
+                new TriageLevelTwo
+                {
+                    ContentItemId = "LevelTwo3",
+                    Title = "LevelTwo3",
+                    Value = "LevelTwo3",
+                    FilterAdviceGroup = new FilterAdviceGroup
+                    {
+                        ContentItems = new List<FilterAdviceGroup>
+                        {
+                            new FilterAdviceGroup { ContentItemId = "1" },
+                            new FilterAdviceGroup { ContentItemId = "2" },
+                        },
+                    },
+                },
+            };
+            response.FilterAdviceGroup = new List<FilterAdviceGroup>
+            {
+                new FilterAdviceGroup { ContentItemId = "1", Title = "CV"},
+                new FilterAdviceGroup { ContentItemId = "2", Title = "Options to work" },
+                new FilterAdviceGroup { ContentItemId = "3", Title = "Interview tips" },
+                new FilterAdviceGroup { ContentItemId = "4", Title = "Support from others" },
+            };
+            return response;
         }
 
     }

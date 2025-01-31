@@ -1,5 +1,6 @@
 ﻿using DFC.App.Triagetool.Extensions;
 using DFC.App.Triagetool.Models;
+using DFC.Common.SharedContent.Pkg.Netcore.Constant;
 using DFC.Common.SharedContent.Pkg.Netcore.Interfaces;
 using DFC.Common.SharedContent.Pkg.Netcore.Model.Common;
 using DFC.Common.SharedContent.Pkg.Netcore.Model.Response;
@@ -61,19 +62,30 @@ namespace DFC.App.Triagetool.Controllers
 
             var sitemapUrlPrefix = $"{Request.GetBaseAddress()}{PagesController.RegistrationPath}";
             var sitemap = new Sitemap();
-            var triagetooldocuments = await sharedContentRedis.GetDataAsyncWithExpiry<TriageToolFilterResponse>(AppConstants.TriageToolFilters, status, expiryInHours);
-
-            if (triagetooldocuments != null)
+            var lookupResponse = await sharedContentRedis.GetDataAsyncWithExpiry<TriageLookupResponse>(ApplicationKeys.TriageToolLookup, status, expiryInHours);
+            if (lookupResponse != null && lookupResponse.TriageLevelOne != null)
             {
-                for (int i = 0; i < triagetooldocuments.TriageToolFilter.Count; i++)
+                foreach (var levelOne in lookupResponse.TriageLevelOne)
                 {
-                    TriageToolFilters? contentPageModel = triagetooldocuments.TriageToolFilter[i];
-                    sitemap.Add(new SitemapLocation
+                    if (!string.IsNullOrEmpty(levelOne.Value))
                     {
-                        Url = $"{sitemapUrlPrefix}/{contentPageModel.DisplayText}",
-                        Priority = 0.5,
-                        ChangeFrequency = SitemapLocation.ChangeFrequencies.Monthly,
-                    });
+                        if (lookupResponse?.TriageLevelTwo != null && levelOne.LevelTwo != null && levelOne.LevelTwo.ContentItems != null)
+                        {
+                            foreach (var levelTwo in levelOne.LevelTwo.ContentItems)
+                            {
+                                var matchedLevelTwo = lookupResponse.TriageLevelTwo.SingleOrDefault(x => x.ContentItemId == levelTwo.ContentItemId);
+                                if (!string.IsNullOrEmpty(matchedLevelTwo?.Value))
+                                {
+                                    sitemap.Add(new SitemapLocation
+                                    {
+                                        Url = $"{sitemapUrlPrefix}/{levelOne.Value}/{matchedLevelTwo.Value}",
+                                        Priority = 0.5,
+                                        ChangeFrequency = SitemapLocation.ChangeFrequencies.Monthly,
+                                    });
+                                }
+                            }
+                        }
+                    }
                 }
             }
 
