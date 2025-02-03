@@ -8,6 +8,12 @@ namespace DFC.App.Triagetool.Controllers
     {
         public const string ThisViewCanonicalName = "home";
 
+        [HttpGet("/")]
+        public IActionResult Index()
+        {
+            return View("~/Views/Pages/Index.cshtml");
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
