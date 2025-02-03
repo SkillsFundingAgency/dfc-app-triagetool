@@ -2,31 +2,32 @@
 
 @{
     Layout = "_LocalLayout";
-
     ViewData["Title"] = "Index";
 }
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
-        @if (Model.Documents?.Count() > 0)
+        @if (Model?.Documents?.Count() > 0)
         {
             <ul>
                 @foreach (var document in Model.Documents)
                 {
-                    if (document.Id == null)
+                    if (document != null)
                     {
+                        var documentId = document.Id?.ToString() ?? "default-id";
+                        var documentTitle = document.Title ?? "Untitled";
+
                         <li>
-                            <a href="/@Model.Path/@document.Title">@document.Title</a>
-                        </li>
-                    }
-                    else
-                    {
-                        <li>
-                            <a href="/@Model.Path/@document.Id/document">@document.Title</a>
+                            <a href="/@Model.Path/@documentId/document">@documentTitle</a>
                         </li>
                     }
                 }
             </ul>
         }
+        else
+        {
+            <p>No documents available.</p>
+        }
     </div>
 </div>
+
